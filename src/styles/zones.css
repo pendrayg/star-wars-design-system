@@ -12,7 +12,7 @@
 
 .ds-zone {
   background: color-mix(in srgb, var(--color-bg) 92%, #000);
-  border: 1px solid var(--grad-solar-to);
+  border: var(--neon-width) solid var(--grad-solar-to);
   border-radius: 3px;
   padding: var(--shadow-room);
   color: var(--grad-solar-to);

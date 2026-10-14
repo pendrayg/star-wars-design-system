@@ -12,7 +12,7 @@
  * Les identifiants sont ceux d'avant — une app qui les cite n'a rien à changer :
  *
  *   #ds-chart-groove — LE HALO D'UN TRAIT (1 à 2 px) : courbe, contour d'aire, ligne de référence.
- *     Le trait, flouté à σ = 2 et posé DEUX FOIS sous lui : un trait de 2 px ne retient qu'une
+ *     Le trait, flouté à σ = 6 — les 12 px du néon du DS — et posé DEUX FOIS sous lui : un trait de 2 px ne retient qu'une
  *     petite part de son flou, et à une seule couche il n'en restait qu'un voile. Le tracé passe
  *     au-dessus, net — le tube, et sa lumière autour.
  *
@@ -24,7 +24,7 @@
  *     désormais le halo d'un trait, pour qu'une app qui le cite encore reste dans le ton, et sera
  *     retiré.
  *
- *   #ds-chart-set — LE CHÂSSIS D'UN GRAPHIQUE : un liseré néon de 1,5 px autour de la silhouette
+ *   #ds-chart-set — LE CHÂSSIS D'UN GRAPHIQUE : un liseré néon de 2,5 px autour de la silhouette
  *     ENTIÈRE de ce qu'il habille (un camembert, une carte), à la teinte du néon des commandes
  *     (`--neon-color`, cf. chart.css), et son halo. C'est le tube d'une commande porté à une forme
  *     quelconque. Il habille le graphique entier, jamais une marque.
@@ -43,7 +43,7 @@ export function ChartFilters() {
     <svg className="ds-chart-filters" width="0" height="0" aria-hidden="true" focusable="false">
       <defs>
         <filter id="ds-chart-groove" x="-40%" y="-40%" width="180%" height="180%">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="halo" />
+          <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="halo" />
           <feMerge>
             <feMergeNode in="halo" />
             <feMergeNode in="halo" />
@@ -52,7 +52,7 @@ export function ChartFilters() {
         </filter>
 
         <filter id="ds-chart-groove-fill" x="-40%" y="-40%" width="180%" height="180%">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="flou" />
+          <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="flou" />
           <feColorMatrix in="flou" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.6 0" result="halo" />
           <feMerge>
             <feMergeNode in="halo" />
@@ -62,7 +62,7 @@ export function ChartFilters() {
 
         {/* DÉPRÉCIÉ : le halo d'un trait, recopié. */}
         <filter id="ds-chart-shadow" x="-40%" y="-40%" width="180%" height="180%">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="halo" />
+          <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="halo" />
           <feMerge>
             <feMergeNode in="halo" />
             <feMergeNode in="halo" />
@@ -70,15 +70,15 @@ export function ChartFilters() {
           </feMerge>
         </filter>
 
-        {/* Le liseré : la silhouette dilatée de 1,5, moins la silhouette — un anneau qui l'épouse
+        {/* Le liseré : la silhouette dilatée de 2,5 — le trait du néon —, moins la silhouette — un anneau qui l'épouse
             au-dehors —, teinté (feFlood, cf. chart.css), puis flouté pour le halo. Le halo
             dessous, la forme, le tube au-dessus de tout. */}
         <filter id="ds-chart-set" x="-40%" y="-40%" width="180%" height="180%">
-          <feMorphology in="SourceAlpha" operator="dilate" radius="1.5" result="gonfle" />
+          <feMorphology in="SourceAlpha" operator="dilate" radius="2.5" result="gonfle" />
           <feComposite operator="out" in="gonfle" in2="SourceAlpha" result="anneau" />
           <feFlood result="encre" />
           <feComposite operator="in" in="encre" in2="anneau" result="tube" />
-          <feGaussianBlur in="tube" stdDeviation="3" result="halo" />
+          <feGaussianBlur in="tube" stdDeviation="6" result="halo" />
           <feMerge>
             <feMergeNode in="halo" />
             <feMergeNode in="SourceGraphic" />

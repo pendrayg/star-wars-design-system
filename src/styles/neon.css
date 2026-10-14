@@ -2,10 +2,10 @@
 
    Trois couches, dans l'ordre d'une liste de box-shadow (la première peinte au-dessus) :
      1. le TUBE : un trait plein de --neon-width, posé EN DEDANS (inset, sans flou) pour ne rien
-        pousser — une bordure CSS décalerait le contenu d'1,5 px et changerait la hauteur des
+        pousser — une bordure CSS décalerait le contenu de 2,5 px et changerait la hauteur des
         commandes, que tout le DS aligne au pixel ;
-     2. le HALO au-dehors : son flou va de --neon-blur à --neon-blur-lit, son encre de 40 à 85 %,
-        selon --lit ;
+     2. le HALO au-dehors : flou fixe (--neon-blur, celui du châssis), encre de 55 à 100 % selon
+        --lit — le plein feu densifie le halo, il ne l'élargit pas ;
      3. le VOILE en dedans : nul au repos, il monte avec --lit. C'est celui du châssis (« un voile
         ambre à 8 % en dedans »), un peu plus dense parce qu'il couvre une pilule et non un écran.
 
@@ -29,8 +29,7 @@
   --neon-on: clamp(0, var(--pop), 1);
   box-shadow:
     inset 0 0 0 var(--neon-width) color-mix(in srgb, var(--neon-color) calc(100% * var(--neon-on)), transparent),
-    0 0 calc(var(--neon-blur) + (var(--neon-blur-lit) - var(--neon-blur)) * var(--lit))
-      color-mix(in srgb, var(--neon-color) calc((40% + 45% * var(--lit)) * var(--neon-on)), transparent),
+    0 0 var(--neon-blur) color-mix(in srgb, var(--neon-color) calc((55% + 45% * var(--lit)) * var(--neon-on)), transparent),
     inset 0 0 calc(14px * var(--lit)) color-mix(in srgb, var(--neon-color) calc(18% * var(--lit) * var(--neon-on)), transparent);
 }
 

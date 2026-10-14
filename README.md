@@ -18,11 +18,11 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
   liste, message) n'a qu'une bordure fine.
 - **Un tube néon, le même partout.** Boutons, champs, case à cocher, recherche, cadre de la barre
   de menu et sa pastille, chaton d'un bouton serti : tous sont cernés du **même tube** — un trait
-  ambre (`--grad-solar-to`) de **1,5 px** posé en dedans, pour ne rien pousser, et son halo
-  au-dehors. C'est le bord du châssis de visée (`.ds-frame`) ramené à l'échelle d'une commande.
+  ambre (`--grad-solar-to`) de **2,5 px** posé en dedans, pour ne rien pousser, et son halo de
+  **12 px** au-dehors. C'est le bord du châssis de visée (`.ds-frame`), à la même mesure : une
+  seule largeur de trait et de néon dans tout le DS — commandes, zones, lectures, châssis.
   `.ds-primary` brille au glacier, `.ds-danger` au rouge. La recette s'écrit une fois (`neon.css`)
-  et se règle par `--neon-color`, `--neon-width`, `--neon-blur` (6 px au repos) et
-  `--neon-blur-lit` (16 px plein feu) ; `.ds-neon` la donne à n'importe quel bloc d'une app, et
+  et se règle par `--neon-color`, `--neon-width` et `--neon-blur` ; `.ds-neon` la donne à n'importe quel bloc d'une app, et
   `--lit: 1` le met plein feu.
 - **Une gouttière pour le halo.** Il n'y a plus d'ombre à loger, mais un halo, qui porte à peu
   près aussi loin. La gouttière d'avant tombe donc encore juste : **72 px × k**, k = **1/3** pour
@@ -31,7 +31,7 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
   **16 / 24 px à la souris** (`--shadow-room` / `-lg`). Les apps la posent en marge et en `gap` :
   un halo rogné, ou recouvert par la commande voisine, se lirait comme un tube cassé.
 - **Plein feu, sans rebond.** Rien ne s'enfonce : on appuie, ça brille plus fort — le halo
-  s'élargit et s'intensifie, un voile de lumière passe en dedans. Un nombre enregistré le pilote,
+  se densifie (55 → 100 %, sans s'élargir), un voile de lumière passe en dedans. Un nombre enregistré le pilote,
   `--lit` (0 au repos, 1 plein feu), qui monte vite (`--lit-in`, 80 ms) et redescend plus
   lentement (`--lit-out`, 250 ms), sans dépassement.
 - **Ce qui apparaît s'amorce.** Une commande qui paraît (grille, section dépliante) ne monte pas
@@ -177,7 +177,7 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
   - `#ds-chart-groove-fill` — **le halo d'une marque pleine** (3 px et plus : symbole, barre,
     part) : le même flou, posé une fois et à 60 % — une marque pleine retient tout le sien, et au
     dosage d'un trait une barre rayonnerait trois fois plus que la courbe d'à côté ;
-  - `#ds-chart-set` — **le châssis du graphique** : un liseré néon de 1,5 px autour de la
+  - `#ds-chart-set` — **le châssis du graphique** : un liseré néon de 2,5 px autour de la
     silhouette **entière** (un camembert, une carte), à la teinte des commandes (`--neon-color`),
     et son halo. Il habille le graphique entier, jamais une marque ;
   - `#ds-chart-shadow` — **déprécié** : il rend désormais le halo d'un trait, pour qu'une app qui

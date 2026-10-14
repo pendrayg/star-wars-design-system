@@ -676,7 +676,7 @@ export function App() {
       <Demo
         id="fondations"
         title="Fondations"
-        intro="Plus d'ombre : tout ce qui se touche est cerné d'un liseré néon, celui du châssis de visée ramené à l'échelle d'une commande — un trait de 1,5 px, son halo au-dehors. Un appui ne l'enfonce pas, il le met plein feu : le halo s'élargit, un voile de lumière passe en dedans. Autour d'une commande, une gouttière de 72 px × k, que le halo occupe."
+        intro="Plus d'ombre : tout ce qui se touche est cerné d'un liseré néon, celui du châssis de visée à la même mesure partout — un trait de 2,5 px, un halo de 12 px. Un appui ne l'enfonce pas, il le met plein feu : le halo se densifie, un voile de lumière passe en dedans. Autour d'une commande, une gouttière de 72 px × k, que le halo occupe."
       >
         <div className="row">
           {[
@@ -744,7 +744,7 @@ export function App() {
       <Demo
         id="boutons"
         title="Boutons"
-        intro="Un liseré néon au repos, plein feu pressés ou actifs : rien ne s'enfonce, le halo s'élargit et un voile de lumière passe en dedans. La lumière monte vite et pâlit plus lentement, sans rebond. Le primaire brille au glacier ; le bouton qui supprime, armé, au rouge."
+        intro="Un liseré néon au repos, plein feu pressés ou actifs : rien ne s'enfonce, le halo se densifie et un voile de lumière passe en dedans. La lumière monte vite et pâlit plus lentement, sans rebond. Le primaire brille au glacier ; le bouton qui supprime, armé, au rouge."
       >
         <div className="row">
           <Button icon="tray_arrow_down">Sauvegarder</Button>

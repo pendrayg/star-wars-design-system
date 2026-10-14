@@ -30,22 +30,23 @@
   --neu-radius: 10px;
   --neu-radius-lg: 16px;
   /* LE NÉON — une recette, que neon.css applique à toutes les commandes du DS (et à `.ds-neon`,
-     pour une app). Elle se règle par quatre nombres et une couleur :
+     pour une app). UN SEUL TUBE, partout : celui du châssis de visée — mêmes trait, flou et encre
+     pour une commande, une zone, une lecture ou le châssis lui-même. On fera varier si un usage
+     le demande ; d'ici là, une seule mesure. Elle se règle par deux nombres et une couleur :
        --neon-color     la teinte du tube : l'ambre du viseur, sauf ton contraire (`.ds-primary`
                         prend le glacier des hologrammes, `.ds-danger` le rouge) ;
-       --neon-width     l'épaisseur du trait : 1,5 px. Le châssis en a 2,5, mais il entoure un
-                        écran ; à l'échelle d'une commande, 2,5 px faisaient un bandeau ;
-       --neon-blur      le halo au repos, 6 px — la moitié des 12 du châssis, pour la même raison ;
-       --neon-blur-lit  le halo plein feu, 16 px : assez pour qu'un appui se voie sans regarder ;
-     et l'intensité du halo, 40 % au repos, 85 % plein feu (le châssis est à 55 %, entre les deux).
+       --neon-width     l'épaisseur du trait : 2,5 px, celle du châssis ;
+       --neon-blur      le flou du halo : 12 px, celui du châssis ;
+     et l'encre du halo, 55 % au repos — celle du châssis —, 100 % plein feu. Le PLEIN FEU ne
+     change donc pas la largeur du néon, il en change l'intensité : le halo se densifie, et un
+     voile de lumière monte en dedans.
      Deux nombres ANIMÉS la pilotent, enregistrés plus bas : --lit (0 au repos, 1 plein feu) et
      --pop (1 allumé, 0 éteint — l'amorçage d'une commande qui apparaît). */
   --neon-color: var(--grad-solar-to);
-  --neon-width: 1.5px;
-  --neon-blur: 6px;
-  --neon-blur-lit: 16px;
+  --neon-width: 2.5px;
+  --neon-blur: 12px;
   /* MARGES. Il n'y a plus d'ombre à loger, mais un HALO, qui porte à peu près aussi loin : plein
-     feu, 16 px de flou. La gouttière d'avant tombe donc encore juste et on la garde, avec son
+     feu, 12 px de flou. La gouttière d'avant tombe donc encore juste et on la garde, avec son
      calcul : 72 px × k, k = 1/3 pour une commande ordinaire, 1/2 pour une grande, et k suit
      l'échelle du support (--neu-density, cf. plus bas) — 16 px et 24 à la souris, 24 et 36 au
      doigt. Les apps la posent en marge et en `gap` ; un halo rogné par le bord d'une zone qui
@@ -136,13 +137,14 @@
 
   /* HALOS. Trois, et un seul principe : un hologramme RAYONNE de sa propre teinte, une lecture
      d'instrument RAYONNE de l'ambre du viseur. Le flou croît avec ce qu'il entoure — 8 px pour un
-     glyphe projeté, 10 pour un panneau, 12 pour un châssis — et l'opacité avec l'importance :
-     30 % pour un liseré ordinaire, 55 % pour un cadre de visée, qui doit se voir de loin.
+     glyphe projeté, puis LE NÉON pour tout ce qui est cerné — zone, lecture, châssis, commande :
+     12 px à 55 %, la mesure du châssis, une seule (cf. --neon-blur). --glow-amber-strong n'en est
+     plus qu'un alias, gardé pour les apps qui le citent.
      Valeurs portées telles quelles de team-dashboard (HoloProjection.module.css, targeting.css) :
      elles y ont été réglées à l'écran, les rejouer de tête ne rendrait pas le même rayonnement. */
   --glow-holo: 0 0 8px color-mix(in srgb, var(--grad-glacier-to) 70%, transparent);
-  --glow-amber: 0 0 10px color-mix(in srgb, var(--grad-solar-to) 30%, transparent);
-  --glow-amber-strong: 0 0 12px color-mix(in srgb, var(--grad-solar-to) 55%, transparent);
+  --glow-amber: 0 0 var(--neon-blur) color-mix(in srgb, var(--grad-solar-to) 55%, transparent);
+  --glow-amber-strong: var(--glow-amber);
 
   /* LE SIGNAL INSTABLE d'une projection, en UNE recette (holo.css en pose les images-clés).
      Elle passe par un jeton et non par un nom d'animation recopié chez chaque consommateur : une

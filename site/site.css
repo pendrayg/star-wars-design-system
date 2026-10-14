@@ -156,7 +156,7 @@ code {
   height: 100%;
   border-radius: var(--neu-radius-lg);
   background: var(--color-surface);
-  border: 1px solid var(--neon-color);
+  border: var(--neon-width) solid var(--neon-color);
   box-shadow: var(--glow-amber);
 }
 
