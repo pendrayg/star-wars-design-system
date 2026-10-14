@@ -5,8 +5,8 @@
    repos ; actif (`ds-active`, pressé) : pleine couleur, son halo, et le néon PLEIN FEU.
 
    RIEN NE S'ENFONCE. Un appui ne creuse plus le bouton : il le fait briller plus fort. --lit, un
-   nombre, dit où en est le bouton : 0 au repos, 1 plein feu. Il monte vite (--lit-in) et
-   redescend plus lentement (--lit-out), sans dépassement.
+   nombre, dit où en est le bouton : 0 au repos, 1 plein feu. Il passe de l'un à l'autre en
+   CLIGNOTANT, dans un sens comme dans l'autre (--lit-in, --lit-out : cf. --lit-flicker).
 
    Un toucher bref ne laisse pas le temps de voir la lumière monter (:active ne dure qu'un
    instant) : les composants posent `ds-pressed` un court moment (cf. usePress), puis le bouton

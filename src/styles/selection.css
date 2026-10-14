@@ -1,7 +1,7 @@
 /* Sélection (Selectable, SelectToggle).
    Ce qui est choisi S'ALLUME au lieu de se teinter : le néon dit l'état, comme partout. Le bloc
    prend le tube PLEIN FEU du même geste que le bouton qui le choisit — --lit, qui monte vite
-   (--lit-in) et pâlit plus lentement (--lit-out).
+   (--lit-in) et retombe de même (--lit-out) : il clignote entre éteint et plein feu.
    ÉTEINT AU REPOS, sans liseré : un bloc qu'on peut choisir n'est pas une commande, il n'a pas de
    tube tant qu'il n'est pas choisi. D'où --neon-on, qui suit --lit au lieu de rester à 1. */
 

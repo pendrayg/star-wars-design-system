@@ -107,11 +107,20 @@
   --btn-active-glow-strong: 0 0 11px color-mix(in srgb, currentColor 75%, transparent);
   --check-glow: drop-shadow(0 0 4px color-mix(in srgb, var(--color-primary) 70%, transparent));
 
-  /* LES DEUX TEMPS DU NÉON : il monte vite (80 ms, le temps qu'un doigt le voie s'allumer sous
-     lui) et redescend plus lentement (250 ms) — un tube ne s'éteint pas net, il pâlit. Aucune
-     courbe à dépassement : rien ne rebondit. */
-  --lit-in: 0.08s ease-out;
-  --lit-out: 0.25s ease-in;
+  /* LE PASSAGE DU REPOS AU PLEIN FEU, et retour : le tube CLIGNOTE entre ses deux éclats, comme
+     un néon dont la tension hésite — les mêmes instants que l'amorçage (ds-pop, neon.css : deux
+     ratés, une retombée à un tiers, puis il tient), mais du MOINS ÉCLAIRÉ au PLUS ÉCLAIRÉ, jamais
+     jusqu'au noir : une commande au repos reste allumée.
+     Le clignotement est une COURBE de transition, et non une animation : linear() accepte des
+     paliers (deux points à la même abscisse font une coupure franche), et une transition se joue
+     dans les deux sens sans rien de plus — vers le plein feu, la courbe saute entre le repos et
+     le plein feu ; au retour, entre le plein feu et le repos. Interrompue (un toucher bref
+     relâché en route), elle repart d'où elle en est, ce qu'une animation ne sait pas faire.
+     0,6 s : le clignotement tient dans les 46 premiers centièmes, soit moins de 0,3 s — un appui
+     se lit tout de suite —, le reste est le palier final. */
+  --lit-flicker: linear(0, 0 8%, 1 8%, 1 13%, 0 13%, 0 24%, 1 24%, 1 28%, 0.35 28%, 0.35 36%, 0 36%, 0 46%, 1 46%, 1);
+  --lit-in: 0.6s var(--lit-flicker);
+  --lit-out: 0.6s var(--lit-flicker);
 
   /* Palettes de dégradé (couleurs de stop). */
   --grad-glacier-from: #001020;
@@ -250,6 +259,15 @@
    sont écrites en variables — il sautait d'une valeur à l'autre.
    --lit transite sur l'élément lui-même (le bouton, le champ) et son calque de néon en hérite :
    Safari n'anime pas une propriété enregistrée sur un pseudo-élément. */
+/* Sans linear() (Safari avant 17.2) : pas de clignotement, la lumière monte vite et pâlit plus
+   lentement. */
+@supports not (transition-timing-function: linear(0, 1)) {
+  :root {
+    --lit-in: 0.08s ease-out;
+    --lit-out: 0.25s ease-in;
+  }
+}
+
 @property --lit {
   syntax: '<number>';
   inherits: true;
