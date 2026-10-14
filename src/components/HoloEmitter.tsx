@@ -9,6 +9,11 @@ import { cx } from './cx'
  * commande mais le sujet lui-même (le vaisseau d'une ligne, le personnage d'une priorité), et
  * l'enfant qu'il projette est, lui, décoratif.
  *
+ * La TAILLE de la projection se règle par un seul `font-size`, posé sur l'émetteur : le sujet
+ * l'hérite (il vaut donc 1 em) et le socle comme le faisceau, mesurés en `em`, suivent à l'échelle.
+ * Par défaut il vaut 2,4 rem ; une app qui veut projeter plus grand ou plus petit ne touche qu'à
+ * cette valeur, en style ou en classe.
+ *
  * La PHASE du clignotement reste à l'app : `--holo-delay`, posé en style sur cet élément ou hérité
  * d'un ancêtre (la ligne d'un tableau). Sans elle, toutes les projections décrochent ensemble — ce
  * qui est juste tant qu'il n'y en a qu'une à l'écran.

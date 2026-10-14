@@ -134,7 +134,9 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
   comme un tube néon qui amorce mal. La **phase** appartient à l'app (`--holo-delay`), et elle doit
   être **dérivée** d'une donnée stable — un `Math.random()` rejouerait à chaque rendu.
   `HoloEmitter` ajoute le socle et le faisceau : le faisceau décroche avec le sujet, **jamais le
-  socle**, qui est une pièce matérielle.
+  socle**, qui est une pièce matérielle. Sa **taille** tient dans un seul `font-size`, posé sur
+  l'émetteur (2,4 rem par défaut) : le sujet l'hérite et vaut 1 em, le socle et le faisceau sont
+  mesurés en `em` — régler cette valeur met toute la projection à l'échelle.
 - **La visée a son propre vocabulaire.** `Frame` est le **bord de l'écran** : trait ambre de
   2,5 px, rayon de **26 px** — le seul du DS à ce rayon, il n'est ni une commande ni une zone —,
   halo fort et voile interne, qu'un balayage rouge parcourt **une seule fois**. `Readout` est le
@@ -308,7 +310,7 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
 | `Spinner`, `Notice`, `Zone` | chargement, message, panneau à liseré ambre et halo |
 | `Icon` | les icônes des **deux** polices : `ICONS` (Symbols Nerd Font) et `GLYPHS` (157 glyphes Star Wars), choisies d'après le seul nom |
 | `Frame`, `Readout` | la **visée** : le châssis d'écran que parcourt un balayage, et la lecture d'instrument dont les chiffres (`digits`) passent au rouge |
-| `HoloEmitter` | l'**émetteur holographique** : socle et faisceau autour de ce qu'il projette (`.ds-holo`), dont la phase se règle par `--holo-delay` |
+| `HoloEmitter` | l'**émetteur holographique** : socle et faisceau autour de ce qu'il projette (`.ds-holo`), dont la phase se règle par `--holo-delay` et la taille par un seul `font-size` sur l'émetteur (2,4 rem par défaut) |
 | `HyperspaceJump`, `useHyperspaceJump` | le **saut** : le hook retarde une valeur jusqu'à la croisière, le composant peint le champ d'étoiles tant que `phase` n'est pas `null` |
 
 ## Utiliser le paquet dans une app

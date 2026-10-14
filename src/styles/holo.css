@@ -78,13 +78,17 @@
 
 /* L'ÉMETTEUR : un socle matériel et le faisceau qu'il projette, tous deux ancrés sur le CENTRE de
    la boîte — donc sur le sujet, qui y est centré. Toutes les mesures sont en `em` et le `font-size`
-   est posé ici : sans lui les pseudo-éléments hériteraient de la taille du texte environnant, et
-   le socle d'une projection de 2 rem serait trois fois trop petit. */
+   est posé sur l'ÉMETTEUR LUI-MÊME, pas sur ses pseudo-éléments : il règle d'un seul geste la
+   taille du sujet projeté (qui l'hérite, et vaut donc 1 em) et celle du socle et du faisceau (qui
+   l'héritent aussi). Le poser sur les seuls pseudo-éléments laissait le sujet à la taille du texte
+   environnant — un faisceau de 2,4 rem projetant un glyphe de 15 px. Une app qui veut une
+   projection plus grande ou plus petite ne règle donc QU'UN `font-size`, ici, et tout suit. */
 .ds-holo-emitter {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  font-size: 2.4rem;
   line-height: 1;
 }
 
@@ -94,7 +98,6 @@
   position: absolute;
   left: 50%;
   translate: -50% 0;
-  font-size: 2.4rem;
   pointer-events: none;
 }
 
