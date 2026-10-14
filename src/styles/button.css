@@ -6,7 +6,7 @@
 
    RIEN NE S'ENFONCE. Un appui ne creuse plus le bouton : il le fait briller plus fort. --lit, un
    nombre, dit où en est le bouton : 0 au repos, 1 plein feu. Il passe de l'un à l'autre en
-   CLIGNOTANT, dans un sens comme dans l'autre (--lit-in, --lit-out : cf. --lit-flicker).
+   CLIGNOTANT, dans un sens comme dans l'autre (--lit-in, --lit-out : cf. --lit-flicker-up et -down, qui passent par le sombre).
 
    Un toucher bref ne laisse pas le temps de voir la lumière monter (:active ne dure qu'un
    instant) : les composants posent `ds-pressed` un court moment (cf. usePress), puis le bouton
@@ -68,10 +68,19 @@
   pointer-events: none;
 }
 
+/* LA BAISSE DE TENSION GAGNE LE TEXTE. Le calque de néon est peint AU-DESSUS du contenu (un
+   élément positionné passe devant le texte qui le précède dans le flux) : le temps d'un raté, il
+   se voile de la couleur du fond, et le libellé comme l'icône s'assombrissent avec le tube. Pas
+   de filtre ni d'opacité sur le bouton lui-même : --lit y est animé, et Safari ne répercute pas
+   un nombre animé sur les autres propriétés de l'élément qui l'anime — un enfant, si. */
+.ds-button > .ds-shade {
+  background: color-mix(in srgb, var(--color-bg) calc(75% * clamp(0, -1 * var(--lit), 1)), transparent);
+}
+
 /* Éteint au repos (posé dans une surface déjà cernée de néon) : le tube ne s'allume qu'à l'appui
    ou à l'état actif — il suit --lit au lieu de rester allumé. */
 .ds-button.ds-flat > .ds-shade {
-  --neon-on: calc(clamp(0, var(--pop), 1) * var(--lit));
+  --neon-on: calc(clamp(0, var(--pop), 1) * clamp(0, var(--lit), 1));
 }
 
 .ds-button:disabled {

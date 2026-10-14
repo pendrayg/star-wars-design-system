@@ -34,7 +34,8 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
   se densifie (55 → 100 %, sans s'élargir), un voile de lumière passe en dedans. Un nombre enregistré le pilote,
   `--lit` (0 au repos, 1 plein feu), qui passe de l'un à l'autre **en clignotant**, dans les
   deux sens, entre le moins et le plus éclairé : les instants de l'amorçage, portés par une
-  courbe de transition à paliers (`--lit-flicker`, un `linear()`), en 0,6 s. Sans `linear()`, la
+  courbe de transition à paliers (`--lit-flicker-up` / `-down`, des `linear()`), chaque raté passant par une baisse de
+  tension qui assombrit tube, texte et icône, en 0,6 s. Sans `linear()`, la
   lumière monte en 80 ms et pâlit en 250.
 - **Ce qui apparaît s'amorce.** Une commande qui paraît (grille, section dépliante) ne monte pas
   du fond : son néon **s'amorce**, comme un tube qu'on allume — deux ratés, une retombée, puis il

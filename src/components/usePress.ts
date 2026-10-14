@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react'
 
-/** Le plein feu d'un toucher bref : un peu plus que le clignotement de --lit (--lit-flicker, les
+/** Le plein feu d'un toucher bref : un peu plus que le clignotement de --lit (--lit-flicker-up, les
  *  46 premiers centièmes de 0,6 s, soit 276 ms), pour que le tube ait fini de s'allumer avant de
  *  clignoter vers son repos. */
 export const PRESS_HOLD_MS = 300

@@ -107,20 +107,26 @@
   --btn-active-glow-strong: 0 0 11px color-mix(in srgb, currentColor 75%, transparent);
   --check-glow: drop-shadow(0 0 4px color-mix(in srgb, var(--color-primary) 70%, transparent));
 
-  /* LE PASSAGE DU REPOS AU PLEIN FEU, et retour : le tube CLIGNOTE entre ses deux éclats, comme
-     un néon dont la tension hésite — les mêmes instants que l'amorçage (ds-pop, neon.css : deux
-     ratés, une retombée à un tiers, puis il tient), mais du MOINS ÉCLAIRÉ au PLUS ÉCLAIRÉ, jamais
-     jusqu'au noir : une commande au repos reste allumée.
+  /* LE PASSAGE DU REPOS AU PLEIN FEU, et retour : le tube CLIGNOTE, comme un néon dont la
+     tension hésite, et chaque raté PASSE PAR LE SOMBRE — sans quoi un saut entre deux éclats
+     voisins ne se voyait pas. --lit sort donc de son intervalle le temps de la transition :
+       1  plein feu,  0  repos,  −1  BAISSE DE TENSION (le tube pâlit, le texte et l'icône du
+       bouton s'assombrissent avec lui, cf. neon.css et button.css).
+     Les mêmes instants que l'amorçage (ds-pop : deux ratés, une retombée, puis il tient).
      Le clignotement est une COURBE de transition, et non une animation : linear() accepte des
-     paliers (deux points à la même abscisse font une coupure franche), et une transition se joue
-     dans les deux sens sans rien de plus — vers le plein feu, la courbe saute entre le repos et
-     le plein feu ; au retour, entre le plein feu et le repos. Interrompue (un toucher bref
-     relâché en route), elle repart d'où elle en est, ce qu'une animation ne sait pas faire.
-     0,6 s : le clignotement tient dans les 46 premiers centièmes, soit moins de 0,3 s — un appui
-     se lit tout de suite —, le reste est le palier final. */
-  --lit-flicker: linear(0, 0 8%, 1 8%, 1 13%, 0 13%, 0 24%, 1 24%, 1 28%, 0.35 28%, 0.35 36%, 0 36%, 0 46%, 1 46%, 1);
-  --lit-in: 0.6s var(--lit-flicker);
-  --lit-out: 0.6s var(--lit-flicker);
+     paliers (deux points à la même abscisse font une coupure franche) et des valeurs hors de
+     [0, 1] — c'est ainsi qu'on descend sous le repos. Interrompue (un toucher bref relâché en
+     route), une transition repart d'où elle en est, ce qu'une animation ne sait pas faire.
+     DEUX courbes, parce qu'une sortie de [0, 1] s'écrit dans le repère de la transition : vers le
+     plein feu (0 → 1), −1 est la sortie −1 ; vers le repos (1 → 0), −1 est la sortie 2.
+     Toutes deux : sombre, éclat, sombre, éclat, demi-sombre, puis l'état d'arrivée — et le
+     sombre d'abord, pour que le clic se voie dès l'image suivante.
+     0,6 s : le clignotement tient dans les 46 premiers centièmes, moins de 0,3 s ; le reste est
+     le palier final. */
+  --lit-flicker-up: linear(-1, -1 10%, 1 10%, 1 18%, -1 18%, -1 30%, 1 30%, 1 36%, -0.5 36%, -0.5 46%, 1 46%, 1);
+  --lit-flicker-down: linear(2, 2 10%, 0 10%, 0 18%, 2 18%, 2 30%, 0 30%, 0 36%, 1.5 36%, 1.5 46%, 1 46%, 1);
+  --lit-in: 0.6s var(--lit-flicker-up);
+  --lit-out: 0.6s var(--lit-flicker-down);
 
   /* Palettes de dégradé (couleurs de stop). */
   --grad-glacier-from: #001020;

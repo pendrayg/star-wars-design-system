@@ -7,7 +7,7 @@
 
 .ds-selectable {
   --lit: 0;
-  --neon-on: calc(clamp(0, var(--pop), 1) * var(--lit));
+  --neon-on: calc(clamp(0, var(--pop), 1) * clamp(0, var(--lit), 1));
   /* La marge du cadre : son contenu ne touche pas le tube, et la marge négative la rend à la
      page — le contenu reste aligné sur celui des voisins, et rien ne bouge quand il s'allume. */
   --selectable-room: 12px;
