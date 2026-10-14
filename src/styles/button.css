@@ -45,9 +45,14 @@
   color: color-mix(in srgb, var(--btn-active-color) 50%, transparent);
 }
 
+/* L'APPUI N'ALLUME QUE CE QUI N'A PAS D'ÉTAT. Une commande momentanée n'a que lui pour dire
+   qu'elle a été touchée : elle clignote jusqu'au plein feu, tient le temps de `ds-pressed`, puis
+   clignote vers son repos. Une BASCULE, elle, a son état, et c'est lui qui s'allume ou s'éteint
+   au clic : l'appui ne la tient plus au plein feu, sans quoi éteindre une bascule ne se voyait
+   qu'une fois le doigt levé et le maintien écoulé — un bon tiers de seconde après le clic. */
 .ds-button.ds-active,
-.ds-button.ds-pressed,
-.ds-button:active {
+.ds-button.ds-momentary.ds-pressed,
+.ds-button:not([aria-pressed]):active {
   --lit: 1;
   color: var(--btn-active-color);
   animation: ds-glow-in 0.05s ease-in both;
@@ -169,8 +174,8 @@
     animation: none;
   }
   .ds-button.ds-active,
-  .ds-button.ds-pressed,
-  .ds-button:active {
+  .ds-button.ds-momentary.ds-pressed,
+  .ds-button:not([aria-pressed]):active {
     animation: none;
     text-shadow: var(--btn-active-glow);
   }

@@ -6,8 +6,9 @@
         commandes, que tout le DS aligne au pixel ;
      2. le HALO au-dehors : flou fixe (--neon-blur, celui du châssis), encre de 55 à 100 % selon
         --lit — le plein feu densifie le halo, il ne l'élargit pas ;
-     3. le VOILE en dedans : nul au repos, il monte avec --lit. C'est celui du châssis (« un voile
-        ambre à 8 % en dedans »), un peu plus dense parce qu'il couvre une pilule et non un écran.
+     3. le VOILE en dedans : nul au repos, il monte avec --lit, jusqu'à 35 % sur 16 px. C'est
+        celui du châssis (« un voile ambre à 8 % en dedans »), bien plus dense : c'est lui qui
+        fait voir le plein feu, et chaque saut du clignotement entre repos et plein feu.
 
    --neon-on (0 à 1) éteint le tout d'un bloc : c'est --pop, l'amorçage d'une commande qui apparaît
    (cf. fold.css), et une commande ordinaire le laisse à 1. Les variables ne sont pas des JETONS
@@ -30,7 +31,7 @@
   box-shadow:
     inset 0 0 0 var(--neon-width) color-mix(in srgb, var(--neon-color) calc(100% * var(--neon-on)), transparent),
     0 0 var(--neon-blur) color-mix(in srgb, var(--neon-color) calc((55% + 45% * var(--lit)) * var(--neon-on)), transparent),
-    inset 0 0 calc(14px * var(--lit)) color-mix(in srgb, var(--neon-color) calc(18% * var(--lit) * var(--neon-on)), transparent);
+    inset 0 0 calc(16px * var(--lit)) color-mix(in srgb, var(--neon-color) calc(35% * var(--lit) * var(--neon-on)), transparent);
 }
 
 /* Sans color-mix() (Safari avant 16.2) : le tube seul, à la couleur du thème — un néon sans halo

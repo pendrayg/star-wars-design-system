@@ -45,7 +45,8 @@
 /* LE BOUTON SECTION DÉPLIANTE (DisclosureButton) : la section est le bouton. Son tube est celui
    d'un bouton — calque de néon (.ds-shade) qui suit --lit —, mais SOUS le contenu : le voile qui
    monte en dedans au plein feu ne doit pas couvrir les champs qu'elle porte. Liseré repliée, plein
-   feu dépliée (et jusqu'à la fin du repli), plein feu le temps d'un appui. */
+   feu dépliée (et jusqu'à la fin du repli). C'est une bascule : l'appui ne la tient pas au plein
+   feu, c'est son état qui clignote (cf. button.css). */
 .ds-disclosure-button {
   --lit: 0;
   position: relative;
@@ -58,8 +59,7 @@
   z-index: -1;
 }
 
-.ds-disclosure-button.ds-active,
-.ds-disclosure-button.ds-pressed {
+.ds-disclosure-button.ds-active {
   --lit: 1;
   transition: --lit var(--lit-in);
 }
@@ -159,7 +159,6 @@
 @media (prefers-reduced-motion: reduce) {
   .ds-disclosure-button,
   .ds-disclosure-button.ds-active,
-  .ds-disclosure-button.ds-pressed,
   .ds-disclosure-chevron {
     transition: none;
   }
