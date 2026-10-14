@@ -10,15 +10,15 @@
  *     titre, un champ avec son libellé — le libellé ne se sépare pas de ce qu'il nomme ;
  *   - un élément qui en porte plusieurs s'ouvre, et ses enfants se rangent en rangées d'après leur
  *     position : ceux qui se tiennent côte à côte font UNE ligne, comme une ligne de grille, et
- *     poppent ensemble ; un enfant seul sur sa rangée est visité à son tour.
+ *     s'amorcent ensemble ; un enfant seul sur sa rangée est visité à son tour.
  *
- * Les commandes en relief de chaque ligne — ce qui poppera — sont relevées au passage.
+ * Les commandes cernées de néon de chaque ligne — ce qui s'amorcera — sont relevées au passage.
  */
 
 /** Ce qui s'actionne : une commande compte pour une, quel que soit son habillage. */
 const COMMANDES = 'button, input:not([type="hidden"]), select, textarea, a[href]'
 
-/** Ce qui porte un relief et poppe : la commande telle que le DS l'habille. Un sélecteur porte le
+/** Ce qui porte un tube et s'amorce : la commande telle que le DS l'habille. Un sélecteur porte le
  *  sien sur son enveloppe (le chevron grandit avec lui) ; un bouton section dépliante le porte sur
  *  la SECTION elle-même, puisque la section EST le bouton. */
 export const RELIEFS = '.ds-button, .ds-disclosure-button, .ds-select, .ds-input:not(.ds-select > .ds-input), .ds-checkbox'
@@ -28,12 +28,12 @@ const SECTIONS = 'section, article, fieldset, form, ul, ol, dl'
 
 /**
  * Ce qui est UNE commande bien que ce soit une section pleine d'autres : le bouton section
- * dépliante, dont la section EST le bouton, en relief au repos.
+ * dépliante, dont la section EST le bouton, cernée de son liseré au repos.
  *
  * SANS CETTE EXCEPTION IL SE DÉCOUPAIT, et c'est le défaut corrigé : un `<section>` s'ouvre
  * toujours, donc son en-tête et son contenu replié faisaient des lignes séparées, dont aucune ne
- * portait le relief — il est sur la section, et elle n'était plus une ligne. Il se découvrait
- * comme du TEXTE, sans rebond, alors que c'est une commande.
+ * portait le tube — il est sur la section, et elle n'était plus une ligne. Il se découvrait
+ * comme du TEXTE, en fondu, sans amorçage, alors que c'est une commande.
  *
  * L'EXCEPTION EST NOMMÉE, PAS UN RETRAIT DE `SECTIONS` : un vrai `<section>` de mise en page doit
  * continuer de s'ouvrir, et le compte des commandes ne suffisait pas à les distinguer — un bouton
@@ -47,7 +47,7 @@ export interface FoldLine {
   /** Haut et bas de la ligne, depuis le haut du contenu, en px. */
   top: number
   bottom: number
-  /** Ses commandes en relief, qui poppent quand la ligne se découvre. */
+  /** Ses commandes cernées de néon, qui s'amorcent quand la ligne se découvre. */
   reliefs: HTMLElement[]
 }
 
@@ -93,8 +93,8 @@ export function foldLines(racine: HTMLElement): FoldLine[] {
     const rects = elements.map((el) => el.getBoundingClientRect())
     const reliefs = elements
       .flatMap((el) => [...(el.matches(RELIEFS) ? [el] : []), ...el.querySelectorAll<HTMLElement>(RELIEFS)])
-      // Une commande entière poppe D'UN BLOC : ce qu'elle cache repliée n'a pas de pop à elle, et
-      // le jouer quand même ferait rebondir des commandes invisibles dans une commande qui monte.
+      // Une commande entière s'amorce D'UN BLOC : ce qu'elle cache repliée n'a pas d'amorçage à elle,
+      // et le jouer quand même ferait clignoter des commandes invisibles dans une commande qui s'allume.
       .filter((el) => visible(el) && !el.parentElement?.closest(COMMANDES_ENTIERES))
     lignes.push({
       elements,

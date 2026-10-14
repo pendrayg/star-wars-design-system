@@ -1,15 +1,15 @@
 /**
  * Rythme du dépli d'une grille dépliante (FoldingGrid), ligne par ligne, tout du long : le cadre
- * s'agrandit d'une ligne (la poussée) ; sitôt sa place faite, les boutons de cette ligne « poppent »
- * — ils montent du fond au-delà de leur relief, rebondissent et s'y posent en faisant apparaître leur
- * logo —, et la poussée de la ligne suivante part en même temps. Chaque bouton porte son propre pop ;
- * les lignes le déclenchent l'une après l'autre. Le repli en est le miroir. La courbe du pop vient de
- * l'atelier « Pop du bouton » (cf. ds-pop, fold.css).
+ * s'agrandit d'une ligne (la poussée) ; sitôt sa place faite, le néon des boutons de cette ligne
+ * S'AMORCE — deux ratés, une retombée, puis il tient, leur logo clignotant avec lui —, et la poussée
+ * de la ligne suivante part en même temps. Chaque bouton porte son propre amorçage (le « pop ») ;
+ * les lignes le déclenchent l'une après l'autre. Le repli en est le miroir : le tube vacille et
+ * s'éteint (cf. ds-pop, neon.css et fold.css).
  */
 
 /** Poussée d'une ligne, et remontée du cadre au repli, en secondes. */
 export const PUSH_S = 0.3
-/** Pop des boutons d'une ligne, rebonds compris, en secondes (durée des animations ds-pop). */
+/** Amorçage du néon des boutons d'une ligne, en secondes (durée des animations ds-pop). */
 export const POP_S = 1
 
 export interface FoldStep {
@@ -20,7 +20,7 @@ export interface FoldStep {
 }
 
 /**
- * Le dépli, une ligne par étape : les poussées s'enchaînent, sans attendre la fin des pops.
+ * Le dépli, une ligne par étape : les poussées s'enchaînent, sans attendre la fin des amorçages.
  * `push` est la durée d'une poussée — celle de la grille par défaut ; la section dépliante la
  * raccourcit quand elle a beaucoup de lignes (cf. foldPush).
  */
@@ -49,22 +49,22 @@ export const SETTLE_S = 0.05
 export interface FoldBackStep {
   /** Lignes encore découvertes après l'étape. */
   rows: number
-  /** Moment où les boutons de la ligne rejouent leur pop à l'envers, puis où le cadre la recouvre. */
+  /** Moment où les boutons de la ligne s'éteignent (le pop à l'envers), puis où le cadre la recouvre. */
   unpopAt: number
   pullAt: number
 }
 
 /**
  * Le repli : le dépli joué à l'envers, une ligne par étape depuis le bas. Les boutons d'une ligne
- * rejouent leur pop à rebours et retournent au fond ; le cadre ne la recouvre qu'ensuite. Les pops
- * inversés partent en cascade, une ligne toutes les PUSH_S, comme au dépli.
+ * rejouent leur amorçage à rebours et s'éteignent ; le cadre ne la recouvre qu'ensuite. Les
+ * extinctions partent en cascade, une ligne toutes les PUSH_S, comme au dépli.
  */
 export function foldBackSchedule(extraRows: number, push = PUSH_S): FoldBackStep[] {
   return Array.from({ length: Math.max(0, extraRows) }, (_, i) => ({
     rows: extraRows - i - 1,
     unpopAt: i * push,
     // Une marge : l'animation part à l'image suivant le changement de classe ; sans elle, le cadre
-    // recouvrirait des boutons pas tout à fait au fond.
+    // recouvrirait des boutons pas tout à fait éteints.
     pullAt: i * push + POP_S + SETTLE_S,
   }))
 }
@@ -72,8 +72,8 @@ export function foldBackSchedule(extraRows: number, push = PUSH_S): FoldBackStep
 /**
  * Le repli d'une section dépliante (Reveal, Disclosure) : il commence DÈS L'APPUI. Le cadre remonte
  * aussitôt sur la dernière ligne, au rythme des poussées, et les commandes de chaque ligne
- * retournent au fond pendant qu'il la recouvre — leur pop inversé dure une poussée (cf.
- * --unpop-duration, disclosure.css). La grille, elle, attend que ses boutons soient au fond
+ * s'éteignent pendant qu'il la recouvre — leur pop inversé dure une poussée (cf.
+ * --unpop-duration, disclosure.css). La grille, elle, attend que ses boutons soient éteints
  * (foldBackSchedule) : ses boutons sont tout son contenu, une section a surtout autre chose à
  * ranger.
  *

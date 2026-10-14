@@ -51,8 +51,8 @@ const draw = (indicator: HTMLElement, [left, top, right, bottom]: Edges) => {
 }
 
 /**
- * Le cœur de la barre de menu et du sélecteur multiple plat : un cadre creusé, et dedans UNE
- * pastille en relief sous le choix courant. Changer de choix ne fait pas glisser la pastille : elle
+ * Le cœur de la barre de menu et du sélecteur multiple plat : un cadre cerné de néon, et dedans UNE
+ * pastille plein feu sous le choix courant. Changer de choix ne fait pas glisser la pastille : elle
  * S'ÉTIRE d'abord jusqu'au nouveau (qui s'allume, et s'élargit s'il montre alors son libellé), puis
  * SE RÉTRACTE depuis l'ancien (qui s'éteint et se resserre). Ses bords suivent ceux des choix,
  * mesurés à chaque image, pendant que ceux-ci changent de largeur.

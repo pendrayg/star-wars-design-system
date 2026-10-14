@@ -66,7 +66,7 @@ const SECTIONS = [
   { id: 'retours', title: 'Zones et messages' },
 ]
 
-/** Une progression de neuf points, en pourcentage : de quoi montrer l'ombre d'une donnée. */
+/** Une progression de neuf points, en pourcentage : de quoi montrer le halo d'une donnée. */
 const COURBE = [-1.2, 2.1, 3.8, 5.2, 8.4, 7.2, 12.6, 16.2, 20.4]
 
 /** Quatre parts, dans les teintes des palettes du DS. */
@@ -147,7 +147,7 @@ function Charts() {
             <line className="charts-demo-axe" x1="8" y1={hauteur - 14} x2={largeur - 8} y2={hauteur - 14} />
             <path className="charts-demo-trait" d={courbe} filter="url(#ds-chart-groove)" />
           </svg>
-          <figcaption>L'ombre d'une donnée, k = 1/9, à l'encre des données.</figcaption>
+          <figcaption>Le halo d’un trait : la courbe rayonne de sa propre teinte.</figcaption>
         </figure>
 
         <figure className="charts-demo-parts">
@@ -173,7 +173,7 @@ function Charts() {
               })}
             </g>
           </svg>
-          <figcaption>Le sertissage, k = 1/3 — l'ombre du creux seule, sur les deux bords.</figcaption>
+          <figcaption>Le châssis : un liseré néon autour de la silhouette entière.</figcaption>
         </figure>
     </div>
   )
@@ -303,7 +303,7 @@ function ImageRow({ variant }: { variant: ImageButtonVariant }) {
   )
 }
 
-/** Trois opérations à choisir : le bloc choisi s'enfonce, du geste de son bouton. */
+/** Trois opérations à choisir : le bloc choisi s'allume, du geste de son bouton. */
 function SelectionDemo() {
   const toutes = [
     { id: 'a', titre: 'Amundi Actions Monde ISR', detail: '08/01/2026 · achat · 200,24 €' },
@@ -433,7 +433,7 @@ function Depliantes() {
   )
 }
 
-/** Deux sections qui s'enfoncent, dépliées, du creux d'un élément choisi. */
+/** Deux sections qui s'allument, dépliées, du néon d'un élément choisi. */
 function DepliantesEnfoncees() {
   return (
     <div className="stack stack-creux">
@@ -455,7 +455,7 @@ function DepliantesEnfoncees() {
   )
 }
 
-/** La section est le bouton : un appui sur l'en-tête l'enfonce tout entier et déplie le contenu dedans. */
+/** La section est le bouton : un appui sur l'en-tête l'allume tout entier et déplie le contenu dedans. */
 function BoutonsDepliants() {
   return (
     <div className="stack">
@@ -676,17 +676,17 @@ export function App() {
       <Demo
         id="fondations"
         title="Fondations"
-        intro="Toutes les ombres réduisent la maquette (shadow 2 en relief, shadow 4 en creux) d'un facteur k : 1/3 pour les commandes ordinaires, 1/2 pour les grandes, 1/9 pour les creux fixes. Autour d'une commande, une marge de 72 px × k."
+        intro="Plus d'ombre : tout ce qui se touche est cerné d'un liseré néon, celui du châssis de visée ramené à l'échelle d'une commande — un trait de 1,5 px, son halo au-dehors. Un appui ne l'enfonce pas, il le met plein feu : le halo s'élargit, un voile de lumière passe en dedans. Autour d'une commande, une gouttière de 72 px × k, que le halo occupe."
       >
         <div className="row">
           {[
-            ['var(--neu-raised)', 'Relief, k = 1/3'],
-            ['var(--neu-inset)', 'Creux, k = 1/3'],
-            ['var(--neu-raised-lg)', 'Relief, k = 1/2'],
-            ['var(--neu-inset-lg)', 'Creux, k = 1/2'],
-          ].map(([shadow, label]) => (
+            [0, 'var(--grad-solar-to)', 'Repos'],
+            [1, 'var(--grad-solar-to)', 'Plein feu'],
+            [1, 'var(--color-primary)', 'Primaire'],
+            [1, 'var(--color-danger)', 'Danger'],
+          ].map(([lit, teinte, label]) => (
             <figure className="swatch" key={label}>
-              <div className="swatch-box" style={{ boxShadow: shadow }} />
+              <div className="swatch-box ds-neon" style={{ '--lit': lit, '--neon-color': teinte } as CSSProperties} />
               <figcaption>{label}</figcaption>
             </figure>
           ))}
@@ -744,7 +744,7 @@ export function App() {
       <Demo
         id="boutons"
         title="Boutons"
-        intro="En relief au repos, enfoncés pressés ou actifs, avec le rebond : le creux dépasse sa profondeur, rebondit et se pose ; relâché, le bouton jaillit au-dessus de son repos, puis se pose."
+        intro="Un liseré néon au repos, plein feu pressés ou actifs : rien ne s'enfonce, le halo s'élargit et un voile de lumière passe en dedans. La lumière monte vite et pâlit plus lentement, sans rebond. Le primaire brille au glacier ; le bouton qui supprime, armé, au rouge."
       >
         <div className="row">
           <Button icon="tray_arrow_down">Sauvegarder</Button>
@@ -770,7 +770,7 @@ export function App() {
       <Demo
         id="images"
         title="Boutons à image"
-        intro="Le bouton reste une surface du DS, l'image en est le contenu, posée au-dessus de ses ombres. Éteinte tant que la bascule n'est pas enfoncée."
+        intro="Le bouton reste une surface du DS, l'image en est le contenu, posée au-dessus de son néon : le voile du plein feu se dessine autour d'elle. Éteinte tant que la bascule n'est pas allumée."
       >
         <h3>Sertie</h3>
         <ImageRow variant="set" />
@@ -785,7 +785,7 @@ export function App() {
       <Demo
         id="serties"
         title="Images serties"
-        intro="Une image qu'on montre sans rien commander, un portrait : incrustée dans le chaton d'un bouton serti, sans la surface du bouton autour. Ce qui ne se touche pas n'a pas de relief."
+        intro="Une image qu'on montre sans rien commander, un portrait : incrustée dans le chaton d'un bouton serti, sans la surface du bouton autour. Le chaton garde son tube, la lumière du DS qui cerne une image ; ce qui ne se touche pas ne passe jamais plein feu."
       >
         <h3>Taille du chaton</h3>
         <div className="row">
@@ -812,7 +812,7 @@ export function App() {
       <Demo
         id="graphiques"
         title="Graphiques"
-        intro="Un graphique n'est ni une commande ni une zone : trois filtres lui suffisent. La rainure, pour une courbe — le creux retourné, ses deux ombres posées de part et d'autre du trait faute d'un dedans où les loger, à une échelle que la largeur du trait donne : le flou vaut cette largeur, soit k = largeur / 48. Le sertissage, pour une surface, qui loge le graphique dans la page — l'ombre du creux seule, sans son reflet clair, qui délaverait les teintes. Et l'ombre d'une donnée, que la rainure a remplacée sur les courbes, pour ce qui doit rester posé sur la page."
+        intro="Un graphique n'est ni une commande ni une zone : quelques filtres lui suffisent. Plus de gravure : chaque marque est un tube néon et rayonne de sa propre teinte, comme un hologramme. Le halo d'un trait, pour une courbe — le trait flouté, posé deux fois sous lui, faute de quoi un trait mince n'en garderait qu'un voile. Celui d'une marque pleine, barre, symbole ou part, posé une fois et plus discret : elle retient tout son flou. Et le châssis, un liseré néon autour de la silhouette entière du graphique, à la teinte des commandes."
       >
         <Charts />
       </Demo>
@@ -820,10 +820,10 @@ export function App() {
       <Demo
         id="depliantes"
         title="Sections dépliantes"
-        intro="Le système de la grille dépliante, pour un contenu quelconque : un intitulé, le contenu replié, et dessous le chevron de la grille, enfoncé tant que tout est affiché. Le dépli va ligne par ligne — un titre, un champ avec son libellé, une rangée de commandes côte à côte — et chaque commande poppe sitôt sa place faite. Le repli est le dépli à l'envers, depuis le bas, et part dès l'appui. Avec `sunken`, la section dépliée s'enfonce tout entière, comme un élément choisi. Le bouton section dépliante (`DisclosureButton`) est une section en forme de bouton large : un appui sur son en-tête l'enfonce tout entier et déplie le contenu dedans."
+        intro="Le système de la grille dépliante, pour un contenu quelconque : un intitulé, le contenu replié, et dessous le chevron de la grille, allumé tant que tout est affiché. Le dépli va ligne par ligne — un titre, un champ avec son libellé, une rangée de commandes côte à côte — et le néon de chaque commande s'amorce sitôt sa place faite : deux ratés, une retombée, puis il tient. Le repli est le dépli à l'envers, depuis le bas, et part dès l'appui : les tubes vacillent et s'éteignent. Avec `sunken`, la section dépliée s'allume tout entière, comme un élément choisi. Le bouton section dépliante (`DisclosureButton`) est une section en forme de bouton large : un appui sur son en-tête le met plein feu tout entier et déplie le contenu dedans."
       >
         <Depliantes />
-        <h3>Qui s'enfonce</h3>
+        <h3>Qui s'allume</h3>
         <DepliantesEnfoncees />
         <h3>Bouton section dépliante</h3>
         <BoutonsDepliants />
@@ -832,7 +832,7 @@ export function App() {
       <Demo
         id="selection"
         title="Sélection"
-        intro="Ce qu'on choisit s'enfonce au lieu de se teinter, et ce qu'on peut en faire se déplie au-dessus, comme une section dépliante dont l'état tient lieu de chevron (Reveal). Le bouton qui choisit est un bouton à bascule — en relief, puis enfoncé et allumé, la case vide devenant cochée — et le bloc se creuse du même geste, avec le même rebond. Le creux seul, sans rebord : au repos le bloc est à plat, ce n'est pas une commande."
+        intro="Ce qu'on choisit s'allume au lieu de se teinter, et ce qu'on peut en faire se déplie au-dessus, comme une section dépliante dont l'état tient lieu de chevron (Reveal). Le bouton qui choisit est un bouton à bascule — liseré au repos, puis plein feu, la case vide devenant cochée — et le bloc prend le néon plein feu du même geste. Pas de tube au repos : le bloc n'est pas une commande, il ne s'éclaire que choisi."
       >
         <SelectionDemo />
       </Demo>
@@ -840,23 +840,23 @@ export function App() {
       <Demo
         id="suppression"
         title="Suppression"
-        intro="Supprimer se fait en deux appuis, sans boîte de dialogue. Au repos, la poubelle est à l'encre des commandes — une liste n'est pas une alerte. Le premier appui fait rebondir le bouton et l'arme : la poubelle passe au rouge. Le second supprime. Armé, il désarme de lui-même au bout de trois secondes, ou dès qu'on touche ailleurs. Avec son libellé (« Tout effacer »), c'est un bouton à libellé, le nom rougissant avec la poubelle."
+        intro="Supprimer se fait en deux appuis, sans boîte de dialogue. Au repos, la poubelle est à l'encre des commandes — une liste n'est pas une alerte. Le premier appui allume le bouton et l'arme : la poubelle passe au rouge, et son tube avec elle. Le second supprime. Armé, il désarme de lui-même au bout de trois secondes, ou dès qu'on touche ailleurs. Avec son libellé (« Tout effacer »), c'est un bouton à libellé, le nom rougissant avec la poubelle."
       >
         <DeleteDemo />
       </Demo>
 
-      <Demo id="champs" title="Champs" intro="Des commandes, pas des zones : en relief au repos, creusées une fois engagées, avec le rebond. Texte à 16 px, pour qu'iOS ne zoome pas.">
+      <Demo id="champs" title="Champs" intro="Des commandes, pas des zones : un liseré néon au repos, plein feu une fois engagées ou cochées. Texte à 16 px, pour qu'iOS ne zoome pas.">
         <Fields />
       </Demo>
 
-      <Demo id="menu" title="Barre de menu" intro="Un cadre creusé ; une pastille en relief sous la destination courante, qui montre son libellé. D'une destination à l'autre, la pastille s'étire puis se rétracte. Chaque destination est une commande, à la hauteur de l'échelle du support.">
+      <Demo id="menu" title="Barre de menu" intro="Un cadre cerné de néon ; une pastille plein feu sous la destination courante, qui montre son libellé. D'une destination à l'autre, la pastille s'étire puis se rétracte. Chaque destination est une commande, à la hauteur de l'échelle du support.">
         <Menu />
       </Demo>
 
       <Demo
         id="selecteur"
         title="Sélecteur multiple plat"
-        intro="Un choix parmi quelques-uns, côte à côte dans un cadre creusé : la pastille en relief s'étire jusqu'au nouveau choix puis se rétracte de l'ancien, comme la barre de menu, dans la hauteur d'une commande. Multiligne, les choix se replient sur autant de lignes qu'il en faut, et la pastille s'étire d'une ligne à l'autre : tous restent visibles, un toucher suffit, là où une liste déroulante en cache une douzaine."
+        intro="Un choix parmi quelques-uns, côte à côte dans un cadre cerné de néon : la pastille plein feu s'étire jusqu'au nouveau choix puis se rétracte de l'ancien, comme la barre de menu, dans la hauteur d'une commande. Multiligne, les choix se replient sur autant de lignes qu'il en faut, et la pastille s'étire d'une ligne à l'autre : tous restent visibles, un toucher suffit, là où une liste déroulante en cache une douzaine."
       >
         <h3>Sur une ligne</h3>
         <RangeDemo />
@@ -867,7 +867,7 @@ export function App() {
       <Demo
         id="ecran"
         title="Écran"
-        intro="Un en-tête et un pied fixes, un corps qui seul défile entre eux et passe dessous en s'effaçant en fondu (8 px). Le même écart, la place d'une ombre, sous l'en-tête et au-dessus du pied."
+        intro="Un en-tête et un pied fixes, un corps qui seul défile entre eux et passe dessous en s'effaçant en fondu (8 px). Le même écart, la place d'un halo, sous l'en-tête et au-dessus du pied."
       >
         <ScreenDemo />
       </Demo>
@@ -875,7 +875,7 @@ export function App() {
       <Demo
         id="rangee"
         title="Rangée de commandes"
-        intro="Des commandes réparties sur toute la largeur qu'on leur donne : la place libre se partage à parts égales entre elles et aux deux bouts. L'écart est une mesure du conteneur, pas une constante — la même rangée, ici, dans trois largeurs. Quand la place manque, l'écart tombe à la marge des ombres, puis la rangée se replie."
+        intro="Des commandes réparties sur toute la largeur qu'on leur donne : la place libre se partage à parts égales entre elles et aux deux bouts. L'écart est une mesure du conteneur, pas une constante — la même rangée, ici, dans trois largeurs. Quand la place manque, l'écart tombe à la marge des halos, puis la rangée se replie."
       >
         <ButtonBarDemo />
       </Demo>
@@ -891,12 +891,12 @@ export function App() {
       <Demo
         id="grille"
         title="Grille dépliante"
-        intro="Repliée, une ligne, ou celles des éléments cochés. Le dépli va ligne par ligne : le cadre pousse la suite, puis les boutons poppent pendant que la ligne suivante se découvre. Le repli est le dépli à l'envers."
+        intro="Repliée, une ligne, ou celles des éléments cochés. Le dépli va ligne par ligne : le cadre pousse la suite, puis le néon des boutons s'amorce — deux ratés, une retombée, puis il tient — pendant que la ligne suivante se découvre. Le repli est le dépli à l'envers : les tubes vacillent et s'éteignent."
       >
         <Platforms />
       </Demo>
 
-      <Demo id="retours" title="Zones et messages" intro="Une zone porte une bordure fine, jamais d'ombre : la profondeur est réservée aux commandes.">
+      <Demo id="retours" title="Zones et messages" intro="Une zone porte une bordure fine, jamais de tube néon : la lumière est réservée aux commandes. Le chargement est un petit tube rond dont le halo pulse.">
         <div className="stack">
           <Zone>
             <strong>Une zone</strong> : une bordure fine.

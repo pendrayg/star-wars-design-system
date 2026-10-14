@@ -16,8 +16,8 @@ export interface FlatSelectorProps<Id extends string> {
 }
 
 /**
- * Sélecteur multiple plat : un choix parmi quelques-uns, côte à côte dans un cadre creusé, la
- * pastille en relief sous le choix courant — qui s'étire jusqu'au nouveau puis se rétracte de
+ * Sélecteur multiple plat : un choix parmi quelques-uns, côte à côte dans un cadre cerné de néon,
+ * la pastille plein feu sous le choix courant — qui s'étire jusqu'au nouveau puis se rétracte de
  * l'ancien, comme la barre de menu (cf. PillBar). Un choix se PRESSE : c'est une commande, pas un
  * contenu logé, et il fait donc --control-height comme un bouton (33 px à la souris, 50 au doigt) ;
  * un cadre faisant ce qu'il loge plus ses deux marges, le sélecteur fait 43 / 66 — même compte que

@@ -21,8 +21,8 @@ export interface DisclosureProps {
   /** Dépliée ou non, quand c'est l'app qui en décide (une seule section ouverte à la fois, un
    *  repli après enregistrement…). Le chevron appelle alors `onToggle`, et l'app suit. */
   open?: boolean
-  /** Dépliée, la section S'ENFONCE tout entière — intitulé, contenu et chevron —, comme un élément
-   *  choisi (`Selectable`) : du même creux, au même rebond. Elle remonte à la FIN du repli, une
+  /** Dépliée, la section S'ALLUME tout entière — intitulé, contenu et chevron —, comme un élément
+   *  choisi (`Selectable`) : du même néon plein feu. Elle ne pâlit qu'à la FIN du repli, une
    *  fois le contenu rentré, pas au premier appui. */
   sunken?: boolean
   onToggle?: (open: boolean) => void
@@ -34,24 +34,24 @@ export interface DisclosureProps {
  * Section dépliante : le système de la grille dépliante, appliqué à un contenu quelconque.
  *
  * Un intitulé, toujours visible ; dessous, le contenu replié ; dessous encore, le CHEVRON de la
- * grille — un bouton-icône, enfoncé tant que tout est affiché. Le dépli lui-même est celui de la
- * section dépliante cachée (`Reveal`) : ligne par ligne, chaque commande poppant sitôt sa place
- * faite, le repli joué à l'envers depuis le bas.
+ * grille — un bouton-icône, allumé tant que tout est affiché. Le dépli lui-même est celui de la
+ * section dépliante cachée (`Reveal`) : ligne par ligne, le néon de chaque commande s'amorçant
+ * sitôt sa place faite, le repli joué à l'envers depuis le bas.
  *
- * `sunken` : dépliée, la section s'enfonce tout entière, du creux d'un élément choisi
- * (`Selectable`) — l'ouverture se lit au relief de la région, plus seulement à celui du chevron.
- * Au repli, elle reste enfoncée le temps que le contenu rentre, et ne remonte qu'à la fin.
- * Repliée, elle est à plat, alignée sur ses voisines : le creux a sa marge d'avance.
+ * `sunken` : dépliée, la section s'allume tout entière, du néon d'un élément choisi
+ * (`Selectable`) — l'ouverture se lit à la lumière de la région, plus seulement à celle du chevron.
+ * Au repli, elle reste allumée le temps que le contenu rentre, et ne pâlit qu'à la fin.
+ * Repliée, elle est éteinte, alignée sur ses voisines : le tube a sa marge d'avance.
  */
 /** L'état d'une section dépliante : dépliée ou non — par elle-même, ou par l'app (`open`) —, et
- *  enfoncée dès le dépli et jusqu'à la fin du repli : le creux tient le temps que le contenu rentre,
- *  puis la section remonte, à plat. */
+ *  allumée dès le dépli et jusqu'à la fin du repli : le néon tient le temps que le contenu rentre,
+ *  puis la section pâlit. */
 function useDepli(defaultOpen: boolean, open: boolean | undefined, onToggle?: (open: boolean) => void) {
   const id = useId()
   const [interne, setInterne] = useState(defaultOpen)
   const ouvert = open ?? interne
   const [enfoncee, setEnfoncee] = useState(ouvert)
-  // Dépliée par l'app : enfoncée aussitôt, sans attendre un effet — au même rendu que le dépli.
+  // Dépliée par l'app : allumée aussitôt, sans attendre un effet — au même rendu que le dépli.
   if (ouvert && !enfoncee) setEnfoncee(true)
   return {
     id,
@@ -114,16 +114,17 @@ export interface DisclosureButtonProps {
 }
 
 /**
- * Le BOUTON SECTION DÉPLIANTE : la section EST le bouton. Au repos, un bouton large en relief, de
- * toute la largeur, qui ne montre que son en-tête — icône, intitulé, indication, et un chevron.
- * Un appui sur l'en-tête ENFONCE le bouton tout entier, du creux et du rebond d'un bouton à bascule,
- * et le déplie : le contenu paraît DANS le bouton, sous l'en-tête, dans le même creux. Un second
+ * Le BOUTON SECTION DÉPLIANTE : la section EST le bouton. Au repos, un bouton large cerné de son
+ * liseré, de toute la largeur, qui ne montre que son en-tête — icône, intitulé, indication, et un
+ * chevron. Un appui sur l'en-tête met le bouton tout entier PLEIN FEU, comme un bouton à bascule,
+ * et le déplie : le contenu paraît DANS le bouton, sous l'en-tête, dans le même tube. Un second
  * appui le replie : le contenu rentre ligne par ligne, depuis le bas, et le bouton ne se rétracte
- * sur une ligne qu'une fois elle rentrée (`retractFirst`) ; il remonte en relief une fois tout rentré.
+ * sur une ligne qu'une fois elle rentrée (`retractFirst`) ; il ne pâlit qu'une fois tout rentré.
  *
  * Seul l'en-tête s'actionne (un `<button>` à bascule, `aria-expanded`) : le contenu, qui porte ses
- * propres commandes, ne peut pas être dans un bouton. Le relief est donc celui de la section, sur
- * son calque d'ombre (`Shade`), qui suit --sink comme celui d'un bouton.
+ * propres commandes, ne peut pas être dans un bouton. Le néon est donc celui de la section, sur
+ * son calque (`Shade`), qui suit --lit comme celui d'un bouton — peint SOUS le contenu, pour que le
+ * voile du plein feu ne couvre pas ses champs.
  */
 export function DisclosureButton({ title, hint, icon, defaultOpen = false, open, onToggle, className, children }: DisclosureButtonProps) {
   const { id, ouvert, creuse, basculer, replie } = useDepli(defaultOpen, open, onToggle)

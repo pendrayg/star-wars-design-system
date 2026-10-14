@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react'
 
-/** Juste avant le premier sommet du rebond (27 % d'1 s) : le bouton descend encore quand il est
- *  relâché, et rebondit du fond sans s'y arrêter. */
+/** Le plein feu d'un toucher bref : bien plus que la montée de --lit (--lit-in, 80 ms), pour que
+ *  la lumière se voie tenir avant de pâlir. */
 export const PRESS_HOLD_MS = 230
 
 interface PressHandlers {
@@ -14,10 +14,9 @@ interface PressHandlers {
 }
 
 /**
- * L'enfoncement d'un toucher bref. `:active` ne dure que le temps du doigt sur l'écran — une
- * fraction de seconde sur iPhone —, et l'enfoncement était interrompu avant d'avoir paru. Le bouton
- * reste donc enfoncé (`pressed`, classe `ds-pressed`) presque jusqu'au premier sommet du rebond,
- * puis se relâche, lancé, avec son propre rebond. Clavier compris (Entrée, Espace). Les gestionnaires de
+ * Le plein feu d'un toucher bref. `:active` ne dure que le temps du doigt sur l'écran — une
+ * fraction de seconde sur iPhone —, et la lumière retombait avant d'avoir paru. Le bouton reste
+ * donc plein feu (`pressed`, classe `ds-pressed`) PRESS_HOLD_MS, puis pâlit (--lit-out). Clavier compris (Entrée, Espace). Les gestionnaires de
  * l'app sont appelés aussi.
  */
 export function usePress(own: PressHandlers): { pressed: boolean; handlers: Required<PressHandlers> } {

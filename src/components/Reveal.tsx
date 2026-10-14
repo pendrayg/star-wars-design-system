@@ -10,7 +10,7 @@ export interface RevealProps {
   /** Identifiant du contenu, pour l'`aria-controls` de ce qui le commande. */
   id?: string
   /** Appelé quand un repli est TERMINÉ — la dernière ligne recouverte, le cadre à zéro —, pas quand
-   *  il commence : ce qui doit suivre la fin du repli (une section qui cesse d'être enfoncée) attend
+   *  il commence : ce qui doit suivre la fin du repli (une section qui cesse d'être allumée) attend
    *  ce moment. Un dépli repris avant la fin ne l'appelle pas. */
   onFolded?: () => void
   /** Au repli, chaque ligne, depuis le bas, rentre puis disparaît, et le cadre ne se rétracte
@@ -38,19 +38,20 @@ function couvrir(ligne: FoldLine) {
 }
 
 /**
- * LA MARQUE D'UNE LIGNE SANS RELIEF, qui entre en FONDU au lieu de monter.
+ * LA MARQUE D'UNE LIGNE SANS NÉON, qui entre en FONDU au lieu de s'amorcer.
  *
- * `folded` n'a pas d'équivalent, et c'est voulu : « à plat au fond du creux » ne veut rien dire pour
- * un texte, qui n'est nulle part avant d'entrer — il est couvert (`data-fold-hidden`), point. Lui
- * poser quand même la marque du relief le ferait tomber sous les règles du pop, qui mettent à zéro
- * l'image d'une ligne repliée et ne la rendent qu'au pop : elle y serait restée invisible.
+ * `folded` n'a pas d'équivalent, et c'est voulu : « tube éteint » ne veut rien dire pour un texte,
+ * qui n'a pas de tube et n'est nulle part avant d'entrer — il est couvert (`data-fold-hidden`),
+ * point. Lui poser quand même la marque d'une commande le ferait tomber sous les règles du pop, qui
+ * mettent à zéro l'image d'une ligne repliée et ne la rendent qu'au pop : elle y serait restée
+ * invisible.
  */
 const FONDU = { folded: null, pop: 'fade', unpop: 'unfade' } as const
 
 /**
- * LES DEUX FAÇONS D'ENTRER, et c'est la même marque qui les commande : une ligne qui a un relief le
- * fait MONTER (pop), une ligne qui n'en a pas s'AFFICHE (fondu). Faute de commande à qui la poser,
- * la marque va alors sur la ligne elle-même.
+ * LES DEUX FAÇONS D'ENTRER, et c'est la même marque qui les commande : une ligne qui a des
+ * commandes (`reliefs`) les ALLUME (pop, l'amorçage du néon), une ligne qui n'en a pas s'AFFICHE
+ * (fondu). Faute de commande à qui la poser, la marque va alors sur la ligne elle-même.
  *
  * SANS ÇA, UN TEXTE SURGISSAIT : le retard de sa découverte réglait le QUAND — il ne paraît plus
  * pendant que le cadre s'ouvre encore —, jamais le COMMENT. Il arrivait donc d'un coup, à pleine
@@ -81,16 +82,16 @@ function hauteurPour(n: number, lignes: FoldLine[], total: number): number {
  * de surgir d'une image à l'autre.
  *
  * Le dépli va LIGNE PAR LIGNE, comme celui de la grille : le cadre pousse la suite de la page pour
- * faire la place d'une ligne, puis les commandes de cette ligne POPPENT — elles montent du fond
- * au-delà de leur relief, rebondissent et s'y posent —, pendant que la ligne suivante se découvre.
+ * faire la place d'une ligne, puis le néon des commandes de cette ligne S'AMORCE — deux ratés,
+ * une retombée, puis il tient —, pendant que la ligne suivante se découvre.
  * Le repli est le dépli joué à l'envers, depuis le bas, et part DÈS L'APPUI : le cadre remonte
- * aussitôt, les commandes de chaque ligne retournant au fond pendant qu'il la recouvre (cf.
+ * aussitôt, les commandes de chaque ligne vacillant et s'éteignant pendant qu'il la recouvre (cf.
  * revealBackSchedule).
  *
  * Les lignes d'un contenu ne sont pas données comme celles d'une grille : elles sont relevées dans
  * la mise en page mesurée (cf. foldLines) — un titre, un champ avec son libellé, une note, ou une
- * rangée de commandes côte à côte, qui poppent ensemble. Un texte se découvre sans popper : seul ce
- * qui s'actionne a un relief à reprendre. Au-delà de quelques lignes, les poussées se resserrent
+ * rangée de commandes côte à côte, qui s'amorcent ensemble. Un texte se découvre en fondu, sans
+ * s'amorcer : seul ce qui s'actionne a un tube à allumer. Au-delà de quelques lignes, les poussées se resserrent
  * pour que le dépli entier tienne dans le temps de quatre lignes de grille (cf. foldPush).
  *
  * Replié, le contenu reste monté — on le mesure pour le déplier —, mais caché et `inert`. Sous
@@ -124,7 +125,7 @@ export function Reveal({ open, id, onFolded, retractFirst = false, className, ch
 
   const plusTard = (fn: () => void, secondes: number) => timers.current.push(window.setTimeout(fn, secondes * 1000))
 
-  /** Toutes les marques retirées : chaque ligne découverte, chaque commande à son relief. */
+  /** Toutes les marques retirées : chaque ligne découverte, chaque commande allumée. */
   const effacer = (lignes: FoldLine[]) => {
     for (const ligne of lignes) {
       decouvrir(ligne)
@@ -154,7 +155,7 @@ export function Reveal({ open, id, onFolded, retractFirst = false, className, ch
         decouvrir(ligne)
         marquer(ligne, null)
       } else {
-        // À découvrir : cachée, et à plat — elle n'a pas encore popé.
+        // À découvrir : cachée, et éteinte — son néon ne s'est pas encore amorcé.
         couvrir(ligne)
         marquer(ligne, 'folded')
       }
@@ -170,27 +171,26 @@ export function Reveal({ open, id, onFolded, retractFirst = false, className, ch
       plusTard(() => {
         const index = deja + etape.rows - 1
         const ligne = lignes[index]
-        // Le pop part une poussée plus tard (--pop-delay) : sitôt la place faite.
+        // L'amorçage part une poussée plus tard (--pop-delay) : sitôt la place faite.
         marquer(ligne, 'pop')
         decouvertes.current = index + 1
         setHauteur(hauteurPour(index + 1, lignes, total))
         /**
-         * UNE LIGNE SANS RELIEF ATTEND SA PLACE ; une ligne qui en a un se montre tout de suite.
+         * UNE LIGNE SANS NÉON ATTEND SA PLACE ; une ligne de commandes se montre tout de suite.
          *
          * LA RÈGLE EST CELLE DU DS, appliquée jusqu'au bout : le cadre pousse pour faire la place
          * d'une ligne, PUIS la ligne paraît. Une commande la respecte déjà sans rien devoir à ce
-         * code — elle gît à plat au fond du creux (`--pop: 0`) et ne monte qu'une poussée plus tard,
-         * par `--pop-delay` ; la voir à plat FAIT PARTIE de l'effet, elle montre le fond du trou
-         * qu'on est en train de creuser.
+         * code — son tube reste éteint (`--pop: 0`) et ne s'amorce qu'une poussée plus tard, par
+         * `--pop-delay` ; la voir éteinte FAIT PARTIE de l'effet, c'est le tube avant la tension.
          *
-         * UN TEXTE N'A RIEN À MONTRER À PLAT, et c'est tout le défaut signalé à l'usage : découvert
+         * UN TEXTE N'A RIEN À MONTRER ÉTEINT, et c'est tout le défaut signalé à l'usage : découvert
          * au DÉPART de la poussée, il paraissait à pleine encre pendant que le cadre s'ouvrait
          * encore. Et il se voyait, parce que `.ds-reveal` garde un `--shadow-room` de marge sous
          * `overflow: hidden` — 16 px à la densité souris, soit une ligne de texte ENTIÈRE affichée
          * avant que la hauteur n'ait bougé d'un pixel.
          *
          * LE RETARD EST EXACTEMENT CELUI DU POP, et pas un nombre à lui : les deux familles de
-         * lignes paraissent donc au même instant de leur poussée, l'une en montant, l'autre en
+         * lignes paraissent donc au même instant de leur poussée, l'une en s'amorçant, l'autre en
          * s'affichant. ET C'EST CE QUI SYNCHRONISE LE FONDU : la marque `fade` est posée ici, mais
          * son animation attend `--pop-delay` — la même poussée —, si bien qu'elle démarre, à zéro
          * d'opacité, dans l'image même où la ligne se découvre. Pas de blanc, pas de saut.
@@ -239,15 +239,15 @@ export function Reveal({ open, id, onFolded, retractFirst = false, className, ch
 
     const etapes = revealBackSchedule(deja, push, retractFirst)
     for (const etape of etapes) {
-      // La ligne qui s'en va est la dernière encore découverte : ses commandes rentrent, puis le
-      // cadre la recouvre — au même instant, ou une fois rentrée (`retractFirst`).
+      // La ligne qui s'en va est la dernière encore découverte : ses commandes s'éteignent, puis le
+      // cadre la recouvre — au même instant, ou une fois éteinte (`retractFirst`).
       const ligne = lignes[etape.rows]
       plusTard(() => marquer(ligne, 'unpop'), etape.unpopAt + DEPART)
       plusTard(() => {
         decouvertes.current = etape.rows
         setHauteur(hauteurPour(etape.rows, lignes, total))
       }, etape.pullAt + DEPART)
-      // Recouverte : elle disparaît aussi de la marge qui laisse voir les ombres. Avec
+      // Recouverte : elle disparaît aussi de la marge qui laisse voir les halos. Avec
       // `retractFirst`, elle disparaît dès qu'elle est rentrée, AVANT que le cadre ne remonte : le
       // cadre ne se rétracte d'une ligne qu'une fois la ligne partie, sur une place vide.
       plusTard(() => couvrir(ligne), etape.pullAt + DEPART + (retractFirst ? 0 : push))
@@ -270,7 +270,7 @@ export function Reveal({ open, id, onFolded, retractFirst = false, className, ch
    *
    * ET ELLE SE VOIT VRAIMENT, parce que le cadre est plus grand que sa hauteur : `.ds-reveal` est en
    * `box-sizing: content-box` avec `padding: var(--shadow-room)` sous `overflow: hidden` (la marge
-   * qui laisse les ombres s'étaler). Même à hauteur nulle, il reste une fenêtre d'un `--shadow-room`
+   * qui laisse les halos s'étaler). Même à hauteur nulle, il reste une fenêtre d'un `--shadow-room`
    * — 16 px à la densité souris, soit une ligne de texte entière.
    *
    * LE REPLI AVAIT LE MÊME DÉFAUT, en miroir : `replie` redevient vrai au rendu qui ferme, donc le

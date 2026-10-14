@@ -14,16 +14,16 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'md' | 'sm'
   /** Icône avant le libellé — symbole d'interface ou glyphe Star Wars. */
   icon?: AnyIconName
-  /** Enfoncé, durablement : la destination courante, un réglage actif. Sans elle, le bouton est
-   *  une commande MOMENTANÉE (`ds-momentary`) : il ne reste jamais enfoncé, et s'enfonce moins. */
+  /** Plein feu, durablement : la destination courante, un réglage actif. Sans elle, le bouton est
+   *  une commande MOMENTANÉE (`ds-momentary`) : il ne brille plus fort que le temps d'un appui. */
   active?: boolean
-  /** À plat au repos (posé dans une surface déjà en relief). */
+  /** Éteint au repos (posé dans une surface déjà cernée de néon) : il ne s'allume qu'à l'appui. */
   flat?: boolean
   children?: ReactNode
 }
 
 /**
- * Bouton à libellé : en relief au repos, enfoncé pressé ou actif, avec le rebond du DS — un
+ * Bouton à libellé : liseré néon au repos, plein feu pressé ou actif — un
  * toucher bref compris (cf. usePress). Un bouton à bascule passe `aria-pressed` et `active` ensemble.
  */
 export function Button({ tone = 'default', size = 'md', icon, active, flat = false, className, children, type = 'button', ...rest }: ButtonProps) {
@@ -57,7 +57,7 @@ export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>
   /** Nom accessible : un bouton-icône n'a pas de texte. */
   label: string
   active?: boolean
-  /** Échelle des grands éléments (ombres k = 1/2), quand il est logé dans une barre de même échelle. */
+  /** Échelle des grands éléments (gouttière k = 1/2), quand il est logé dans une barre de même échelle. */
   large?: boolean
   tone?: ButtonTone
 }

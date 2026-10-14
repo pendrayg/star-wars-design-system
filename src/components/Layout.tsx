@@ -29,15 +29,15 @@ export function Header({ className, ...rest }: Props<HTMLElement>) {
  *
  * IL NE COUPE QUE CE QU'IL DOIT. Un corps qui défile se coupe net sur ses bords — sans quoi son
  * contenu passerait par-dessus l'en-tête et le pied. Mais ce découpage n'a rien à cacher quand il
- * NE DÉFILE PAS : il ne coupe plus alors que les OMBRES de ce qu'il porte, et un bouton posé au ras
- * du pied y perdait la sienne, tranchée sur la ligne du pied. Le corps le dit donc par `data-fits`,
+ * NE DÉFILE PAS : il ne coupe plus alors que les HALOS de ce qu'il porte, et un bouton posé au ras
+ * du pied y perdait le sien, tranchée sur la ligne du pied. Le corps le dit donc par `data-fits`,
  * et la feuille de style en tire les conséquences (cf. `layout.css`) : plus de découpe, et
- * l'en-tête comme le pied rendent leur fond opaque, qui repeindrait par-dessus l'ombre.
+ * l'en-tête comme le pied rendent leur fond opaque, qui repeindrait par-dessus le halo.
  *
  * Il faut le MESURER : aucune requête CSS ne sait dire si une boîte défile (il faudrait
  * `scroll-state()`, que Safari ne connaît pas encore). On suit la boîte ET ses enfants — le corps
  * tient sa taille de l'écran, elle ne bouge pas quand son contenu grandit ; c'est le contenu qui
- * déborde. Au premier rendu on suppose qu'il défile : une ombre qui apparaît une image plus tard ne
+ * déborde. Au premier rendu on suppose qu'il défile : un halo qui apparaît une image plus tard ne
  * se voit pas, un contenu qui déborde du cadre le temps d'une image, si.
  */
 export function Body({ className, ref, ...rest }: Props<HTMLDivElement>) {
@@ -125,7 +125,7 @@ export function Slides({ at, className, children, ...rest }: Props<HTMLDivElemen
  * les boutons et aux deux bouts, au lieu de les serrer au centre derrière un écart fixe. L'écart
  * devient une mesure du conteneur — la même rangée respire sur un iPad et se resserre sur un
  * iPhone SE, sans réglage. En dessous de la place nécessaire, l'écart tombe à son minimum (la
- * marge des ombres) puis la rangée se replie.
+ * marge des halos) puis la rangée se replie.
  *
  * Elle NE POSE PAS de marge latérale : celle de son conteneur (le pied, le corps) suffit, et
  * `space-evenly` laisse déjà de la place aux deux bouts.

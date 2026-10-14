@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef, type ComponentProps, type InputHTMLAttributes,
 import { cx } from './cx'
 import { Icon } from './Icon'
 
-/** Champ de saisie : en relief au repos, creusé au focus, avec le rebond du DS. */
+/** Champ de saisie : liseré néon au repos, plein feu au focus. */
 export function Input({ className, ...rest }: InputHTMLAttributes<HTMLInputElement>) {
   return <input className={cx('ds-input', className)} {...rest} />
 }
@@ -21,7 +21,7 @@ function fitToText(element: HTMLTextAreaElement) {
 
 /**
  * Champ de saisie MULTILIGNE : une ligne au repos — à la hauteur d'une commande, comme un `Input` —
- * puis il grandit avec le texte. Même relief, même creusé au focus.
+ * puis il grandit avec le texte. Même liseré, même plein feu au focus.
  *
  * LA CROISSANCE EST DANS LE PAQUET, pas laissée aux apps. Elle ne tient qu'en trois lignes, mais ce
  * sont trois lignes à piège (la remise à `auto`, le cas non contrôlé, la mesure avant peinture) que
@@ -86,7 +86,7 @@ export function Select({ options, className, ...rest }: { options: readonly Sele
   )
 }
 
-/** Case à cocher : relief au repos ; cochée, enfoncée, coche rétroéclairée. */
+/** Case à cocher : liseré au repos ; cochée, plein feu, coche rétroéclairée. */
 export function Checkbox({ className, ...rest }: Omit<InputHTMLAttributes<HTMLInputElement>, 'type'>) {
   return <input type="checkbox" className={cx('ds-checkbox', className)} {...rest} />
 }

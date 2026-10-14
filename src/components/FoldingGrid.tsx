@@ -11,7 +11,7 @@ export const FALLBACK_COLUMNS = 4
 export interface FoldingGridProps<T> {
   items: readonly T[]
   getKey: (item: T) => Key
-  /** Dessine un élément ; passer `fold` au bouton (ImageButton) le fait popper avec la grille. */
+  /** Dessine un élément ; passer `fold` au bouton (ImageButton) fait s'amorcer son néon avec la grille. */
   renderItem: (item: T, fold: FoldItemState) => ReactNode
   /**
    * Ce qui reste toujours visible, repliée : la grille garde autant de lignes qu'il en faut pour le
@@ -27,19 +27,19 @@ export interface FoldingGridProps<T> {
 
 /**
  * Grille dépliante. Repliée, une ligne (ou celles de `keepVisible`) ; un chevron la déplie, et reste
- * enfoncé tant que tout est affiché. Le dépli va ligne par ligne : le cadre pousse la suite de la page
- * pour faire la place d'une ligne, puis ses boutons poppent pendant que la ligne suivante se découvre ;
- * le repli est le dépli joué à l'envers. Sans mise en page mesurable, ou sous
+ * allumé tant que tout est affiché. Le dépli va ligne par ligne : le cadre pousse la suite de la page
+ * pour faire la place d'une ligne, puis le néon de ses boutons s'amorce pendant que la ligne suivante
+ * se découvre ; le repli est le dépli joué à l'envers, les tubes vacillant et s'éteignant. Sans mise en page mesurable, ou sous
  * `prefers-reduced-motion`, tout est immédiat.
  */
 export function FoldingGrid<T>({ items, getKey, renderItem, keepVisible, toggleLabel, cellSize, className }: FoldingGridProps<T>) {
-  // Dépliée (ce que dit le chevron, enfoncé), et combien de lignes du dessous sont découvertes.
+  // Dépliée (ce que dit le chevron, allumé), et combien de lignes du dessous sont découvertes.
   const [open, setOpen] = useState(false)
   const [revealed, setRevealed] = useState(0)
-  // Au repli, les lignes pas encore reparties au fond : une ligne y retourne avant d'être recouverte.
+  // Au repli, les lignes pas encore éteintes : une ligne s'éteint avant d'être recouverte.
   const [lit, setLit] = useState(0)
   // Les lignes du bas ne sont rendues qu'une fois la grille dépliée, puis restent là, repliées sous le
-  // cadre : c'est ce qui les laisse popper à l'ouverture et repartir au fond à la fermeture.
+  // cadre : c'est ce qui laisse leur néon s'amorcer à l'ouverture et s'éteindre à la fermeture.
   const [unfolded, setUnfolded] = useState(false)
   const [motion, setMotion] = useState<'opening' | 'closing' | null>(null)
   const timers = useRef<number[]>([])

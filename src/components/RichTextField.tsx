@@ -69,7 +69,7 @@ export interface RichTextFieldProps extends Omit<TextAreaProps, 'value' | 'onCha
  * Champ de saisie MULTILIGNE SURMONTÉ DE SA BARRE DE MISE EN FORME : le `TextArea` du paquet, sa
  * croissance comprise, et au-dessus les outils qui écrivent la syntaxe.
  *
- * LES OUTILS SONT DE VRAIES COMMANDES (`IconButton`) : en relief au repos, creusées au clic. Une
+ * LES OUTILS SONT DE VRAIES COMMANDES (`IconButton`) : liseré néon au repos, plein feu au clic. Une
  * barre rendue à plat se lit comme du texte iconique, et on ne sait plus qu'on peut appuyer dessus.
  *
  * CE QUE LE PAQUET PORTE ICI, ce n'est pas l'habillage — c'est la MÉCANIQUE D'INSERTION, et elle est

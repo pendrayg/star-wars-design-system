@@ -1,7 +1,7 @@
 import type { HTMLAttributes, ReactNode } from 'react'
 import { cx } from './cx'
 
-/** Chargement : un cercle qui rebondit par son ombre ; `compact`, le point seul. */
+/** Chargement : un petit tube néon rond qui pulse ; `compact`, le point seul. */
 export function Spinner({ label = 'Chargement…', compact = false }: { label?: string; compact?: boolean }) {
   return (
     <div className={compact ? 'ds-spinner ds-spinner-compact' : 'ds-spinner'} role="status" aria-label={label}>
@@ -20,7 +20,7 @@ export function Notice({ tone, title, children, className, ...rest }: { tone?: '
   )
 }
 
-/** Zone : délimitée par une bordure fine, jamais par une ombre. */
+/** Zone : délimitée par une bordure fine, jamais par un tube néon. */
 export function Zone({ className, ...rest }: HTMLAttributes<HTMLElement>) {
   return <section className={cx('ds-zone', className)} {...rest} />
 }

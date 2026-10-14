@@ -16,8 +16,8 @@ export interface SetImageProps {
 
 /**
  * Image sertie hors bouton : un portrait, une vignette qu'on montre sans rien commander. Elle est
- * incrustée dans un chaton, le même creux fixe que celui d'un bouton serti, sans la surface du
- * bouton autour : ce qui ne se touche pas n'a pas de relief, seulement le creux qui la tient.
+ * incrustée dans un chaton, cerclé du même tube que celui d'un bouton serti, sans la surface du
+ * bouton autour : ce qui ne se touche pas ne passe jamais plein feu, seul le chaton qui la tient luit.
  */
 export function SetImage({ name, src, size, decorative, className }: SetImageProps) {
   const [failed, setFailed] = useState<string | null>(null)

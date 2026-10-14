@@ -21,8 +21,8 @@ export interface DeleteButtonProps extends Omit<IconButtonProps, 'icon' | 'tone'
  * Le bouton qui supprime, en deux appuis, sans boîte de dialogue.
  *
  * Au repos, un bouton-icône comme les autres : la poubelle, à l'encre des commandes — et non en
- * rouge, qui ferait de chaque ligne d'une liste une alerte. Le PREMIER appui le fait rebondir,
- * comme tout bouton, et l'ARME : la poubelle passe au rouge du danger. Le SECOND supprime. Rien
+ * rouge, qui ferait de chaque ligne d'une liste une alerte. Le PREMIER appui le met plein feu,
+ * comme tout bouton, et l'ARME : la poubelle passe au rouge du danger, son tube avec elle. Le SECOND supprime. Rien
  * d'autre ne bouge à l'écran : la confirmation est là où était le doigt.
  *
  * Armé, il désarme de lui-même au bout de `DELETE_ARM_MS`, ou dès qu'on touche ailleurs : un appui

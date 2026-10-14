@@ -12,8 +12,8 @@ export interface SelectToggleProps extends Omit<IconButtonProps, 'icon' | 'activ
 /**
  * Le bouton qui choisit un élément : un bouton-icône À BASCULE, et non une case à cocher.
  *
- * La sélection se lit au relief, comme tout état dans le DS — en relief tant que l'élément n'est
- * pas choisi, ENFONCÉ et allumé une fois choisi —, et l'icône le redit par sa forme : case vide,
+ * La sélection se lit au néon, comme tout état dans le DS — liseré tant que l'élément n'est
+ * pas choisi, PLEIN FEU une fois choisi —, et l'icône le redit par sa forme : case vide,
  * case cochée. Il a la taille d'une commande (une case n'en montrait que 22 px) et se tient à côté
  * des autres commandes de l'élément, de la même taille qu'elles.
  *
@@ -38,7 +38,7 @@ export function SelectToggle({ selected, onToggle, className, ...rest }: SelectT
 export type SelectableTag = 'div' | 'li' | 'tr' | 'article' | 'section'
 
 export interface SelectableProps extends HTMLAttributes<HTMLElement> {
-  /** Choisi : le bloc est enfoncé. */
+  /** Choisi : le bloc s'allume, plein feu. */
   selected: boolean
   /** La balise rendue — `tr` pour une ligne de tableau. `div` par défaut. */
   as?: SelectableTag
@@ -47,16 +47,16 @@ export interface SelectableProps extends HTMLAttributes<HTMLElement> {
 
 /**
  * Un élément qu'on choisit — une opération dans une liste, une ligne d'un tableau —, et qui
- * S'ENFONCE quand il est choisi, au lieu de se teinter : le relief dit l'état, comme partout dans
- * le DS, et l'élément se creuse du même geste que le bouton qui le choisit (`SelectToggle`) —
- * `--sink`, avec le rebond à l'enfoncement et l'élan au relâchement.
+ * S'ALLUME quand il est choisi, au lieu de se teinter : le néon dit l'état, comme partout dans
+ * le DS, et l'élément prend le tube plein feu du même geste que le bouton qui le choisit
+ * (`SelectToggle`) — `--lit`, qui monte vite et pâlit plus lentement.
  *
- * Le CREUX SEUL, sans le rebord en relief d'un bouton pressé : au repos, l'élément est à plat — ce
- * n'est pas une commande —, et c'est une région de la page qui s'enfonce, pas une touche.
+ * PAS DE TUBE AU REPOS, à la différence d'un bouton : l'élément n'est pas une commande, il reste
+ * éteint tant qu'il n'est pas choisi — c'est une région de la page qui s'allume, pas une touche.
  *
- * L'élément porte d'avance la marge intérieure et les coins d'un creux, rendus par une marge
- * négative : rien ne bouge quand il s'enfonce, et son contenu reste aligné sur ses voisins. Une ligne
- * de tableau (`as="tr"`) se creuse aussi, mais sans coins ni marges, qu'une ligne de tableau ignore.
+ * L'élément porte d'avance la marge intérieure et les coins de son tube, rendus par une marge
+ * négative : rien ne bouge quand il s'allume, et son contenu reste aligné sur ses voisins. Une ligne
+ * de tableau (`as="tr"`) s'allume aussi, mais sans coins ni marges, qu'une ligne de tableau ignore.
  *
  * Le bouton qui le choisit se pose dedans, avec ses autres commandes :
  *

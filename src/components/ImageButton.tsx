@@ -5,7 +5,7 @@ import { Shade } from './Shade'
 
 export type ImageButtonVariant = 'chip' | 'set' | 'label' | 'label-set'
 
-/** L'état d'un bouton dans une grille dépliante (cf. FoldingGrid) : repli, pop, attente. */
+/** L'état d'un bouton dans une grille dépliante (cf. FoldingGrid) : repli, amorçage (pop), attente. */
 export interface FoldItemState {
   folded: boolean
   motion: 'pop' | 'unpop' | null
@@ -22,7 +22,7 @@ export interface ImageButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonEl
   name: string
   /** L'image ; à défaut, ou si elle ne charge pas, les initiales du nom. */
   src?: string | null
-  /** Bouton à bascule : enfoncé et image allumée quand vrai, image éteinte sinon. */
+  /** Bouton à bascule : plein feu et image allumée quand vrai, image éteinte sinon. */
   pressed?: boolean
   /** Dans une grille dépliante : l'état que la grille lui passe. */
   fold?: FoldItemState
@@ -30,7 +30,7 @@ export interface ImageButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonEl
 
 /**
  * Bouton à image : le bouton reste une surface du DS, l'image en est le contenu, posée au-dessus de
- * ses ombres — le creux se dessine autour d'elle, jamais par-dessus.
+ * son néon — le voile du plein feu se dessine autour d'elle, jamais par-dessus.
  */
 export function ImageButton({ variant = 'set', name, src, pressed, fold, className, style, type = 'button', ...rest }: ImageButtonProps) {
   const [failed, setFailed] = useState(false)

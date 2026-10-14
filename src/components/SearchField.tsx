@@ -13,8 +13,8 @@ export interface SearchFieldProps extends Omit<InputHTMLAttributes<HTMLInputElem
 }
 
 /**
- * Champ de recherche : un cadre en relief, creusé quand on y écrit ; la loupe s'allume ; le bouton
- * Effacer y est en relief. `enterKeyHint="search"` met « Rechercher » sur la touche Entrée mobile.
+ * Champ de recherche : un cadre cerné de néon, plein feu quand on y écrit ; la loupe s'allume ; le
+ * bouton Effacer y a son propre tube. `enterKeyHint="search"` met « Rechercher » sur la touche Entrée mobile.
  * Le nom accessible du champ vient d'un <label> de l'app ou de `aria-label`.
  */
 export function SearchField({ value, onChange, onClear, clearLabel = 'Effacer la recherche', inputRef, className, ...rest }: SearchFieldProps) {
