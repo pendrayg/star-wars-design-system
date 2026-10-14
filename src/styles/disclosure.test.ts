@@ -108,32 +108,30 @@ describe("l'amorçage d'une ligne", () => {
   })
 })
 
-describe("le fondu d'une ligne sans néon", () => {
+describe("l'amorçage d'une ligne sans néon", () => {
   /**
-   * CE QUE jsdom NE PEUT PAS TENIR : que l'encre monte vraiment. Il ne joue aucune animation et ne
-   * résout aucun `var()`, donc l'opacité d'une ligne en cours d'entrée n'y est pas observable. Ce
-   * qui se garde ici, c'est la RÈGLE — son existence, et surtout ses durées, qui sont le seul
-   * endroit où le fondu peut se décrocher du rythme du dépli. Le câblage, lui (quelle ligne reçoit
-   * quelle marque, et quand), est tenu par `components.test.tsx`, où il s'observe.
+   * CE QUE jsdom NE PEUT PAS TENIR : que la ligne clignote vraiment. Ce qui se garde ici, c'est la
+   * RÈGLE — une ligne sans commande s'allume comme un néon, plus en fondu, et au même retard que
+   * les commandes voisines. Le câblage (quelle ligne reçoit quelle marque, et quand) est tenu par
+   * `components.test.tsx`.
    */
-  it('entre en fondu sur une POUSSÉE, et part au même instant que le pop', () => {
-    const fondu = rule(`.ds-reveal [data-fold='fade']`)
+  it('s’allume comme un néon, en coupures franches, et part au même instant que le pop', () => {
+    const entree = rule(`.ds-reveal [data-fold='fade']`)
 
-    expect(fondu).toMatch(/animation:\s*ds-fade-in/)
-    // La durée est la poussée, et le retard celui du pop : deux jetons posés par le composant, qui
-    // suivent le resserrement des poussées. Un nombre écrit en clair décrocherait le texte du
-    // rythme dès qu'une section a beaucoup de lignes.
-    expect(fondu).toContain('var(--fold-duration')
-    expect(fondu).toContain('var(--pop-delay')
-    expect(CSS).toMatch(/@keyframes ds-fade-in/)
+    expect(entree).toMatch(/animation:\s*ds-neon-in[^;]*steps\(1, end\)/)
+    expect(entree).toContain('var(--pop-delay')
+    expect(CSS).not.toMatch(/ds-fade-in/)
   })
 
-  it('se joue à l’envers au repli, sur la mesure du pop inversé', () => {
-    // Sans quoi le repli redevenait sec : la ligne disparaissait net sous un cadre encore ouvert.
+  it('s’éteint de même au repli, sur la mesure du pop inversé', () => {
     const sortie = rule(`.ds-reveal [data-fold='unfade']`)
 
-    expect(sortie).toMatch(/ds-fade-in.*reverse/)
+    expect(sortie).toMatch(/ds-neon-in.*reverse/)
     expect(sortie).toContain('var(--unpop-duration')
+  })
+
+  it('une commande s’amorce tout entière, son contenu avec son tube', () => {
+    expect(rule(`.ds-reveal [data-fold='pop']`)).toMatch(/ds-neon-in/)
   })
 
   it('ne remplace pas la barrière : une ligne couverte reste hors d’atteinte', () => {

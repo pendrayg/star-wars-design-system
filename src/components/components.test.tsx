@@ -339,7 +339,7 @@ describe('Reveal', () => {
     vi.useRealTimers()
   })
 
-  it('fait ENTRER EN FONDU une ligne sans relief, au lieu de la poser d’un coup', () => {
+  it('fait S’AMORCER une ligne sans néon, au lieu de la poser d’un coup', () => {
     /**
      * LE DÉFAUT SIGNALÉ À L'USAGE : « tout le bloc message apparaît d'un coup au lieu que chaque
      * message fade in ». Le retard de la découverte réglait le QUAND — un texte ne paraît plus
@@ -389,6 +389,37 @@ describe('Reveal', () => {
 
     act(() => void vi.advanceTimersByTime(PUSH_S * 1000))
     expect(ligne).toHaveAttribute('data-fold-hidden')
+    vi.useRealTimers()
+  })
+
+  it('allume d’un bloc une ligne MIXTE : le libellé s’amorce avec son champ', () => {
+    /**
+     * LE DÉFAUT CONSTATÉ À L'ÉCRAN : dans une ligne qui porte une commande, seule la commande
+     * recevait une marque. Le libellé d'un champ, à côté, paraissait d'un coup pendant que le tube
+     * du champ clignotait. Tout ce qui apparaît s'allume : l'élément de la ligne prend la marque
+     * d'un texte, la commande logée dedans celle du pop — les deux jouent les mêmes instants.
+     */
+    vi.useFakeTimers()
+    mesurer()
+    const contenu = (
+      <label className="ds-field">
+        Nom
+        <input className="ds-input" />
+      </label>
+    )
+    const { rerender } = render(
+      <Reveal open={false} id="mixte">
+        {contenu}
+      </Reveal>,
+    )
+    rerender(
+      <Reveal open id="mixte">
+        {contenu}
+      </Reveal>,
+    )
+    act(() => void vi.advanceTimersByTime(60))
+    expect((document.querySelector('#mixte label') as HTMLElement).dataset.fold).toBe('fade')
+    expect((document.querySelector('#mixte input') as HTMLElement).dataset.fold).toBe('pop')
     vi.useRealTimers()
   })
 

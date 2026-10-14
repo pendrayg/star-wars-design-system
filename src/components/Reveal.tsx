@@ -38,7 +38,8 @@ function couvrir(ligne: FoldLine) {
 }
 
 /**
- * LA MARQUE D'UNE LIGNE SANS NÉON, qui entre en FONDU au lieu de s'amorcer.
+ * LA MARQUE DE CE QUI N'A PAS DE TUBE — un texte, un intitulé, le cadre d'un champ —, qui
+ * s'amorce en entier (son opacité clignote) au lieu de rallumer un liseré.
  *
  * `folded` n'a pas d'équivalent, et c'est voulu : « tube éteint » ne veut rien dire pour un texte,
  * qui n'a pas de tube et n'est nulle part avant d'entrer — il est couvert (`data-fold-hidden`),
@@ -49,22 +50,25 @@ function couvrir(ligne: FoldLine) {
 const FONDU = { folded: null, pop: 'fade', unpop: 'unfade' } as const
 
 /**
- * LES DEUX FAÇONS D'ENTRER, et c'est la même marque qui les commande : une ligne qui a des
- * commandes (`reliefs`) les ALLUME (pop, l'amorçage du néon), une ligne qui n'en a pas s'AFFICHE
- * (fondu). Faute de commande à qui la poser, la marque va alors sur la ligne elle-même.
+ * TOUT CE QUI APPARAÎT S'ALLUME, et d'un seul geste. Les commandes de la ligne (`reliefs`) prennent
+ * la marque du pop : leur tube s'amorce. Les éléments de la ligne qui ne sont pas eux-mêmes des
+ * commandes prennent celle de l'amorçage d'un texte : ils clignotent en entier, contenu compris —
+ * le libellé d'un champ avec son champ, une note seule. Les deux marques jouent les mêmes instants
+ * (neon.css), si bien qu'une ligne mixte s'allume d'un bloc ; une commande logée dans un élément
+ * qui clignote déjà ne clignote pas une seconde fois, seul son tube suit (cf. disclosure.css).
  *
  * SANS ÇA, UN TEXTE SURGISSAIT : le retard de sa découverte réglait le QUAND — il ne paraît plus
  * pendant que le cadre s'ouvre encore —, jamais le COMMENT. Il arrivait donc d'un coup, à pleine
- * encre, là où tout le reste du DS entre par un mouvement. La même marque sert les deux familles
- * pour qu'un seul endroit (prefers-reduced-motion, l'effacement final) les tienne toutes les deux.
+ * encre, là où tout le reste du DS entre par un mouvement. Les mêmes marques servent les deux
+ * familles pour qu'un seul endroit (prefers-reduced-motion, l'effacement final) les tienne.
  */
 function marquer(ligne: FoldLine, etat: 'folded' | 'pop' | 'unpop' | null) {
-  const fondu = ligne.reliefs.length === 0
-  const marque = etat && (fondu ? FONDU[etat] : etat)
-  for (const el of fondu ? ligne.elements : ligne.reliefs) {
+  const pose = (el: HTMLElement, marque: string | null) => {
     if (marque) el.dataset.fold = marque
     else delete el.dataset.fold
   }
+  for (const el of ligne.elements) if (!ligne.reliefs.includes(el)) pose(el, etat && FONDU[etat])
+  for (const el of ligne.reliefs) pose(el, etat)
 }
 
 /** Hauteur du cadre quand `n` lignes sont découvertes : jusqu'au bas de la dernière ; toutes, le
@@ -90,8 +94,8 @@ function hauteurPour(n: number, lignes: FoldLine[], total: number): number {
  *
  * Les lignes d'un contenu ne sont pas données comme celles d'une grille : elles sont relevées dans
  * la mise en page mesurée (cf. foldLines) — un titre, un champ avec son libellé, une note, ou une
- * rangée de commandes côte à côte, qui s'amorcent ensemble. Un texte se découvre en fondu, sans
- * s'amorcer : seul ce qui s'actionne a un tube à allumer. Au-delà de quelques lignes, les poussées se resserrent
+ * rangée de commandes côte à côte, qui s'amorcent ensemble. Un texte s'amorce avec elles, en
+ * entier, faute de tube à rallumer : rien n'entre en fondu. Au-delà de quelques lignes, les poussées se resserrent
  * pour que le dépli entier tienne dans le temps de quatre lignes de grille (cf. foldPush).
  *
  * Replié, le contenu reste monté — on le mesure pour le déplier —, mais caché et `inert`. Sous
@@ -191,7 +195,7 @@ export function Reveal({ open, id, onFolded, retractFirst = false, className, ch
          *
          * LE RETARD EST EXACTEMENT CELUI DU POP, et pas un nombre à lui : les deux familles de
          * lignes paraissent donc au même instant de leur poussée, l'une en s'amorçant, l'autre en
-         * s'affichant. ET C'EST CE QUI SYNCHRONISE LE FONDU : la marque `fade` est posée ici, mais
+         * s'affichant. ET C'EST CE QUI SYNCHRONISE L'AMORÇAGE D'UN TEXTE : la marque `fade` est posée ici, mais
          * son animation attend `--pop-delay` — la même poussée —, si bien qu'elle démarre, à zéro
          * d'opacité, dans l'image même où la ligne se découvre. Pas de blanc, pas de saut.
          */
