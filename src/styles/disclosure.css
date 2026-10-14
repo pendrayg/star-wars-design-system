@@ -1,0 +1,329 @@
+/* Section dépliante cachée (Reveal) et section dépliante (Disclosure).
+   Reveal est le cadre qui se déplie ligne par ligne, commandé par l'état ; Disclosure y ajoute un
+   intitulé et, dessous, le chevron de la grille (.ds-fold-toggle), enfoncé tant que tout est
+   affiché. Les commandes d'une ligne poppent une fois sa place faite, du pop de la grille
+   (ds-pop, fold.css). */
+
+.ds-disclosure {
+  display: block;
+}
+
+/* L'intitulé n'est pas une commande : c'est le chevron qui l'est. Il se lit donc comme un titre,
+   sans relief, l'icône de sa destination devant. */
+.ds-disclosure-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.ds-disclosure-icon {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  color: var(--color-muted);
+  font-size: 19px;
+}
+
+.ds-disclosure-titles {
+  min-width: 0;
+}
+
+.ds-disclosure-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+/* La section qui s'enfonce : le creux d'un élément choisi (.ds-selectable, selection.css), qui
+   donne la marge latérale ; la section y ajoute la marge du haut et du bas, rendue elle aussi par
+   une marge négative — repliée à plat, elle reste alignée sur ses voisines, et rien ne bouge quand
+   elle s'enfonce. */
+.ds-disclosure-sunken {
+  padding-block: var(--selectable-room);
+  margin-block: calc(-1 * var(--selectable-room));
+}
+
+/* LE BOUTON SECTION DÉPLIANTE (DisclosureButton) : la section est le bouton. Son relief est celui
+   d'un bouton — calque d'ombre (.ds-shade) qui suit --sink, au rebond du DS —, mais SOUS le
+   contenu : le creux d'une section dépliée ne doit pas assombrir les champs qu'elle porte. En
+   relief repliée, enfoncée dépliée (et jusqu'à la fin du repli), enfoncée le temps d'un appui. */
+.ds-disclosure-button {
+  --sink: 0;
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--control-radius);
+  transition: --sink 1s var(--release-ease);
+}
+
+.ds-disclosure-button > .ds-shade {
+  z-index: -1;
+}
+
+.ds-disclosure-button.ds-active,
+.ds-disclosure-button.ds-pressed {
+  --sink: 1;
+  transition: --sink 1s var(--sink-ease);
+}
+
+@supports not (transition-timing-function: linear(0, 1)) {
+  .ds-disclosure-button,
+  .ds-disclosure-button.ds-active,
+  .ds-disclosure-button.ds-pressed {
+    transition: --sink 0.45s cubic-bezier(0.34, 1.8, 0.64, 1);
+  }
+}
+
+/* L'en-tête, seule commande : à plat dans le bouton qu'est la section, de toute sa largeur.
+   Icône, intitulé et indication à gauche, le chevron à droite ; le texte à demi-encre au repos, à
+   pleine encre enfoncé, comme un bouton.
+
+   SES BOÎTES SUIVENT L'ÉCHELLE DU SUPPORT, et c'est une correction : la marge et l'écart étaient
+   écrits en dur (14 px et 12 px), c'est-à-dire à l'échelle du POUCE. Un en-tête d'une seule ligne
+   mesurait donc ~47 px à la souris, où une commande en fait 33 — le `min-height` ne servait à rien,
+   la marge décidait avant lui. C'est exactement ce que les six nombres de `tokens.css` existent pour
+   éviter : « ce qui change, ce sont les BOÎTES ».
+
+   LES DEUX EXPRESSIONS RENDENT LES ANCIENNES VALEURS AU POUCE, à l'unité près — 2 × 8 = 16 pour les
+   côtés, 1,5 × 8 = 12 pour l'écart —, donc rien ne bouge là où le dessin a été arrêté. À la souris
+   (`--control-pad` à 5), la marge verticale tombe à 5 px et c'est `min-height` qui décide enfin :
+   l'intitulé de 16 px tient dans ses 33 px.
+
+   `min-height` ET NON `height`, à la différence d'un bouton ordinaire : l'en-tête peut porter une
+   INDICATION sous l'intitulé (cf. `.ds-disclosure-hint`), et il lui faut alors deux lignes. La
+   hauteur d'une commande est son PLANCHER ici, pas sa mesure.
+
+   LA TYPOGRAPHIE, ELLE, NE BOUGE PAS (16 px pour l'intitulé) : c'est la règle de la feuille de
+   jetons, et elle vaut ici comme ailleurs. */
+.ds-disclosure-trigger {
+  display: flex;
+  align-items: center;
+  gap: calc(1.5 * var(--control-pad));
+  width: 100%;
+  min-height: var(--control-height);
+  padding: var(--control-pad) calc(2 * var(--control-pad));
+  border: none;
+  border-radius: var(--control-radius);
+  background: transparent;
+  color: color-mix(in srgb, var(--btn-active-color) 50%, transparent);
+  font: inherit;
+  /* Après le raccourci, qui vient de remettre la famille à celle du corps : l'en-tête d'une
+     section est une COMMANDE, elle prend la police des titres (cf. base.css). */
+  font-family: var(--font-title);
+  font-weight: 400;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.2s ease;
+}
+
+.ds-disclosure-button.ds-active > .ds-disclosure-trigger {
+  color: var(--btn-active-color);
+}
+
+.ds-disclosure-trigger:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--color-primary) 60%, transparent);
+  outline-offset: 2px;
+}
+
+.ds-disclosure-trigger .ds-disclosure-titles {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.ds-disclosure-trigger .ds-disclosure-title {
+  font-size: 16px;
+}
+
+.ds-disclosure-trigger .ds-disclosure-hint {
+  font-weight: 400;
+}
+
+.ds-disclosure-trigger .ds-disclosure-icon {
+  margin-top: 0;
+}
+
+.ds-disclosure-chevron {
+  flex: 0 0 auto;
+  font-size: var(--control-icon);
+  transition: transform 0.3s var(--release-ease, ease);
+}
+
+.ds-disclosure-button.ds-open > .ds-disclosure-trigger .ds-disclosure-chevron {
+  transform: rotate(180deg);
+  transition: transform 0.3s var(--sink-ease, ease);
+}
+
+/* Le contenu se range DANS le bouton, sous l'en-tête : rentré de sa marge intérieure de chaque côté
+   (aligné sur l'icône), et posé au-dessus d'une marge. Les marges sont dans le contenu, mesurées
+   avec lui par le dépli ; l'écart avec l'en-tête aussi, plus court que celui d'une section.
+
+   SUR `--control-pad` COMME L'EN-TÊTE, et pour la même raison : « aligné sur l'icône » n'est vrai
+   que si les deux marges latérales sont la MÊME expression. Écrites en dur, elles se décalaient
+   à la souris, où l'en-tête se resserre et pas le contenu. Les trois valeurs rendent 4, 16 et 16 au
+   pouce, exactement ce qui était dessiné. */
+.ds-disclosure.ds-disclosure-button .ds-reveal-content {
+  padding: calc(0.5 * var(--control-pad)) calc(2 * var(--control-pad)) calc(2 * var(--control-pad));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-disclosure-button,
+  .ds-disclosure-button.ds-active,
+  .ds-disclosure-button.ds-pressed,
+  .ds-disclosure-chevron,
+  .ds-disclosure-button.ds-open > .ds-disclosure-trigger .ds-disclosure-chevron {
+    transition: none;
+  }
+}
+
+/* Ce que la section contient, pour décider sans déplier. */
+.ds-disclosure-hint {
+  margin: 3px 0 0;
+  color: var(--color-muted);
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+/* Le cadre de la grille : sa marge intérieure laisse aux ombres de quoi s'étaler sans être rognées,
+   sa marge négative rend la place à la page. La hauteur, posée par le composant ligne après ligne,
+   est celle du contenu découvert ; repliée, elle est nulle. */
+.ds-reveal {
+  --fold-ease: cubic-bezier(0.45, 0, 0.55, 1);
+  box-sizing: content-box;
+  overflow: hidden;
+  padding: var(--shadow-room);
+  margin: calc(-1 * var(--shadow-room));
+  transition: height var(--fold-duration, 0.3s) var(--fold-ease);
+}
+
+@supports (transition-timing-function: linear(0, 1)) {
+  .ds-reveal {
+    --fold-ease: linear(0, 0.006 5%, 0.024 10%, 0.054 15%, 0.095 20%, 0.149 25%, 0.214 30%, 0.786 70%, 0.851 75%, 0.905 80%, 0.946 85%, 0.976 90%, 0.994 95%, 1);
+  }
+}
+
+.ds-reveal-content.ds-folded {
+  visibility: hidden;
+}
+
+/* Dans une section dépliante, le contenu prend ses distances avec l'intitulé ; la marge est DANS
+   le contenu, mesurée avec lui, pour qu'une section repliée ne laisse aucun blanc entre l'intitulé
+   et le chevron. Une section cachée n'a pas d'intitulé : c'est la page qui la place. */
+.ds-disclosure .ds-reveal-content {
+  padding-top: 18px;
+}
+
+/* Une ligne pas encore découverte — ou déjà recouverte — ne se montre pas, même dans la marge que
+   le cadre réserve aux ombres : on n'y verrait que le haut de la ligne suivante, coupé.
+
+   `visibility` ET NON UNE OPACITÉ : c'est la BARRIÈRE — une ligne couverte n'est ni lue par un
+   lecteur d'écran, ni cliquable, ni atteinte à la tabulation. Le fondu ci-dessous ne la remplace
+   pas, il ne peint que l'ENTRÉE, une fois la barrière levée ; une opacité nulle seule laisserait
+   une ligne invisible mais vivante au milieu d'un dépli. */
+.ds-reveal [data-fold-hidden] {
+  visibility: hidden;
+}
+
+/* LE POP. --pop est la hauteur de la commande : 0 au fond, 1 à son relief, 1,8 au plus haut du
+   rebond. À plat avant de popper, elle monte une poussée plus tard (--pop-delay), sitôt sa place
+   faite ; au repli, elle rejoue la courbe à l'envers et retourne au fond. */
+.ds-reveal [data-fold='folded'] {
+  --pop: 0;
+}
+
+.ds-reveal [data-fold='pop'] {
+  animation:
+    ds-pop 1s linear both var(--pop-delay, 0.3s),
+    ds-pop-scale 1s linear both var(--pop-delay, 0.3s);
+}
+
+/* Au repli, le cadre remonte dès l'appui : les commandes d'une ligne retournent au fond le temps
+   d'une poussée, pendant qu'il la recouvre (--unpop-duration, posé par le composant). */
+.ds-reveal [data-fold='unpop'] {
+  animation:
+    ds-pop var(--unpop-duration, 1s) linear reverse both,
+    ds-pop-scale var(--unpop-duration, 1s) linear reverse both;
+}
+
+/* LE FONDU, l'autre façon d'entrer : une ligne sans relief n'a rien à faire monter, elle s'affiche.
+   Le pop et le fondu sont les deux rendus d'une MÊME marque (cf. marquer, Reveal.tsx), pour que le
+   dépli se lise d'un seul geste — ce qui est en relief monte, ce qui n'en a pas paraît.
+
+   LA DURÉE EST UNE POUSSÉE, et ce n'est pas un nombre choisi : `--fold-duration` est le temps que
+   le cadre met à faire la place d'une ligne, et c'est la pulsation de tout le dépli. Une durée
+   écrite en clair se décrocherait du rythme dès que les poussées se resserrent (un groupe de trente
+   réglages les ramène à 0,04 s, cf. foldPush) — le texte continuerait de se peindre pendant que
+   trois lignes ont déjà défilé. En poussée, il reste en mesure quoi qu'il arrive.
+
+   LE RETARD EST CELUI DU POP (`--pop-delay`, une poussée lui aussi) : le fondu part à zéro d'opacité
+   dans l'image même où le composant découvre la ligne, donc sans blanc ni saut. */
+.ds-reveal [data-fold='fade'] {
+  animation: ds-fade-in var(--fold-duration, 0.3s) linear both var(--pop-delay, 0.3s);
+}
+
+/* Au repli, le fondu joué à l'envers, et sur la même mesure que le pop inversé : la ligne s'efface
+   le temps d'une poussée, puis le cadre la recouvre — sans lui, le repli redevenait sec, la ligne
+   disparaissant net sous un cadre encore ouvert. */
+.ds-reveal [data-fold='unfade'] {
+  animation: ds-fade-in var(--unpop-duration, 0.3s) linear reverse both;
+}
+
+@keyframes ds-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Le relief suit --pop, quelle que soit la commande : un bouton le porte sur son calque d'ombre, un
+   sélecteur sur son champ, un champ ou une case sur eux-mêmes. Un bouton enfoncé garde son creux,
+   comme dans la grille.
+
+   LE BOUTON SECTION DÉPLIANTE EST DU MÊME CALQUE, et il lui fallait pourtant sa place ici : son
+   .ds-shade est enfant de la SECTION, pas d'un .ds-button — sans ce sélecteur, il poppait (le
+   data-fold est bien posé, l'échelle joue) mais son ombre restait celle de --sink, donc le rebond
+   ne se VOYAIT pas, seule la taille bougeait.
+
+   `:not(.ds-active)` VAUT POUR LUI COMME POUR UN BOUTON, et c'est ce qui l'empêche de se battre avec
+   son propre état : un bouton section qui se découvre DÉJÀ DÉPLIÉ est enfoncé, et il garde son creux
+   plutôt que de le voir écrasé par --pop. Avec son `usePress` il n'y a rien à arbitrer : --pop ne
+   commande cette ombre que le temps d'un data-fold, posé puis retiré par le dépli, et un appui
+   pendant ce temps-là se lit comme sur un bouton de grille. */
+.ds-reveal :is(.ds-button, .ds-disclosure-button)[data-fold]:not(.ds-active) > .ds-shade,
+.ds-reveal .ds-select[data-fold] > .ds-input,
+.ds-reveal :is(.ds-input, .ds-checkbox)[data-fold] {
+  box-shadow:
+    calc(28px * var(--neu-k) * var(--pop)) calc(28px * var(--neu-k) * var(--pop)) calc(50px * var(--neu-k) * var(--pop)) var(--neu-dark),
+    calc(-23px * var(--neu-k) * var(--pop)) calc(-23px * var(--neu-k) * var(--pop)) calc(45px * var(--neu-k) * var(--pop)) var(--neu-light);
+}
+
+.ds-reveal [data-fold] .ds-well {
+  --well: clamp(0, var(--pop), 1);
+}
+
+.ds-reveal [data-fold='folded'] .ds-image {
+  opacity: 0;
+}
+
+.ds-reveal [data-fold='pop'] .ds-image {
+  animation: ds-image-in 1s linear both var(--pop-delay, 0.3s);
+}
+
+.ds-reveal [data-fold='unpop'] .ds-image {
+  animation: ds-image-in var(--unpop-duration, 1s) linear reverse both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-reveal {
+    transition: none;
+  }
+
+  /* Sans valeur, et c'est ce qui compte : le pop comme le fondu passent par la MÊME marque, donc
+     cette seule règle les coupe tous les deux — un fondu qui reparaîtrait ici serait précisément le
+     mouvement qu'on vient de refuser. */
+
+  .ds-reveal [data-fold] {
+    animation: none;
+  }
+}

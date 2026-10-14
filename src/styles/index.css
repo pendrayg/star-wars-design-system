@@ -1,0 +1,25 @@
+/* Le design system, dans l'ordre : jetons, polices, base, puis chaque famille — et le DÉCOR en
+   dernier, parce qu'il se pose par-dessus tout (les rayures couvrent la page, le saut couvre les
+   rayures). L'ordre compte : à spécificité égale, la dernière règle déclarée gagne. */
+@import './tokens.css';
+@import './fonts.css';
+@import './base.css';
+@import './icons.css';
+@import './glyphs.css';
+@import './zones.css';
+@import './targeting.css';
+@import './holo.css';
+@import './layout.css';
+@import './button.css';
+@import './delete.css';
+@import './image-button.css';
+@import './field.css';
+@import './search.css';
+@import './menu.css';
+@import './fold.css';
+@import './disclosure.css';
+@import './selection.css';
+@import './spinner.css';
+@import './chart.css';
+@import './scanlines.css';
+@import './jump.css';

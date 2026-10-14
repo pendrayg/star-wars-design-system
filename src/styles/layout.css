@@ -1,0 +1,157 @@
+/* Mise en page d'un écran d'app : un EN-TÊTE et un PIED fixes, et entre eux un CORPS qui défile.
+
+     .ds-screen — l'écran : une colonne, sur toute la hauteur (--app-height si l'app la connaît
+                  mieux que 100dvh, cf. l'app installée sur iPhone) ;
+     .ds-header — l'en-tête (une barre de recherche…) : sous la barre d'état, deux marges de cadre
+                  plus bas (16 px au doigt, 8 à la souris) ;
+     .ds-body   — le corps, SEUL à défiler : il passe sous l'en-tête et sous le pied, en s'effaçant
+                  en fondu (8 px) au lieu d'être coupé net ;
+     .ds-footer — le pied (la barre de menu) : au-dessus de la zone sûre du bas d'iPhone ;
+     .ds-button-bar — une rangée de commandes répartie sur toute la largeur qu'on lui donne ;
+     .ds-slides — les écrans côte à côte, dont on glisse de l'un à l'autre.
+
+   Entre l'en-tête et le corps, entre le corps et le pied, le même écart : --shadow-room, la place
+   d'une ombre. Sur les côtés, le corps garde la même marge, où débordent les ombres de ce qu'il
+   contient (un défilement rogne tout ce qui dépasse de sa boîte). Sans en-tête, le corps prend
+   lui-même la marge du haut, sous la barre d'état. L'en-tête et le pied restent au-dessus du
+   corps : rien n'est collé (sticky), rien ne défile avec eux.
+
+   Tout cela vaut tant que le corps DÉFILE. Quand il tient dans sa place, il cesse de couper et
+   l'en-tête comme le pied rendent leur fond : il n'y a plus de contenu à retenir, seulement des
+   ombres à ne pas trancher (cf. `data-fits`, plus bas). */
+
+.ds-screen {
+  --ds-fade: 8px;
+  --ds-edge-top: calc(2 * var(--control-pad) + env(safe-area-inset-top));
+  --ds-edge-x: max(var(--shadow-room), env(safe-area-inset-left), env(safe-area-inset-right));
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  height: var(--app-height, 100dvh);
+  background: var(--color-bg);
+}
+
+.ds-header,
+.ds-footer {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  background: var(--color-bg);
+}
+
+.ds-header {
+  padding: var(--ds-edge-top) var(--ds-edge-x) calc(var(--shadow-room) - var(--ds-fade));
+}
+
+.ds-footer {
+  padding: calc(var(--shadow-room) - var(--ds-fade)) var(--ds-edge-x) max(12px, env(safe-area-inset-bottom));
+}
+
+.ds-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--ds-edge-top) var(--ds-edge-x) var(--ds-fade);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 var(--ds-fade), #000 calc(100% - var(--ds-fade)), transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 var(--ds-fade), #000 calc(100% - var(--ds-fade)), transparent);
+}
+
+/* Sous un en-tête, le corps commence par son seul fondu. */
+.ds-header + .ds-body {
+  padding-top: var(--ds-fade);
+}
+
+/* QUAND LE CORPS TIENT DANS SA PLACE, IL NE COUPE PLUS RIEN. Le découpage et le fondu servent au
+   DÉFILEMENT : ils retiennent le contenu qui passerait par-dessus l'en-tête et le pied. Un corps
+   qui ne défile pas n'a rien à retenir — il ne coupe plus que les OMBRES de ce qu'il porte, et un
+   bouton posé au ras du pied y perdait la sienne, tranchée net sur la ligne du pied.
+   L'en-tête et le pied rendent alors leur fond : leur opacité ne masque plus rien, et elle
+   repeindrait par-dessus l'ombre qui déborde désormais chez eux.
+   `data-fits` vient de `Body`, qui MESURE : aucune requête CSS ne sait dire si une boîte défile
+   (il faudrait `scroll-state()`, que Safari ne connaît pas encore). */
+.ds-body[data-fits] {
+  overflow: visible;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.ds-header:has(+ .ds-body[data-fits]),
+.ds-body[data-fits] + .ds-footer {
+  background: none;
+}
+
+/* La même règle quand le corps est dans un ruban (Slides) : le pied n'est plus son voisin, c'est
+   le ruban qui l'est. Seul compte l'écran qu'on regarde — les autres sont `inert`. */
+.ds-header:has(+ .ds-slides > .ds-slides-track > .ds-slide:not([inert]) > .ds-body[data-fits]),
+.ds-slides:has(> .ds-slides-track > .ds-slide:not([inert]) > .ds-body[data-fits]) + .ds-footer {
+  background: none;
+}
+
+/* UNE RANGÉE DE COMMANDES, RÉPARTIE SUR SA LARGEUR. `space-evenly` donne la même place entre deux
+   boutons et aux deux bouts : la rangée occupe la largeur qu'on lui donne, et l'écart se lit comme
+   une mesure du conteneur plutôt que comme une constante — la même barre respire sur un iPad et se
+   resserre sur un iPhone SE, sans réglage.
+   Le `gap` reste le MINIMUM : quand la largeur manque, la place libre tombe à zéro, c'est lui qui
+   tient l'écart (la marge des ombres), puis la rangée se replie. D'une ligne à l'autre, la moitié :
+   une commande enfoncée a le relief court, ses lignes peuvent se serrer.
+   Pas de marge latérale ici : celle du conteneur (--ds-edge-x du pied ou du corps) la porte déjà. */
+.ds-button-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: calc(var(--shadow-room) / 2) var(--shadow-room);
+}
+
+/* LES ÉCRANS CÔTE À CÔTE. Un ruban aussi large que le nombre d'écrans, translaté d'un écran par
+   index : changer de destination le fait glisser à GAUCHE ou à DROITE selon l'ordre du menu, et le
+   mouvement dit où l'on va. Les écrans restent tous montés (une carte garde son contexte), le
+   débord est coupé par le cadre.
+   La durée est celle de la pastille du menu qui s'étire vers la nouvelle destination
+   (`SLIDE_MS`) : un seul geste, un seul rythme. La courbe décélère franchement — un glissement
+   d'écran ne rebondit pas, il arrive et s'arrête. */
+.ds-slides {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Le ruban ne coupe que sur les CÔTÉS, où attendent les écrans voisins. En hauteur, il laisse
+   déborder les ombres d'un corps qui tient dans sa place, comme le fait l'écran sans ruban — sinon
+   un bouton posé au ras du pied y perdrait la sienne. `clip` sur un seul axe ne force pas l'autre à
+   défiler, là où `hidden` le ferait. */
+@supports (overflow: clip) {
+  .ds-slides {
+    overflow-x: clip;
+    overflow-y: visible;
+  }
+}
+
+.ds-slides-track {
+  display: flex;
+  height: 100%;
+  transform: translateX(calc(var(--slides-at, 0) * -100%));
+  transition: transform var(--slides-dur, 380ms) cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Un écran est une COLONNE, comme l'écran entier (.ds-screen) : le corps qu'il porte s'y étire et
+   y défile seul. Sans cela, un `Body` posé dans un écran prenait la hauteur de son contenu, débordait
+   de l'écran — que le ruban coupe — et ne défilait plus. Chaque écran a ainsi SON défilement, et le
+   retrouve en revenant. */
+.ds-slide {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 100%;
+  min-width: 0;
+  height: 100%;
+}
+
+/* Mouvement réduit : on saute d'un écran à l'autre, sans glissement. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-slides-track {
+    transition: none;
+  }
+}

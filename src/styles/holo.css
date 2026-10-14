@@ -1,0 +1,134 @@
+/* HOLOGRAMMES — ce qui est PROJETÉ, par opposition à ce qui est peint.
+
+   Deux classes, et elles sont indépendantes :
+     .ds-holo         — le SUJET projeté : teinte glacier, halo, et le signal qui décroche ;
+     .ds-holo-emitter — l'ÉMETTEUR : le socle et son faisceau, dessinés autour de ce qu'il projette.
+
+   On peut poser l'une sans l'autre — un texte holographique n'a pas de socle, un émetteur dont le
+   sujet manque continue de projeter dans le vide. */
+
+.ds-holo {
+  color: var(--color-primary);
+  text-shadow: var(--glow-holo);
+  /* La recette est un JETON (--holo-anim, tokens.css) et non un nom d'animation recopié : une app,
+     ou un CSS module qui hacherait le nom, hérite des périodes et du `steps()` sans les connaître. */
+  animation: var(--holo-anim);
+  /* DÉSYNCHRONISATION. Des hologrammes qui décrochent tous ensemble ne se lisent plus comme des
+     projections instables mais comme un clignotant de tableau de bord. Le déphasage appartient à
+     l'app — elle seule sait ce qui distingue deux projections voisines (un rang de liste, une
+     identité) — et il doit être DÉRIVÉ d'une donnée stable, jamais tiré au sort : un Math.random()
+     rejouerait à chaque rendu et ferait sauter l'effet. Sans valeur posée, tout décroche à
+     l'unisson, ce qui reste juste quand il n'y a qu'une projection à l'écran. */
+  animation-delay: var(--holo-delay, 0s);
+}
+
+/* Images-clés irrégulières et très rapprochées (11,2 % → 11,5 %, soit ~40 ms sur 13 s), en
+   `steps(1, end)` : la coupure est franche et brève, comme un tube néon qui amorce mal. Un fondu
+   sinusoïdal, lui, donnerait une respiration régulière qui « bat la mesure » et se laisse
+   anticiper. Les décrochages sont espacés inégalement (11 %, 38 %, 63 %, 90 %) et parfois doublés
+   (11,5 % puis 12,2 %), comme un starter qui s'y reprend à deux fois.
+   L'OPACITÉ, et elle seule : c'est une des deux propriétés que le compositeur traite sans
+   repeindre — indispensable quand cinquante projections clignotent en même temps. */
+@keyframes ds-holo-flicker {
+  0%,
+  11.2% {
+    opacity: 1;
+  }
+  11.5% {
+    opacity: 0.25;
+  }
+  11.9% {
+    opacity: 1;
+  }
+  12.2% {
+    opacity: 0.6;
+  }
+  12.6%,
+  37.8% {
+    opacity: 1;
+  }
+  38.1% {
+    opacity: 0.15;
+  }
+  38.5%,
+  63.4% {
+    opacity: 1;
+  }
+  63.7% {
+    opacity: 0.45;
+  }
+  64% {
+    opacity: 1;
+  }
+  64.3% {
+    opacity: 0.2;
+  }
+  64.7%,
+  89.5% {
+    opacity: 1;
+  }
+  89.8% {
+    opacity: 0.5;
+  }
+  90.2%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* L'ÉMETTEUR : un socle matériel et le faisceau qu'il projette, tous deux ancrés sur le CENTRE de
+   la boîte — donc sur le sujet, qui y est centré. Toutes les mesures sont en `em` et le `font-size`
+   est posé ici : sans lui les pseudo-éléments hériteraient de la taille du texte environnant, et
+   le socle d'une projection de 2 rem serait trois fois trop petit. */
+.ds-holo-emitter {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.ds-holo-emitter::before,
+.ds-holo-emitter::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  translate: -50% 0;
+  font-size: 2.4rem;
+  pointer-events: none;
+}
+
+/* LE SOCLE : un trapèze base large en bas, qui MORD de 0,1 em l'encre du sujet (laquelle descend à
+   0,563 em du centre) — sans ce chevauchement, le sujet lévite au lieu de se poser dessus. */
+.ds-holo-emitter::after {
+  top: calc(50% + 0.46em);
+  width: 0.55em;
+  height: 0.09em;
+  clip-path: polygon(18% 0, 82% 0, 100% 100%, 0 100%);
+  background: linear-gradient(180deg, var(--grad-glacier-to), color-mix(in srgb, var(--grad-glacier-to) 45%, transparent));
+}
+
+/* LE FAISCEAU : un triangle qui part exactement de la largeur du HAUT du trapèze (0,352 em = 27 %
+   des 1,3 em de large) et s'évase jusqu'au sommet du sujet, sans le dépasser — l'encre s'arrête à
+   0,563 em du centre, d'où une hauteur de 0,563 + 0,46 = 1,023 em. Un faisceau qui dépasserait le
+   sujet casserait la lecture « projection » : la lumière s'arrête sur ce qu'elle dessine.
+   Aucun z-index : `::before` précède `::after` et le contenu dans l'ordre de peinture, donc le
+   faisceau passe dessous — et un z-index négatif le ferait passer sous le fond de la page.
+   Le faisceau décroche avec le sujet (même recette, même délai hérité) ; LE SOCLE NON : c'est une
+   pièce matérielle, seule la lumière projetée souffre de la perturbation. */
+.ds-holo-emitter::before {
+  top: calc(50% - 0.563em);
+  width: 1.3em;
+  height: 1.023em;
+  clip-path: polygon(0 0, 100% 0, 63.5% 100%, 36.5% 100%);
+  background: linear-gradient(to top, color-mix(in srgb, var(--grad-glacier-to) 18%, transparent), transparent);
+  animation: var(--holo-anim);
+  animation-delay: var(--holo-delay, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-holo,
+  .ds-holo-emitter::before {
+    animation: none;
+  }
+}

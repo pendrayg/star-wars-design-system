@@ -1,0 +1,91 @@
+/* Base : boîte, fond, typographie, défilement, et les quelques utilitaires partagés. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  /* Pas de rebond de défilement parasite : c'est le contenu qui défile, jamais la page. */
+  overscroll-behavior: none;
+}
+
+/* UNE SEULE GRAISSE, PARTOUT. La SF Distant Galaxy et son Alternate n'en ont qu'une : une graisse
+   que le navigateur SIMULE épaissit le tracé et en brouille les contre-formes. Les sept `700` du
+   DS tombent donc à `400`, ici comme dans button.css, disclosure.css, image-button.css et
+   menu.css. Aucun `!important` : rien ne les concurrence, le DS n'héritant pas de la feuille d'une
+   app consommatrice. */
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--font-title);
+  font-weight: 400;
+  /* La SF Distant Galaxy Alternate est large et déjà serrée ; le resserrage de −0,01 em de la
+     police système y collait les capitales. */
+  letter-spacing: 0;
+}
+
+/* LES COMMANDES PRENNENT LA POLICE DES TITRES. Un bouton, une destination de menu, l'intitulé
+   d'une section dépliante : ce sont des mots courts, en capitales, qui ont la place de la variante
+   large — là où un paragraphe entier, en Alternate, se lirait comme une affiche. Le corps de texte
+   garde donc --font-body (posé sur :root, tokens.css).
+   Deux commandes manquent ici et c'est VOULU : `.ds-menu-item` (menu.css) et
+   `.ds-disclosure-trigger` (disclosure.css) déclarent `font: inherit`, un RACCOURCI qui remet la
+   famille à la valeur héritée. À spécificité égale et déclarées plus loin dans l'ordre des
+   @import, leurs règles gagneraient sur celle-ci ; elles posent donc leur police elles-mêmes,
+   juste après leur raccourci. Gagner par un `:root` de rab ou un `!important` aurait caché le
+   conflit au lieu de le régler. */
+.ds-button,
+.ds-disclosure-title {
+  font-family: var(--font-title);
+}
+
+button,
+select,
+textarea,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+/* Barre de défilement à plat (pas d'ombre néomorphique). */
+::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color-muted) 45%, transparent);
+  background-clip: padding-box;
+  border: 3px solid transparent;
+  border-radius: var(--neu-radius);
+}
+
+/* Masqué à l'œil, lisible par les lecteurs d'écran. */
+.ds-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.ds-muted {
+  color: var(--color-muted);
+}

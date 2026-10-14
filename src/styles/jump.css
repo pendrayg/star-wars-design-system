@@ -1,0 +1,42 @@
+/* Saut en hyperespace : l'overlay plein écran qui couvre la page le temps de la transition.
+   Le composant (HyperspaceJump) peint le champ d'étoiles dans son canvas ; cette feuille ne pose
+   que la boîte et le fondu de sortie. */
+
+.ds-jump {
+  position: fixed;
+  inset: 0;
+  /* AU-DESSUS DES SCANLINES (z-index 9999, scanlines.css) : le décor de l'écran cathodique
+     appartient à la page qu'on quitte, il n'a rien à faire par-dessus le saut. Un cran plus haut
+     (10001) laisse la place à une app qui voudrait glisser quelque chose entre les deux. */
+  z-index: 10001;
+  /* Le fond est OPAQUE dès le premier frame, sans fondu d'entrée : les composants d'une app
+     basculent leur rendu au changement de valeur, avant que `data-theme` ne suive. Ce noir
+     immédiat est ce qui empêche d'apercevoir la page à moitié basculée. */
+  background: #000;
+  /* L'overlay capte les clics : pendant le saut, la page dessous est inerte — ce qui évite aussi
+     un second appui sur la commande en pleine séquence. */
+  pointer-events: auto;
+}
+
+/* Sortie : le noir s'efface pendant la décélération et découvre la nouvelle page. La durée est
+   alignée sur JUMP_DURATIONS.exit (jump/starfield.ts) — le retrait du composant doit tomber au
+   moment où l'opacité atteint zéro, pas avant. Pas de palier à opacité pleine : la phase est trop
+   brève pour qu'on en réserve une part, le fondu se verrait alors comme une coupure. */
+.ds-jump[data-phase='exit'] {
+  animation: ds-jump-fade 0.2s ease-in both;
+}
+
+@keyframes ds-jump-fade {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.ds-jump-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

@@ -1,0 +1,49 @@
+/* Chargement : un cercle qui « rebondit » par son ombre. */
+
+.ds-spinner {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 0;
+  color: var(--color-muted);
+}
+
+/* Compact : le point à sa taille, plus une marge de cadre de part et d'autre — 38 px au doigt,
+   comme avant, 28 à la souris, où une commande n'en fait plus que 33. */
+.ds-spinner-compact {
+  display: inline-flex;
+  justify-content: center;
+  width: calc(var(--control-check) + 2 * var(--control-pad));
+  height: calc(var(--control-check) + 2 * var(--control-pad));
+  padding: 0;
+}
+
+.ds-spinner-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-bg);
+  animation: ds-spinner-bounce 0.7s ease-in-out infinite;
+}
+
+.ds-spinner-compact .ds-spinner-dot {
+  width: var(--control-check);
+  height: var(--control-check);
+}
+
+@keyframes ds-spinner-bounce {
+  0%,
+  100% {
+    box-shadow: none;
+  }
+  45% {
+    box-shadow: var(--neu-raised);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-spinner-dot {
+    animation: none;
+    box-shadow: var(--neu-raised);
+  }
+}

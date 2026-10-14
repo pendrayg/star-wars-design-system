@@ -1,0 +1,93 @@
+/* RAYURES DE BALAYAGE — le grain d'un tube cathodique, posé sur toute la page.
+
+   C'est du DÉCOR, et il est peint par-dessus tout : un pseudo-élément du `body`, fixe, inerte au
+   pointeur, à un z-index que rien du DS n'atteint (seul le saut en hyperespace passe au-dessus,
+   cf. jump.css). Le motif lui-même est un jeton (--scanlines, tokens.css), ce qui laisse au thème
+   clair une seule valeur à redéfinir.
+
+   DEUX ANIMATIONS, ET LEURS PÉRIODES SONT PREMIÈRES ENTRE ELLES — 17 s et 23 s : elles ne se
+   réalignent que toutes les 391 s, près de sept minutes. Aucune n'est aléatoire, mais leur
+   superposition ne se répète pas à l'échelle d'un regard. Elles agissent sur DEUX propriétés
+   distinctes, et ce n'est pas un détail : deux animations sur la même propriété ne se composent
+   pas (la dernière déclarée gagne, la première est purement ignorée).
+   `steps(1, end)` pour la dérive : un décalage d'un ou deux pixels doit être FRANC, comme une
+   synchro verticale qui décroche — interpolé, il donnerait un glissement continu qu'on suit des
+   yeux. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: var(--scanlines);
+  animation:
+    ds-scan-drift 17s steps(1, end) infinite,
+    ds-scan-flicker 23s ease-in-out infinite;
+}
+
+/* L'ÉCHAPPATOIRE : `data-scanlines="off"` sur <html> éteint le décor, comme `data-theme` force le
+   thème et `data-density` l'échelle — même grammaire, même endroit. Une app qui pose une image en
+   fond, ou qui affiche de longs textes, a de bonnes raisons de s'en passer. */
+:root[data-scanlines='off'] body::after {
+  display: none;
+}
+
+/* Dérive : trois décrochages par cycle, espacés inégalement (18 %, 47 %, 78 %) et d'amplitudes
+   différentes (−2, +1, −1 px), chacun ne durant que six millièmes du cycle, soit ~100 ms. */
+@keyframes ds-scan-drift {
+  0%,
+  18% {
+    background-position: 0 0;
+  }
+  18.6% {
+    background-position: 0 -2px;
+  }
+  19.2%,
+  46.4% {
+    background-position: 0 0;
+  }
+  47% {
+    background-position: 0 1px;
+  }
+  47.6%,
+  77.4% {
+    background-position: 0 0;
+  }
+  78% {
+    background-position: 0 -1px;
+  }
+  78.6%,
+  100% {
+    background-position: 0 0;
+  }
+}
+
+/* Clignotement : deux creux par cycle, à 30 % et 72 % — deux nombres sans rapport simple avec les
+   trois de la dérive, pour que les deux effets ne tombent jamais ensemble deux fois de suite. */
+@keyframes ds-scan-flicker {
+  0%,
+  29.5% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 0.55;
+  }
+  30.5%,
+  71.5% {
+    opacity: 1;
+  }
+  72% {
+    opacity: 0.55;
+  }
+  72.5%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Le grain reste — c'est une texture, pas un mouvement —, mais il cesse de bouger. */
+@media (prefers-reduced-motion: reduce) {
+  body::after {
+    animation: none;
+  }
+}

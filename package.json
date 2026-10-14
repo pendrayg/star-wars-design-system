@@ -1,0 +1,67 @@
+{
+  "name": "@pendrayg/star-wars-design-system",
+  "version": "0.1.0",
+  "description": "Design system Star Wars : jetons, CSS et composants React — pilules, glyphes swg, scanlines, holo et saut en hyperespace.",
+  "type": "module",
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pendrayg/star-wars-design-system.git"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  },
+  "keywords": [
+    "design-system",
+    "star-wars",
+    "starwars",
+    "react",
+    "components",
+    "css"
+  ],
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./styles.css": "./dist/styles/index.css"
+  },
+  "sideEffects": [
+    "*.css"
+  ],
+  "scripts": {
+    "build": "vite build && tsc -p tsconfig.build.json && node scripts/copy-styles.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "oxlint",
+    "test": "vitest run",
+    "site": "vite --config vite.site.config.ts",
+    "build-site": "vite build --config vite.site.config.ts"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "~6.0.2",
+    "vite": "^8.1.1",
+    "@vitejs/plugin-react": "^6.0.3",
+    "vitest": "^4.1.10",
+    "jsdom": "^29.1.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/user-event": "^14.6.1",
+    "oxlint": "^1.71.0",
+    "@types/node": "^24.13.2"
+  }
+}

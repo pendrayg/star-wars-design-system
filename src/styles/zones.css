@@ -1,0 +1,53 @@
+/* Zones : délimitées par une bordure fine, jamais par une ombre — la profondeur reste réservée aux
+   commandes, si bien qu'un bouton se détache franchement du cadre qui le contient.
+   Padding d'une zone bordée : la marge des ombres (--shadow-room).
+
+   ICI, LA BORDURE EST AMBRE ET ELLE RAYONNE. Une zone n'est plus un panneau neutre mais un PANNEAU
+   D'INSTRUMENT : liseré solaire, halo, encre solaire aussi — le texte d'une zone se lit comme un
+   affichage, pas comme du corps de texte. Et le RAYON TOMBE À 3 PX : les commandes sont en pilules,
+   une zone qui les imiterait leur disputerait la forme ; un panneau de cockpit est presque carré,
+   et ce contraste est ce qui distingue, d'un coup d'œil, ce qui s'actionne de ce qui se lit.
+   Le fond s'assombrit de 8 % pour décoller le panneau du fond de page (valeur de team-dashboard,
+   `targeting.css:103-115`). */
+
+.ds-zone {
+  background: color-mix(in srgb, var(--color-bg) 92%, #000);
+  border: 1px solid var(--grad-solar-to);
+  border-radius: 3px;
+  padding: var(--shadow-room);
+  color: var(--grad-solar-to);
+  box-shadow: var(--glow-amber);
+}
+
+/* Thème clair : ces 8 % d'assombrissement y virent au gris franc, et le liseré ambre suffit à
+   décoller le panneau d'un fond déjà clair. Le reste de l'habillage ne bouge pas — même bordure,
+   même halo, même rayon : seule la couleur de fond change. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) .ds-zone {
+    background: var(--color-bg);
+  }
+}
+
+:root[data-theme='light'] .ds-zone {
+  background: var(--color-bg);
+}
+
+/* Message : un texte d'accompagnement, sans cadre, dont seul le mot clé est appuyé. */
+.ds-notice {
+  padding: calc(1.5 * var(--control-pad)) calc(2 * var(--control-pad));
+  color: var(--color-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.ds-notice strong {
+  color: var(--color-text);
+}
+
+.ds-notice.ds-warn strong {
+  color: var(--grad-solar-to);
+}
+
+.ds-notice.ds-ok strong {
+  color: var(--grad-fern-to);
+}

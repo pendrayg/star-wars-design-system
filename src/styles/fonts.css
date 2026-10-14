@@ -1,0 +1,35 @@
+/* Les polices Star Wars, servies avec le paquet — pas de CDN, même règle que la police d'icônes
+   (cf. icons.css) : une app hors ligne doit rendre le même texte.
+
+   DEUX POLICES, UNE GRAISSE. La SF Distant Galaxy (ShyFoundry, Sigurdur Armannsson, 1999) est le
+   lettrage du générique ; son Alternate en est la variante large, retenue pour les titres et les
+   commandes, où les capitales sont rares et l'espace disponible. Ni l'une ni l'autre n'a de gras :
+   toute graisse simulée par le navigateur épaissit et brouille le tracé — d'où les `font-weight: 400`
+   semés dans le DS, et aucune déclaration de graisse ici.
+
+   La Starwars Kit, elle, n'est pas une police de texte : ses lettres dessinent des COQUES DE
+   VAISSEAUX. Elle est exposée en jeton (--font-hull, tokens.css) et n'est appliquée nulle part par
+   défaut — une app qui veut une frise de vaisseaux la cite, le texte courant n'y touche jamais.
+
+   `font-display: swap` : le texte s'affiche aussitôt dans la police de repli, puis bascule. Les
+   trois fichiers pèsent 200 ko à eux trois, mais un .ttf ne se décompresse pas comme un .woff2.
+
+   LICENCES, cf. le README : SF Distant Galaxy — ShyFoundry Fonts, gratuite pour un usage NON
+   COMMERCIAL, ce qui s'accorde avec la licence PolyForm Noncommercial du paquet. */
+@font-face {
+  font-family: 'SF Distant Galaxy';
+  src: url('../assets/fonts/SFDistantGalaxy.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SF Distant Galaxy Alternate';
+  src: url('../assets/fonts/SFDistantGalaxyAlternate.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Starwars Kit';
+  src: url('../assets/fonts/StarwarsKit.ttf') format('truetype');
+  font-display: swap;
+}

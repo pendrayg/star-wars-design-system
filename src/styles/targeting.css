@@ -1,0 +1,94 @@
+/* VISÉE — le vocabulaire des écrans de ciblage : un châssis ambre, et des lectures d'instrument.
+   Porté de team-dashboard (`src/styles/targeting.css`), où il a été réglé à l'écran.
+
+   Trois pièces, et elles se distinguent par leur ÉCHELLE :
+     .ds-frame   — le CHÂSSIS d'un écran : il entoure un graphique, une carte, un tableau de bord.
+                   Trait épais, grand rayon, halo fort, et un balayage qui le parcourt une fois ;
+     .ds-readout — la LECTURE : un petit panneau d'instrument, trait fin, presque carré, qui porte
+                   une valeur mesurée ;
+     .ds-digits  — les CHIFFRES de cette lecture, en rouge, parce qu'un nombre qui compte ne se
+                   lit pas à la même encre que son intitulé.
+
+   Le châssis N'EST PAS une zone (.ds-zone) et ne la remplace pas : une zone est un panneau de
+   contenu, le châssis est le bord de l'écran lui-même. Les deux se superposent sans se gêner —
+   2,5 px contre 1, 26 px de rayon contre 3. */
+
+.ds-frame {
+  position: relative;
+  padding: 10px;
+  /* 2,5 px : la demi-épaisseur est volontaire — un trait de 2 tombait maigre à côté du halo, un
+     trait de 3 s'épaississait en bandeau. */
+  border: 2.5px solid var(--grad-solar-to);
+  /* 26 px, et le châssis est la SEULE pièce du DS à ce rayon : il n'est ni une commande (pilule,
+     hauteur / 2) ni une zone (3 px). Son arrondi est celui d'une dalle d'écran. */
+  border-radius: 26px;
+  background: var(--color-bg);
+  /* Le halo fort au-dehors, et un voile ambre à 8 % en dedans, sur 40 px : c'est lui qui donne au
+     châssis sa profondeur de tube, sans assombrir le contenu. */
+  box-shadow:
+    var(--glow-amber-strong),
+    inset 0 0 40px color-mix(in srgb, var(--grad-solar-to) 8%, transparent);
+}
+
+/* LE BALAYAGE : une barre rouge qui traverse le châssis une seule fois, à l'apparition. `1 both`
+   et non `infinite` — un balayage qui se répète cesse d'être un démarrage et devient un gyrophare.
+   Les 10 px de haut et de bas la font courir le long du contenu, pas du congé des coins. */
+.ds-frame::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 0;
+  width: 2px;
+  pointer-events: none;
+  z-index: 2;
+  background: var(--grad-blaze-to);
+  box-shadow: 0 0 8px var(--grad-blaze-to);
+  animation: ds-sweep 1.4s ease-out 1 both;
+}
+
+@keyframes ds-sweep {
+  from {
+    left: 0;
+    opacity: 1;
+  }
+  /* L'extinction n'occupe que le dernier cinquième : la barre doit avoir traversé avant de pâlir,
+     sinon elle semble s'évanouir en route. */
+  80% {
+    opacity: 1;
+  }
+  to {
+    left: calc(100% - 2px);
+    opacity: 0;
+  }
+}
+
+/* `display: none` et non `animation: none` : sans animation, le `both` ne s'applique plus et la
+   barre resterait figée, opaque, sur le bord gauche. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-frame::after {
+    display: none;
+  }
+}
+
+/* LA LECTURE : le panneau d'instrument, à l'échelle d'une étiquette. Même recette que la zone
+   (fond 92 %, liseré ambre, 3 px, halo) à une différence près — elle prend la police des TITRES,
+   celle des commandes : une valeur mesurée s'affiche, elle ne se raconte pas. */
+.ds-readout {
+  display: inline-block;
+  padding: 6px 10px;
+  background: color-mix(in srgb, var(--color-bg) 92%, #000);
+  border: 1px solid var(--grad-solar-to);
+  border-radius: 3px;
+  color: var(--grad-solar-to);
+  font-family: var(--font-title);
+  box-shadow: var(--glow-amber);
+}
+
+/* Les CHIFFRES, en rouge et rayonnants : dans une lecture ambre, c'est la seule encre qui se
+   détache sans qu'on la cherche. Le halo est plus court que celui d'un panneau (6 px contre 10) —
+   il entoure des glyphes, pas une boîte. */
+.ds-digits {
+  color: var(--grad-blaze-to);
+  text-shadow: 0 0 6px var(--grad-blaze-to);
+}
