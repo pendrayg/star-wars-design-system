@@ -156,7 +156,8 @@ code {
   height: 100%;
   border-radius: var(--neu-radius-lg);
   background: var(--color-surface);
-  box-shadow: var(--neu-inset);
+  border: 1px solid var(--neon-color);
+  box-shadow: var(--glow-amber);
 }
 
 /* Les trois largeurs de la démo de rangée : c'est l'écart qui change, pas les boutons. Chaque

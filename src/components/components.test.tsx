@@ -28,55 +28,41 @@ import { PRESS_HOLD_MS } from './usePress'
 import { PUSH_S } from '../fold/schedule'
 
 describe('ChartFilters', () => {
-  it("rend les trois filtres d'un graphique, chacun à son échelle", () => {
+  it("rend les filtres d'un graphique : des halos, plus aucune ombre", () => {
     const { container } = render(<ChartFilters />)
 
-    // La rainure : le creux à k = 1/24, dont le flou vaut la largeur du trait — 48 × 1/24 = 2 px,
-    // soit σ = 1. C'est la règle entière, et c'est elle que ce test garde.
-    const sombre = container.querySelector('#ds-chart-groove feDropShadow.ds-groove-dark')
-    const claire = container.querySelector('#ds-chart-groove feDropShadow.ds-groove-light')
-    expect(sombre).toHaveAttribute('dx', '-1.08')
-    expect(sombre).toHaveAttribute('stdDeviation', '1')
-    // L'ombre du côté d'où vient la lumière, le rehaut du côté opposé : les signes sont opposés.
-    expect(claire).toHaveAttribute('dx', '1.29')
-    expect(Number(sombre?.getAttribute('dx')) * Number(claire?.getAttribute('dx'))).toBeLessThan(0)
-    // Le tracé passe au-dessus de ses deux parois.
+    // Le néomorphisme est parti : plus une seule ombre portée, dans aucun filtre.
+    expect(container.querySelector('feDropShadow')).toBeNull()
+
+    // Le halo d'un trait : son propre flou, posé deux fois sous lui, le tracé net au-dessus.
+    expect(container.querySelector('#ds-chart-groove feGaussianBlur')).toHaveAttribute('in', 'SourceGraphic')
     const fusion = container.querySelectorAll('#ds-chart-groove feMergeNode')
-    expect(fusion[fusion.length - 1]).toHaveAttribute('in', 'SourceGraphic')
+    expect([...fusion].map((n) => n.getAttribute('in'))).toEqual(['halo', 'halo', 'SourceGraphic'])
 
-    // L'ombre d'une donnée : le relief à k = 1/9 (28 et 50 réduits). Déprécié, mais conservé tant
-    // que des apps le citent : ce test garde l'identifiant vivant et sa géométrie intacte.
-    expect(container.querySelector('#ds-chart-shadow feDropShadow')).toHaveAttribute('dx', '3.11')
-    expect(container.querySelector('#ds-chart-shadow feDropShadow')).toHaveAttribute('stdDeviation', '2.78')
+    // Déprécié, mais conservé tant que des apps le citent : l'identifiant reste vivant.
+    expect(container.querySelector('#ds-chart-shadow')).not.toBeNull()
 
-    // Le sertissage : le creux à k = 1/3 (26 et 48 réduits), sans reflet clair ni rebord.
-    expect(container.querySelector('#ds-chart-set feOffset')).toHaveAttribute('dx', '8.67')
-    expect(container.querySelector('#ds-chart-set feGaussianBlur')).toHaveAttribute('stdDeviation', '8')
+    // Le châssis : un anneau autour de la silhouette, teinté par le thème (une seule encre), et le
+    // tube peint au-dessus de tout.
+    expect(container.querySelector('#ds-chart-set feMorphology')).toHaveAttribute('operator', 'dilate')
     expect(container.querySelectorAll('#ds-chart-set feFlood')).toHaveLength(1)
+    const chassis = container.querySelectorAll('#ds-chart-set feMergeNode')
+    expect(chassis[chassis.length - 1]).toHaveAttribute('in', 'tube')
 
     // Le porteur ne s'annonce pas : il n'existe que pour ses définitions.
     expect(container.querySelector('svg')).toHaveAttribute('aria-hidden', 'true')
   })
 
-  it("entaille une marque pleine à la MÊME profondeur qu'un trait : même géométrie, autre encre", () => {
+  it("fait rayonner une marque pleine au MÊME flou qu'un trait, à moindre dose", () => {
     const { container } = render(<ChartFilters />)
-    const geometrie = (id: string, paroi: string) => {
-      const noeud = container.querySelector(`#${id} feDropShadow.${paroi}`)
-      return ['dx', 'dy', 'stdDeviation'].map((a) => noeud?.getAttribute(a))
-    }
+    const flou = (id: string) => container.querySelector(`#${id} feGaussianBlur`)?.getAttribute('stdDeviation')
 
-    // LE CŒUR DE LA RÈGLE : une rainure n'a qu'une profondeur par graphique. Si ces deux
-    // géométries divergent un jour, une barre et une courbe cesseront de se comparer — c'est
-    // exactement ce que ce test interdit.
-    expect(geometrie('ds-chart-groove-fill', 'ds-groove-dark')).toEqual(geometrie('ds-chart-groove', 'ds-groove-dark'))
-    expect(geometrie('ds-chart-groove-fill', 'ds-groove-light')).toEqual(geometrie('ds-chart-groove', 'ds-groove-light'))
-
-    // Ce qui les distingue est l'ENCRE, et elle vient du thème (chart.css), pas des attributs :
-    // le filtre ne porte aucune couleur, c'est son identifiant qui la lui vaut.
-    expect(container.querySelector('#ds-chart-groove-fill feDropShadow')).not.toHaveAttribute('flood-color')
-
-    // Le tracé passe au-dessus de ses deux parois, ici aussi.
+    // Un halo par graphique : une barre et une courbe s'y comparent tant que les flous coïncident.
+    expect(flou('ds-chart-groove-fill')).toBe(flou('ds-chart-groove'))
+    // Une seule couche de halo, et atténuée : une marque pleine retient tout son flou.
+    expect(container.querySelector('#ds-chart-groove-fill feColorMatrix')).not.toBeNull()
     const fusion = container.querySelectorAll('#ds-chart-groove-fill feMergeNode')
+    expect(fusion).toHaveLength(2)
     expect(fusion[fusion.length - 1]).toHaveAttribute('in', 'SourceGraphic')
   })
 })

@@ -1,24 +1,17 @@
 /* Boutons à image.
    Une image (un logo) ne remplace jamais la surface d'un bouton : posée à plein cadre, elle en
-   prenait la place, et le relief se lisait plus ou moins selon l'image. Le bouton reste une surface
+   prenait la place, et le néon se lisait plus ou moins selon l'image. Le bouton reste une surface
    du DS et l'image en est le contenu, sous trois formes :
      .ds-image-chip  — pastille : l'image au centre, avec une marge de matière (image : 57 % du
                        côté de la tuile) ;
-     .ds-image-set   — sertie : l'image incrustée dans un creux fixe, son chaton (.ds-well, chaton
-                       et image aux deux tiers du côté) ; elle le remplit bord à bord, et l'ombre sombre du creux
-                       (shadow 4 au cran --neu-k-xs, sans son reflet clair) passe sur ses bords ;
+     .ds-image-set   — sertie : l'image incrustée dans un chaton (.ds-well, chaton et image aux
+                       deux tiers du côté) ; elle le remplit bord à bord, cerclée de son propre
+                       tube, qui s'allume avec celui du bouton ;
      .ds-image-label — logo et nom : l'image en icône d'une commande ordinaire, suivie du nom ;
      .ds-image-label-set — logo serti et nom : le même, le logo incrusté dans un chaton.
-   L'image est posée AU-DESSUS des ombres du bouton : le creux de l'enfoncement se dessine autour
-   d'elle, jamais par-dessus — son reflet clair la voilait, surtout en thème clair. Un bouton à
-   bascule éteint son image (gris, 60 %) tant qu'il n'est pas enfoncé. */
-
-/* L'image couvre l'essentiel du creux : le rebond y garde sa pleine ampleur. */
-.ds-image-chip,
-.ds-image-set,
-.ds-image-label-set {
-  --sink-over: 1;
-}
+   L'image est posée AU-DESSUS du néon du bouton : le voile qui monte en dedans au plein feu se
+   dessine autour d'elle, jamais par-dessus. Un bouton à bascule éteint son image (gris, 60 %) tant
+   qu'il n'est pas allumé. */
 
 .ds-image-chip,
 .ds-image-set {
@@ -44,7 +37,7 @@
 /* LE NOM, à côté de l'image. Il tient sur UNE LIGNE et se tronque par des points de suspension : un
    bouton a la hauteur d'une commande, pas celle de son contenu, et un nom long qui passait à la
    ligne débordait de la plaque — 42 px de texte dans 33 px de bouton à l'échelle compacte (le
-   relief ne rogne rien, il laisse baver sur la page). `min-width: 0` est ce qui l'autorise à
+   néon ne rogne rien, il laisse baver sur la page). `min-width: 0` est ce qui l'autorise à
    rétrécir : sans lui, un élément flexible refuse de descendre sous la largeur de son contenu, et
    `overflow` n'a jamais rien à rogner. `white-space: nowrap` va avec `text-overflow` : des points de
    suspension ne se posent qu'au bout d'une ligne qui ne se replie pas. */
@@ -88,7 +81,7 @@
 }
 
 /* Logo serti et nom : le logo remplit un chaton de la hauteur d'une commande logée
-   (--control-inner), à une marge de cadre du bord, sous l'ombre du creux. */
+   (--control-inner), à une marge de cadre du bord, sous son tube. */
 .ds-image-label-set {
   padding-left: var(--control-pad);
 }
@@ -113,9 +106,9 @@
   border-radius: inherit;
 }
 
-/* Le chaton : un creux fixe dans la matière du bouton, que l'image remplit. Son ombre est peinte
-   AU-DESSUS de l'image : c'est elle qui l'incruste. --well (0 à 1) en règle la profondeur, pour
-   qu'il puisse naître avec le bouton (pop d'une grille dépliante). Sa grille a la taille du chaton :
+/* Le chaton : un logement dans la matière du bouton, que l'image remplit. Son tube est peint
+   AU-DESSUS de l'image : c'est lui qui la sertit. Il suit le --lit et le --pop du bouton, dont il
+   hérite — il s'allume, brille et s'amorce avec lui (cf. neon.css). Sa grille a la taille du chaton :
    une image plus haute que large (un portrait) y est recadrée au lieu de le déborder. */
 .ds-well {
   display: grid;
@@ -135,8 +128,6 @@
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  box-shadow: inset calc(26px * var(--neu-k-xs) * var(--well, 1)) calc(26px * var(--neu-k-xs) * var(--well, 1))
-    calc(48px * var(--neu-k-xs) * var(--well, 1)) var(--neu-dark);
 }
 
 /* Image sertie hors bouton (SetImage) : le chaton seul, à la taille voulue, sans surface de bouton

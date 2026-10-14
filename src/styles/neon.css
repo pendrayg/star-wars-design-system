@@ -1,0 +1,111 @@
+/* LE NÉON — la recette, écrite une fois, que toutes les commandes du DS portent.
+
+   Trois couches, dans l'ordre d'une liste de box-shadow (la première peinte au-dessus) :
+     1. le TUBE : un trait plein de --neon-width, posé EN DEDANS (inset, sans flou) pour ne rien
+        pousser — une bordure CSS décalerait le contenu d'1,5 px et changerait la hauteur des
+        commandes, que tout le DS aligne au pixel ;
+     2. le HALO au-dehors : son flou va de --neon-blur à --neon-blur-lit, son encre de 40 à 85 %,
+        selon --lit ;
+     3. le VOILE en dedans : nul au repos, il monte avec --lit. C'est celui du châssis (« un voile
+        ambre à 8 % en dedans »), un peu plus dense parce qu'il couvre une pilule et non un écran.
+
+   --neon-on (0 à 1) éteint le tout d'un bloc : c'est --pop, l'amorçage d'une commande qui apparaît
+   (cf. fold.css), et une commande ordinaire le laisse à 1. Les variables ne sont pas des JETONS
+   de :root mais des déclarations posées ICI, sur l'élément : un var() se résout là où il est
+   déclaré, et --lit doit être celui du bouton, pas celui de la racine.
+
+   `.ds-neon` est la porte d'entrée pour une app : posé sur n'importe quel bloc, il lui donne le
+   néon d'une commande, et `--lit: 1` le met plein feu. */
+
+.ds-neon,
+.ds-shade,
+.ds-input,
+.ds-checkbox,
+.ds-search,
+.ds-menu,
+.ds-menu-indicator,
+.ds-selectable,
+.ds-well::after {
+  --neon-on: clamp(0, var(--pop), 1);
+  box-shadow:
+    inset 0 0 0 var(--neon-width) color-mix(in srgb, var(--neon-color) calc(100% * var(--neon-on)), transparent),
+    0 0 calc(var(--neon-blur) + (var(--neon-blur-lit) - var(--neon-blur)) * var(--lit))
+      color-mix(in srgb, var(--neon-color) calc((40% + 45% * var(--lit)) * var(--neon-on)), transparent),
+    inset 0 0 calc(14px * var(--lit)) color-mix(in srgb, var(--neon-color) calc(18% * var(--lit) * var(--neon-on)), transparent);
+}
+
+/* Sans color-mix() (Safari avant 16.2) : le tube seul, à la couleur du thème — un néon sans halo
+   reste un liseré, pas une commande nue. */
+@supports not (color: color-mix(in srgb, red 50%, transparent)) {
+  .ds-neon,
+  .ds-shade,
+  .ds-input,
+  .ds-checkbox,
+  .ds-search,
+  .ds-menu,
+  .ds-menu-indicator,
+  .ds-selectable,
+  .ds-well::after {
+    box-shadow: inset 0 0 0 var(--neon-width) var(--neon-color);
+  }
+}
+
+/* L'AMORÇAGE — un tube qui s'allume : deux ratés, une retombée à mi-tension, puis il tient. Les
+   images-clés sont en `steps(1, end)` (posé par qui joue l'animation) : chaque coupure est franche,
+   comme celles du signal holographique (holo.css). Tout se joue dans la première moitié ; la
+   seconde, le tube tient, ce qui laisse au regard le temps de le voir stable. Joué à l'envers,
+   c'est l'extinction : le tube tient, vacille, et s'éteint.
+   --pop est hérité : l'animer sur une commande allume aussi son calque de néon et son chaton. */
+@keyframes ds-pop {
+  0% {
+    --pop: 0;
+  }
+  8% {
+    --pop: 1;
+  }
+  13% {
+    --pop: 0;
+  }
+  24% {
+    --pop: 1;
+  }
+  28% {
+    --pop: 0.35;
+  }
+  36% {
+    --pop: 0;
+  }
+  46%,
+  100% {
+    --pop: 1;
+  }
+}
+
+/* L'image d'une commande s'amorce avec elle, sur les MÊMES images-clés : elle est éclairée par le
+   tube. --image-on est son plein (0,6 pour une bascule éteinte, cf. image-button.css). Écrite en
+   opacité, et non en --pop : sur iPhone, Safari ne répercute pas un nombre animé sur les autres
+   propriétés de l'élément qui l'anime, et l'image n'en hérite pas toujours à temps. */
+@keyframes ds-image-in {
+  0% {
+    opacity: 0;
+  }
+  8% {
+    opacity: var(--image-on, 1);
+  }
+  13% {
+    opacity: 0;
+  }
+  24% {
+    opacity: var(--image-on, 1);
+  }
+  28% {
+    opacity: calc(var(--image-on, 1) * 0.35);
+  }
+  36% {
+    opacity: 0;
+  }
+  46%,
+  100% {
+    opacity: var(--image-on, 1);
+  }
+}

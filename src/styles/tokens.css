@@ -1,12 +1,16 @@
 /* Jetons du design system Star Wars.
 
-   Néomorphisme à DEUX niveaux — repos = surélevé, actif = enfoncé — en DEUX THÈMES.
-   RÈGLE DE RELIEF : l'ombre ne dit qu'une chose, l'interaction.
-   — SURÉLEVÉ = ce qui s'actionne, au repos (bouton, champ, case à cocher) ;
-   — ENFONCÉ = l'état actif de ces mêmes commandes (bouton pressé, destination courante, champ
-     engagé, case cochée) ;
-   — BORDURE GRISE FINE = une ZONE, et rien d'autre (panneau, liste, message) : une zone ne se
-     presse pas, elle ne porte aucune ombre.
+   NÉON, et plus d'ombre — en DEUX THÈMES. Le néomorphisme est parti : aucune commande ne porte
+   plus de relief ni de creux. Tout ce qui se touche est cerné d'un LISERÉ NÉON, celui du châssis
+   de visée (targeting.css) ramené à l'échelle d'une commande : un trait ambre, son halo au-dehors.
+   RÈGLE DU NÉON : la lumière ne dit qu'une chose, l'interaction.
+   — ALLUMÉ = ce qui s'actionne, au repos (bouton, champ, case à cocher) : liseré et halo doux ;
+   — PLEIN FEU = l'état actif de ces mêmes commandes (bouton pressé, destination courante, champ
+     engagé, case cochée) : le halo s'élargit et s'intensifie, un voile de lumière passe en dedans.
+     Rien ne s'enfonce, rien ne rebondit : on appuie, ça brille plus fort ;
+   — BORDURE FINE AMBRE, PRESQUE CARRÉE = une ZONE (zones.css), qui se lit sans s'actionner.
+   Une commande qui APPARAÎT (grille, section dépliante) ne monte plus du fond : son néon
+   S'AMORCE, il clignote avant de tenir, comme un tube qui s'allume — et s'éteint de même.
 
    Le thème SUIT L'APPAREIL : le sombre est le défaut, le clair prend la main sur
    `prefers-color-scheme: light`. `data-theme="dark"` ou `"light"` sur <html> le force (page de démonstration,
@@ -25,68 +29,29 @@
 
   --neu-radius: 10px;
   --neu-radius-lg: 16px;
-  /* OMBRES ET MARGES — une seule règle.
-     La référence est la maquette (« shadow 2 » en relief, « shadow 4 » en creux, dessinées pour un
-     carré de 383 px) : relief — ombre sombre à 28 px floue sur 50, rehaut à −23 px flou sur 45 ;
-     creux — ombre sombre à 26 px floue sur 48, rehaut à −31 px flou sur 43. Toutes nos ombres en
-     sont une RÉDUCTION par un facteur k qui ne dépend que de la taille de l'élément :
-       k = 1/3 — commandes ordinaires, jusqu'à ~60 px de haut ;
-       k = 1/2 — grandes commandes, ~64 px et plus, ou barre sur toute la largeur ;
-       k = 1/9 — creux fixes logés dans une commande (le chaton d'un bouton à image serti).
-     Le rebord d'un élément enfoncé (son ombre extérieure) est son ombre en relief, au même k.
-     MARGE : autour d'une commande, 72 px × k — 24 px à 1/3 et 36 px à 1/2 au doigt, 16 et 24 à la
-     souris —, pour que l'ombre ne soit ni rognée par le bord d'une zone qui défile, ni recouverte
-     par la voisine. Elle couvre : l'ombre d'un bouton porte à 14 px à la souris et 21 au doigt
-     (mesuré dans Chrome, la portée étant la distance où elle tombe à un dixième de son pic).
-     k ne dépendant que de la TAILLE de l'élément, il suit l'échelle du support : --neu-density
-     (1 au doigt, 2/3 à la souris, cf. plus bas) le multiplie. Une commande plus petite ne porte pas
-     l'ombre d'une grande. Toutes les ombres du DS en découlent — y compris celles que
-     field.css, search.css et image-button.css réécrivent à la main sur k. */
+  /* LE NÉON — une recette, que neon.css applique à toutes les commandes du DS (et à `.ds-neon`,
+     pour une app). Elle se règle par quatre nombres et une couleur :
+       --neon-color     la teinte du tube : l'ambre du viseur, sauf ton contraire (`.ds-primary`
+                        prend le glacier des hologrammes, `.ds-danger` le rouge) ;
+       --neon-width     l'épaisseur du trait : 1,5 px. Le châssis en a 2,5, mais il entoure un
+                        écran ; à l'échelle d'une commande, 2,5 px faisaient un bandeau ;
+       --neon-blur      le halo au repos, 6 px — la moitié des 12 du châssis, pour la même raison ;
+       --neon-blur-lit  le halo plein feu, 16 px : assez pour qu'un appui se voie sans regarder ;
+     et l'intensité du halo, 40 % au repos, 85 % plein feu (le châssis est à 55 %, entre les deux).
+     Deux nombres ANIMÉS la pilotent, enregistrés plus bas : --lit (0 au repos, 1 plein feu) et
+     --pop (1 allumé, 0 éteint — l'amorçage d'une commande qui apparaît). */
+  --neon-color: var(--grad-solar-to);
+  --neon-width: 1.5px;
+  --neon-blur: 6px;
+  --neon-blur-lit: 16px;
+  /* MARGES. Il n'y a plus d'ombre à loger, mais un HALO, qui porte à peu près aussi loin : plein
+     feu, 16 px de flou. La gouttière d'avant tombe donc encore juste et on la garde, avec son
+     calcul : 72 px × k, k = 1/3 pour une commande ordinaire, 1/2 pour une grande, et k suit
+     l'échelle du support (--neu-density, cf. plus bas) — 16 px et 24 à la souris, 24 et 36 au
+     doigt. Les apps la posent en marge et en `gap` ; un halo rogné par le bord d'une zone qui
+     défile, ou recouvert par la commande voisine, se lirait comme un tube cassé. */
   --neu-k: calc(1 / 3 * var(--neu-density));
   --neu-k-lg: calc(1 / 2 * var(--neu-density));
-  --neu-k-xs: calc(1 / 9 * var(--neu-density));
-  --neu-dark: rgba(0, 0, 0, 0.55);
-  --neu-light: rgba(255, 255, 255, 0.05);
-  --neu-light-in: rgba(255, 255, 255, 0.032);
-  /* L'ENCRE D'UNE DONNÉE — l'ombre d'un trait, non d'une surface. Une ombre floutée par un trait de
-     2 px n'en retient qu'environ le tiers (le pic d'un flou gaussien vaut largeur / (σ√2π)) : à
-     l'encre d'une surface, elle tombe sous le seuil du visible. Elle est donc plus dense, pour peser
-     autant. Voir chart.css. */
-  --neu-data: rgba(0, 0, 0, 0.95);
-  /* La PAROI ÉCLAIRÉE d'une rainure — le pendant clair de --neu-data, et pour la même raison : une
-     paroi large de deux pixels ne retient pas plus un rehaut qu'une ombre. Le rehaut d'une surface,
-     à 5 % en sombre, n'y laisserait rien. */
-  --neu-data-light: rgba(255, 255, 255, 0.3);
-  /* L'ENCRE D'UNE MARQUE PLEINE — les deux encres ci-dessus, RENDUES À LEUR VALEUR DE SURFACE.
-     --neu-data n'est pas une encre à part : c'est l'encre du relief DIVISÉE par ce qu'un trait perd
-     de son ombre. Une marque pleine — un symbole de nuage, un rectangle de barre, une part de
-     camembert — ne perd rien : elle rend donc le facteur. Sans quoi elle porterait, à géométrie de
-     rainure égale, DEUX FOIS ET DEMIE l'ombre de la courbe d'à côté, et le même graphique se
-     lirait gravé à deux profondeurs.
-     LE FACTEUR EST MESURÉ, et c'est le seul nombre de la règle. Dans Chrome, à rainure constante,
-     l'ombre déposée hors de la marque par pixel de bord, rapportée à celle d'une marque épaisse :
-     1 px → 27 %, 2 px → 40 %, 3 px → 89 %, 6 px → 99 %, 9 px et au-delà → 100 %. Une marque cesse
-     donc de perdre son ombre dès 3 px ; le trait de 2 px du DS en perd les trois cinquièmes, d'où
-     ces deux cinquièmes. Vérifié : à 40 %, une barre de 14 px et une de 30 px déposent exactement
-     l'ombre d'un trait de 2 px (rapport 1,00), dans les DEUX thèmes.
-     Recoupement : en thème clair, --neu-dark / --neu-data vaut 0,38. L'encre du relief d'une
-     surface EST, à deux points près, l'encre d'une donnée à 40 % — le modèle se tient tout seul. */
-  --neu-data-fill: color-mix(in srgb, var(--neu-data) 40%, transparent);
-  --neu-data-fill-light: color-mix(in srgb, var(--neu-data-light) 40%, transparent);
-  --neu-raised:
-    calc(28px * var(--neu-k)) calc(28px * var(--neu-k)) calc(50px * var(--neu-k)) var(--neu-dark),
-    calc(-23px * var(--neu-k)) calc(-23px * var(--neu-k)) calc(45px * var(--neu-k)) var(--neu-light);
-  --neu-raised-lg:
-    calc(28px * var(--neu-k-lg)) calc(28px * var(--neu-k-lg)) calc(50px * var(--neu-k-lg)) var(--neu-dark),
-    calc(-23px * var(--neu-k-lg)) calc(-23px * var(--neu-k-lg)) calc(45px * var(--neu-k-lg)) var(--neu-light);
-  /* Enfoncé : le rebord, puis le creux. */
-  --neu-inset:
-    var(--neu-raised), inset calc(26px * var(--neu-k)) calc(26px * var(--neu-k)) calc(48px * var(--neu-k)) var(--neu-dark),
-    inset calc(-31px * var(--neu-k)) calc(-31px * var(--neu-k)) calc(43px * var(--neu-k)) var(--neu-light-in);
-  --neu-inset-lg:
-    var(--neu-raised-lg),
-    inset calc(26px * var(--neu-k-lg)) calc(26px * var(--neu-k-lg)) calc(48px * var(--neu-k-lg)) var(--neu-dark),
-    inset calc(-31px * var(--neu-k-lg)) calc(-31px * var(--neu-k-lg)) calc(43px * var(--neu-k-lg)) var(--neu-light-in);
   --shadow-room: calc(72px * var(--neu-k));
   --shadow-room-lg: calc(72px * var(--neu-k-lg));
   /* ÉCHELLE DU SUPPORT — compacte à la souris, confortable au doigt.
@@ -102,7 +67,7 @@
      doit tomber juste. D'où --neu-density: calc(2 / 3), écrit en fraction et non en décimale.
      PAS de `resolution` / `dppx` : un écran Retina est un écran de bureau, et se vise à la souris.
      LA TYPOGRAPHIE NE BOUGE PAS — ce qui change, ce sont les BOÎTES, les GLYPHES de commande et
-     l'AMPLITUDE DU RELIEF. CINQ NOMBRES, tout le reste en découle.
+     la GOUTTIÈRE. CINQ NOMBRES, tout le reste en découle.
      UNE HAUTEUR, pour que tout s'aligne : qu'il s'agisse d'une commande (bouton, lien d'action,
      bouton-icône, champ, sélecteur, logo et nom) ou d'un cadre qui en contient (recherche, barre de
      menu) ; les tuiles à image sont des carrés de même côté. UN RAYON, et il n'est plus un nombre :
@@ -133,8 +98,6 @@
      pilule lui aussi, PAR CONSTRUCTION et sans second calcul. 11,5 px à la souris, 17 au doigt. */
   --control-radius: calc(var(--control-height) / 2);
   --control-radius-inner: calc(var(--control-radius) - var(--control-pad));
-  /* Sol d'une commande enfoncée : la couleur du fond, sans assombrissement. */
-  --neu-sunk-bg: var(--color-bg);
   /* Fond d'attente d'une image avant son chargement. */
   --placeholder-bg: color-mix(in srgb, var(--color-bg) 70%, #000);
   /* Signal d'état actif : blanc rétroéclairé, et son halo, qui rayonne de la couleur de l'élément. */
@@ -143,22 +106,11 @@
   --btn-active-glow-strong: 0 0 11px color-mix(in srgb, currentColor 75%, transparent);
   --check-glow: drop-shadow(0 0 4px color-mix(in srgb, var(--color-primary) 70%, transparent));
 
-  /* LE REBOND — la courbe réglée dans l'atelier « Pop du bouton » : dépassement ×1,8, creux,
-     second rebond, posé, en 1 s. Sert à l'enfoncement des boutons (--sink) et au pop (--pop). */
-  --sink-ease: linear(0, 0.041, 0.159, 0.341, 0.569, 0.824, 1.083, 1.324, 1.529, 1.683, 1.775, 1.794, 1.713, 1.585, 1.427, 1.255, 1.086, 0.933, 0.806, 0.713, 0.656, 0.635, 0.647, 0.687, 0.746, 0.819, 0.896, 0.971, 1.039, 1.094, 1.133, 1.157, 1.164, 1.157, 1.137, 1.108, 1.065, 1.021, 1.001, 1, 1);
-  /* L'AMPLEUR DES DÉPASSEMENTS du rebond (au-delà d'enfoncé, au-dessus du repos), de 0 à 1. Une
-     surface nue (bouton à libellé, bouton-icône, champ) montre tout son creux et tout son relief :
-     à pleine ampleur, le rebond y paraît exagéré, d'autant qu'un toucher bref en joue deux, à
-     l'enfoncement puis au relâchement. Moitié par défaut ; pleine sur les boutons à image, dont
-     l'image couvre l'essentiel du creux (cf. image-button.css). */
-  --sink-over: 0.5;
-  /* LA PROFONDEUR de l'enfoncement d'un bouton, de 0 à 1 : pleine par défaut, moindre sur une
-     commande momentanée (.ds-momentary, cf. button.css). */
-  --sink-press: 1;
-  /* LE RELÂCHEMENT — même ressort (sommet ×1,8, creux, second rebond, posé, en 1 s), mais lancé :
-     il part avec sa vitesse au lieu de démarrer à l'arrêt. Le bouton relâché rebondit aussitôt du
-     fond, sans y marquer de pause. */
-  --release-ease: linear(0, 0.389, 0.778, 1.133, 1.427, 1.642, 1.769, 1.811, 1.773, 1.672, 1.525, 1.351, 1.17, 0.999, 0.852, 0.738, 0.664, 0.63, 0.634, 0.67, 0.73, 0.807, 0.89, 0.971, 1.044, 1.102, 1.144, 1.166, 1.171, 1.16, 1.136, 1.103, 1.066, 1.026, 0.993, 0.974, 0.97, 0.977, 0.988, 0.997, 1);
+  /* LES DEUX TEMPS DU NÉON : il monte vite (80 ms, le temps qu'un doigt le voie s'allumer sous
+     lui) et redescend plus lentement (250 ms) — un tube ne s'éteint pas net, il pâlit. Aucune
+     courbe à dépassement : rien ne rebondit. */
+  --lit-in: 0.08s ease-out;
+  --lit-out: 0.25s ease-in;
 
   /* Palettes de dégradé (couleurs de stop). */
   --grad-glacier-from: #001020;
@@ -247,12 +199,6 @@
        clair. On garde la teinte, on descend la luminosité. */
     --color-primary: #0b7285;
     --color-danger: #c92a2a;
-    /* Les couleurs de la maquette : bleu nuit à 16 %, rehaut blanc plein, rehaut des creux à 64 %. */
-    --neu-dark: rgba(13, 39, 80, 0.16);
-    --neu-light: #ffffff;
-    --neu-light-in: rgba(255, 255, 255, 0.64);
-    --neu-data: rgba(13, 39, 80, 0.42);
-    --neu-data-light: #ffffff;
     /* L'attente d'une image se contente d'un voile : 30 % de noir, ici, ferait une tache. */
     --placeholder-bg: color-mix(in srgb, var(--color-bg) 88%, #000);
     /* L'encre remplace le blanc rétroéclairé : c'est le plus foncé qui « s'allume » sur fond clair. */
@@ -281,12 +227,6 @@
      clair. On garde la teinte, on descend la luminosité. */
   --color-primary: #0b7285;
   --color-danger: #c92a2a;
-  /* Les couleurs de la maquette : bleu nuit à 16 %, rehaut blanc plein, rehaut des creux à 64 %. */
-  --neu-dark: rgba(13, 39, 80, 0.16);
-  --neu-light: #ffffff;
-  --neu-light-in: rgba(255, 255, 255, 0.64);
-  --neu-data: rgba(13, 39, 80, 0.42);
-  --neu-data-light: #ffffff;
   /* L'attente d'une image se contente d'un voile : 30 % de noir, ici, ferait une tache. */
   --placeholder-bg: color-mix(in srgb, var(--color-bg) 88%, #000);
   /* L'encre remplace le blanc rétroéclairé : c'est le plus foncé qui « s'allume » sur fond clair. */
@@ -305,10 +245,10 @@
 }
 
 /* Nombres enregistrés, et non listes d'ombres : Safari n'interpole pas ces dernières quand elles
-   sont écrites en variables — il sautait d'une ombre à l'autre. */
-/* --sink est animé sur l'élément lui-même (le bouton, le champ) et hérité par son calque d'ombre :
+   sont écrites en variables — il sautait d'une valeur à l'autre.
+   --lit transite sur l'élément lui-même (le bouton, le champ) et son calque de néon en hérite :
    Safari n'anime pas une propriété enregistrée sur un pseudo-élément. */
-@property --sink {
+@property --lit {
   syntax: '<number>';
   inherits: true;
   initial-value: 0;
@@ -319,4 +259,3 @@
   inherits: true;
   initial-value: 1;
 }
-

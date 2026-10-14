@@ -1,6 +1,6 @@
-/* Barre de menu : un rectangle à coins arrondis CREUSÉ (shadow 4, échelle des grands éléments), sur
-   toute la largeur. Chaque destination y est une icône à plat ; celle où l'on est S'ÉTIRE pour
-   montrer son libellé, et une pastille EN RELIEF (shadow 2) est posée sous elle. Au changement, la
+/* Barre de menu : un cadre en pilule CERNÉ DE NÉON, sur toute la largeur. Chaque destination y est
+   une icône sans tube ; celle où l'on est S'ÉTIRE pour montrer son libellé, et une pastille PLEIN
+   FEU (son propre tube, à --lit 1) est posée sous elle. Au changement, la
    pastille s'étire jusqu'à la nouvelle destination puis se rétracte depuis l'ancienne : le
    composant (MenuBar) en pose les bords, mesurés sur les destinations ; l'ancienne reste allumée
    (.ds-trail) le temps que la pastille la quitte.
@@ -40,7 +40,6 @@
      pilule. 21,5 px à la souris, 33 au doigt : la moitié de 43 et de 66. */
   border-radius: calc(var(--control-radius) + var(--control-pad));
   background: var(--color-bg);
-  box-shadow: var(--neu-inset-lg);
 }
 
 /* Le composant en pose les quatre bords, mesurés sur le choix courant. */
@@ -53,8 +52,8 @@
   /* La pastille fait la hauteur du choix qu'elle double (--control-height, cf. .ds-menu-item) et
      non --control-inner : son rayon est donc celui d'une COMMANDE, pas celui d'un logé. */
   border-radius: var(--control-radius);
+  --lit: 1;
   background: var(--color-bg);
-  box-shadow: var(--neu-raised-lg);
   pointer-events: none;
 }
 

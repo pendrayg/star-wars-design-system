@@ -1,15 +1,15 @@
 /* Section dépliante cachée (Reveal) et section dépliante (Disclosure).
    Reveal est le cadre qui se déplie ligne par ligne, commandé par l'état ; Disclosure y ajoute un
-   intitulé et, dessous, le chevron de la grille (.ds-fold-toggle), enfoncé tant que tout est
-   affiché. Les commandes d'une ligne poppent une fois sa place faite, du pop de la grille
-   (ds-pop, fold.css). */
+   intitulé et, dessous, le chevron de la grille (.ds-fold-toggle), allumé tant que tout est
+   affiché. Les commandes d'une ligne s'amorcent une fois sa place faite, comme celles de la
+   grille (ds-pop, neon.css). */
 
 .ds-disclosure {
   display: block;
 }
 
 /* L'intitulé n'est pas une commande : c'est le chevron qui l'est. Il se lit donc comme un titre,
-   sans relief, l'icône de sa destination devant. */
+   sans tube, l'icône de sa destination devant. */
 .ds-disclosure-heading {
   display: flex;
   align-items: flex-start;
@@ -33,25 +33,25 @@
   font-weight: 400;
 }
 
-/* La section qui s'enfonce : le creux d'un élément choisi (.ds-selectable, selection.css), qui
+/* La section qui s'allume : le néon d'un élément choisi (.ds-selectable, selection.css), qui
    donne la marge latérale ; la section y ajoute la marge du haut et du bas, rendue elle aussi par
-   une marge négative — repliée à plat, elle reste alignée sur ses voisines, et rien ne bouge quand
-   elle s'enfonce. */
+   une marge négative — repliée et éteinte, elle reste alignée sur ses voisines, et rien ne bouge
+   quand elle s'allume. */
 .ds-disclosure-sunken {
   padding-block: var(--selectable-room);
   margin-block: calc(-1 * var(--selectable-room));
 }
 
-/* LE BOUTON SECTION DÉPLIANTE (DisclosureButton) : la section est le bouton. Son relief est celui
-   d'un bouton — calque d'ombre (.ds-shade) qui suit --sink, au rebond du DS —, mais SOUS le
-   contenu : le creux d'une section dépliée ne doit pas assombrir les champs qu'elle porte. En
-   relief repliée, enfoncée dépliée (et jusqu'à la fin du repli), enfoncée le temps d'un appui. */
+/* LE BOUTON SECTION DÉPLIANTE (DisclosureButton) : la section est le bouton. Son tube est celui
+   d'un bouton — calque de néon (.ds-shade) qui suit --lit —, mais SOUS le contenu : le voile qui
+   monte en dedans au plein feu ne doit pas couvrir les champs qu'elle porte. Liseré repliée, plein
+   feu dépliée (et jusqu'à la fin du repli), plein feu le temps d'un appui. */
 .ds-disclosure-button {
-  --sink: 0;
+  --lit: 0;
   position: relative;
   isolation: isolate;
   border-radius: var(--control-radius);
-  transition: --sink 1s var(--release-ease);
+  transition: --lit var(--lit-out);
 }
 
 .ds-disclosure-button > .ds-shade {
@@ -60,21 +60,13 @@
 
 .ds-disclosure-button.ds-active,
 .ds-disclosure-button.ds-pressed {
-  --sink: 1;
-  transition: --sink 1s var(--sink-ease);
-}
-
-@supports not (transition-timing-function: linear(0, 1)) {
-  .ds-disclosure-button,
-  .ds-disclosure-button.ds-active,
-  .ds-disclosure-button.ds-pressed {
-    transition: --sink 0.45s cubic-bezier(0.34, 1.8, 0.64, 1);
-  }
+  --lit: 1;
+  transition: --lit var(--lit-in);
 }
 
 /* L'en-tête, seule commande : à plat dans le bouton qu'est la section, de toute sa largeur.
    Icône, intitulé et indication à gauche, le chevron à droite ; le texte à demi-encre au repos, à
-   pleine encre enfoncé, comme un bouton.
+   pleine encre allumé, comme un bouton.
 
    SES BOÎTES SUIVENT L'ÉCHELLE DU SUPPORT, et c'est une correction : la marge et l'écart étaient
    écrits en dur (14 px et 12 px), c'est-à-dire à l'échelle du POUCE. Un en-tête d'une seule ligne
@@ -145,12 +137,11 @@
 .ds-disclosure-chevron {
   flex: 0 0 auto;
   font-size: var(--control-icon);
-  transition: transform 0.3s var(--release-ease, ease);
+  transition: transform 0.3s ease;
 }
 
 .ds-disclosure-button.ds-open > .ds-disclosure-trigger .ds-disclosure-chevron {
   transform: rotate(180deg);
-  transition: transform 0.3s var(--sink-ease, ease);
 }
 
 /* Le contenu se range DANS le bouton, sous l'en-tête : rentré de sa marge intérieure de chaque côté
@@ -169,8 +160,7 @@
   .ds-disclosure-button,
   .ds-disclosure-button.ds-active,
   .ds-disclosure-button.ds-pressed,
-  .ds-disclosure-chevron,
-  .ds-disclosure-button.ds-open > .ds-disclosure-trigger .ds-disclosure-chevron {
+  .ds-disclosure-chevron {
     transition: none;
   }
 }
@@ -183,7 +173,7 @@
   line-height: 1.4;
 }
 
-/* Le cadre de la grille : sa marge intérieure laisse aux ombres de quoi s'étaler sans être rognées,
+/* Le cadre de la grille : sa marge intérieure laisse aux halos de quoi s'étaler sans être rognées,
    sa marge négative rend la place à la page. La hauteur, posée par le composant ligne après ligne,
    est celle du contenu découvert ; repliée, elle est nulle. */
 .ds-reveal {
@@ -213,7 +203,7 @@
 }
 
 /* Une ligne pas encore découverte — ou déjà recouverte — ne se montre pas, même dans la marge que
-   le cadre réserve aux ombres : on n'y verrait que le haut de la ligne suivante, coupé.
+   le cadre réserve aux halos : on n'y verrait que le haut de la ligne suivante, coupé.
 
    `visibility` ET NON UNE OPACITÉ : c'est la BARRIÈRE — une ligne couverte n'est ni lue par un
    lecteur d'écran, ni cliquable, ni atteinte à la tabulation. Le fondu ci-dessous ne la remplace
@@ -223,30 +213,31 @@
   visibility: hidden;
 }
 
-/* LE POP. --pop est la hauteur de la commande : 0 au fond, 1 à son relief, 1,8 au plus haut du
-   rebond. À plat avant de popper, elle monte une poussée plus tard (--pop-delay), sitôt sa place
-   faite ; au repli, elle rejoue la courbe à l'envers et retourne au fond. */
+/* LE POP. --pop est l'allumage de la commande : 0 éteinte, 1 allumée (cf. neon.css). Éteinte
+   avant de s'amorcer, elle s'allume une poussée plus tard (--pop-delay), sitôt sa place faite —
+   deux ratés, une retombée, puis le tube tient ; au repli, elle rejoue l'amorçage à l'envers et
+   s'éteint. `steps(1, end)` : chaque raté est une coupure franche.
+   --pop est HÉRITÉ, et c'est toute la mécanique : posé sur la ligne marquée, il éteint et rallume
+   ce qu'elle porte — le calque de néon d'un bouton (même celui du bouton section, enfant de la
+   SECTION), le champ d'un sélecteur, un champ, une case, un chaton —, sans un sélecteur par
+   commande. */
 .ds-reveal [data-fold='folded'] {
   --pop: 0;
 }
 
 .ds-reveal [data-fold='pop'] {
-  animation:
-    ds-pop 1s linear both var(--pop-delay, 0.3s),
-    ds-pop-scale 1s linear both var(--pop-delay, 0.3s);
+  animation: ds-pop 1s steps(1, end) both var(--pop-delay, 0.3s);
 }
 
-/* Au repli, le cadre remonte dès l'appui : les commandes d'une ligne retournent au fond le temps
-   d'une poussée, pendant qu'il la recouvre (--unpop-duration, posé par le composant). */
+/* Au repli, le cadre remonte dès l'appui : les commandes d'une ligne s'éteignent le temps d'une
+   poussée, pendant qu'il la recouvre (--unpop-duration, posé par le composant). */
 .ds-reveal [data-fold='unpop'] {
-  animation:
-    ds-pop var(--unpop-duration, 1s) linear reverse both,
-    ds-pop-scale var(--unpop-duration, 1s) linear reverse both;
+  animation: ds-pop var(--unpop-duration, 1s) steps(1, end) reverse both;
 }
 
-/* LE FONDU, l'autre façon d'entrer : une ligne sans relief n'a rien à faire monter, elle s'affiche.
+/* LE FONDU, l'autre façon d'entrer : une ligne sans néon n'a rien à amorcer, elle s'affiche.
    Le pop et le fondu sont les deux rendus d'une MÊME marque (cf. marquer, Reveal.tsx), pour que le
-   dépli se lise d'un seul geste — ce qui est en relief monte, ce qui n'en a pas paraît.
+   dépli se lise d'un seul geste — ce qui a un tube s'amorce, ce qui n'en a pas paraît.
 
    LA DURÉE EST UNE POUSSÉE, et ce n'est pas un nombre choisi : `--fold-duration` est le temps que
    le cadre met à faire la place d'une ligne, et c'est la pulsation de tout le dépli. Une durée
@@ -276,42 +267,16 @@
   }
 }
 
-/* Le relief suit --pop, quelle que soit la commande : un bouton le porte sur son calque d'ombre, un
-   sélecteur sur son champ, un champ ou une case sur eux-mêmes. Un bouton enfoncé garde son creux,
-   comme dans la grille.
-
-   LE BOUTON SECTION DÉPLIANTE EST DU MÊME CALQUE, et il lui fallait pourtant sa place ici : son
-   .ds-shade est enfant de la SECTION, pas d'un .ds-button — sans ce sélecteur, il poppait (le
-   data-fold est bien posé, l'échelle joue) mais son ombre restait celle de --sink, donc le rebond
-   ne se VOYAIT pas, seule la taille bougeait.
-
-   `:not(.ds-active)` VAUT POUR LUI COMME POUR UN BOUTON, et c'est ce qui l'empêche de se battre avec
-   son propre état : un bouton section qui se découvre DÉJÀ DÉPLIÉ est enfoncé, et il garde son creux
-   plutôt que de le voir écrasé par --pop. Avec son `usePress` il n'y a rien à arbitrer : --pop ne
-   commande cette ombre que le temps d'un data-fold, posé puis retiré par le dépli, et un appui
-   pendant ce temps-là se lit comme sur un bouton de grille. */
-.ds-reveal :is(.ds-button, .ds-disclosure-button)[data-fold]:not(.ds-active) > .ds-shade,
-.ds-reveal .ds-select[data-fold] > .ds-input,
-.ds-reveal :is(.ds-input, .ds-checkbox)[data-fold] {
-  box-shadow:
-    calc(28px * var(--neu-k) * var(--pop)) calc(28px * var(--neu-k) * var(--pop)) calc(50px * var(--neu-k) * var(--pop)) var(--neu-dark),
-    calc(-23px * var(--neu-k) * var(--pop)) calc(-23px * var(--neu-k) * var(--pop)) calc(45px * var(--neu-k) * var(--pop)) var(--neu-light);
-}
-
-.ds-reveal [data-fold] .ds-well {
-  --well: clamp(0, var(--pop), 1);
-}
-
 .ds-reveal [data-fold='folded'] .ds-image {
   opacity: 0;
 }
 
 .ds-reveal [data-fold='pop'] .ds-image {
-  animation: ds-image-in 1s linear both var(--pop-delay, 0.3s);
+  animation: ds-image-in 1s steps(1, end) both var(--pop-delay, 0.3s);
 }
 
 .ds-reveal [data-fold='unpop'] .ds-image {
-  animation: ds-image-in var(--unpop-duration, 1s) linear reverse both;
+  animation: ds-image-in var(--unpop-duration, 1s) steps(1, end) reverse both;
 }
 
 @media (prefers-reduced-motion: reduce) {

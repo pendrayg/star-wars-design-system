@@ -1,4 +1,5 @@
-/* Chargement : un cercle qui « rebondit » par son ombre. */
+/* Chargement : un petit tube rond qui PULSE — son halo enfle et retombe, comme un néon sous une
+   tension qui hésite. */
 
 .ds-spinner {
   display: flex;
@@ -23,7 +24,7 @@
   height: 16px;
   border-radius: 50%;
   background: var(--color-bg);
-  animation: ds-spinner-bounce 0.7s ease-in-out infinite;
+  animation: ds-spinner-pulse 0.7s ease-in-out infinite;
 }
 
 .ds-spinner-compact .ds-spinner-dot {
@@ -31,19 +32,30 @@
   height: var(--control-check);
 }
 
-@keyframes ds-spinner-bounce {
+/* Les mêmes trois couches que neon.css (tube, halo, voile), au repos puis plein feu — écrites en
+   clair dans les images-clés, et non par --lit : l'ombre est portée par l'élément même qui
+   l'animerait, ce que Safari ne répercute pas. */
+@keyframes ds-spinner-pulse {
   0%,
   100% {
-    box-shadow: none;
+    box-shadow:
+      inset 0 0 0 var(--neon-width) var(--neon-color),
+      0 0 var(--neon-blur) color-mix(in srgb, var(--neon-color) 40%, transparent),
+      inset 0 0 0 transparent;
   }
   45% {
-    box-shadow: var(--neu-raised);
+    box-shadow:
+      inset 0 0 0 var(--neon-width) var(--neon-color),
+      0 0 var(--neon-blur-lit) color-mix(in srgb, var(--neon-color) 85%, transparent),
+      inset 0 0 8px color-mix(in srgb, var(--neon-color) 30%, transparent);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ds-spinner-dot {
     animation: none;
-    box-shadow: var(--neu-raised);
+    box-shadow:
+      inset 0 0 0 var(--neon-width) var(--neon-color),
+      0 0 var(--neon-blur) color-mix(in srgb, var(--neon-color) 40%, transparent);
   }
 }

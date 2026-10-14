@@ -86,34 +86,29 @@ describe("l'invariant d'échelle du bouton section", () => {
   })
 })
 
-describe('le pop du bouton section', () => {
+describe("l'amorçage d'une ligne", () => {
   /**
-   * LA MOITIÉ QUE jsdom NE PEUT PAS TENIR : il ne résout ni `calc()` ni animation, donc le rebond ne
-   * s'y observe pas. Ce qui se garde, c'est que la RÈGLE existe — le bouton section monte son relief
-   * sur --pop comme les autres commandes —, lue depuis le fichier, comme les tests voisins.
+   * LA MOITIÉ QUE jsdom NE PEUT PAS TENIR : il ne résout ni `calc()` ni animation, donc le
+   * clignotement ne s'y observe pas. Ce qui se garde, c'est la RÈGLE, lue depuis le fichier.
    *
-   * SANS ELLE LE DÉFAUT SE REJOUAIT À MOITIÉ : la marque de pop était bien posée (et `lines.test.ts`
-   * la garde), l'échelle jouait, mais l'ombre restait celle de --sink — le relief ne bougeait pas.
-   * Son calque est enfant de la SECTION, pas d'un `.ds-button` : il n'était atteint par aucun
-   * sélecteur.
+   * --pop est HÉRITÉ : l'animer sur la ligne marquée suffit à éteindre puis rallumer tout ce
+   * qu'elle porte — le calque de néon du bouton section compris, enfant de la SECTION et non d'un
+   * `.ds-button`, qu'un sélecteur par commande avait déjà oublié une fois.
    */
-  const POP = CSS.replace(/\/\*[\s\S]*?\*\//g, '')
-    .split('\n')
-    .filter((ligne) => ligne.includes('[data-fold]') && ligne.includes('.ds-shade'))
-
-  it('monte son relief sur --pop, comme toute commande qui se découvre', () => {
-    expect(POP.join('\n')).toMatch(/\.ds-disclosure-button\b/)
+  it('éteint une ligne pas encore découverte', () => {
+    expect(rule(`.ds-reveal [data-fold='folded']`)).toMatch(/--pop:\s*0/)
   })
 
-  it('garde son creux quand il se découvre DÉJÀ DÉPLIÉ : --pop ne commande pas un enfoncé', () => {
-    // La règle de la grille, appliquée ici : un bouton enfoncé garde son creux. C'est aussi ce qui
-    // empêche le pop de se battre avec l'état déplié du bouton section (.ds-active, porté par la
-    // même section), dont le creux vient de --sink.
-    expect(POP.join('\n')).toMatch(/:not\(\.ds-active\)/)
+  it("s'amorce en coupures franches, et s'éteint de même", () => {
+    // `steps()`, pas une courbe : un tube qui s'allume coupe net, il ne respire pas — et surtout
+    // il ne rebondit plus.
+    expect(rule(`.ds-reveal [data-fold='pop']`)).toMatch(/ds-pop[^;]*steps\(1, end\)/)
+    expect(rule(`.ds-reveal [data-fold='unpop']`)).toMatch(/ds-pop[^;]*steps\(1, end\)[^;]*reverse/)
+    expect(CSS).not.toMatch(/ds-pop-scale/)
   })
 })
 
-describe("le fondu d'une ligne sans relief", () => {
+describe("le fondu d'une ligne sans néon", () => {
   /**
    * CE QUE jsdom NE PEUT PAS TENIR : que l'encre monte vraiment. Il ne joue aucune animation et ne
    * résout aucun `var()`, donc l'opacité d'une ligne en cours d'entrée n'y est pas observable. Ce
