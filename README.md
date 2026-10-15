@@ -259,10 +259,18 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
   « Confirmer : … ». Avec `withLabel`, c'est un bouton à libellé — la poubelle puis le nom —,
   pour une suppression qui doit se lire avant d'être touchée (« Tout effacer ») ; le nom rougit
   avec la poubelle, et ne change pas, pour que le bouton garde sa largeur.
-- **Les images ne remplacent jamais la surface d'un bouton.** Elles en sont le contenu, posées
-  au-dessus de son néon — le voile du plein feu se dessine autour d'elle, jamais par-dessus :
-  pastille, sertie (dans un chaton cerclé de son propre tube, qui s'allume avec celui du bouton),
-  logo et nom, ou logo serti et nom.
+- **Une pastille EST son image.** Elle la remplit bord à bord, et le tube du bouton lui passe
+  par-dessus : c'est lui qui la sertit, le chaton n'a plus à le faire. En **logo et nom**, l'image
+  redevient l'icône d'une commande ordinaire, posée au-dessus du néon — le voile du plein feu se
+  dessine alors autour d'elle, jamais par-dessus.
+- **Rien ne glisse : le cadre CLIGNOTE, et c'est une triche.** Changer d'écran est une **coupure**
+  — un glissement montrait l'image arriver par le côté, un mouvement de surface qui n'a rien d'un
+  instrument. Le clignotement la couvre. Faire vraiment vaciller un contenu demanderait de
+  recomposer tout son arbre à chaque raté, et éteindrait ses halos avec lui : un **voile à la
+  couleur du fond**, à la taille du cadre, clignote donc à sa place, sur les instants de l'amorçage
+  d'un tube, **en négatif** — il est plein là où le tube est éteint. Il couvre le COMPOSANT, jamais
+  la fenêtre : un design system ne possède pas la page, et **seul ce qui est dans le cadre** est vu
+  vaciller.
 - **On ne bascule pas, on SAUTE.** Un changement d'état qui repeint toute la page — le thème, le
   skin, la langue — passe par un **saut en hyperespace** : `useHyperspaceJump(cible)` garde
   l'ancienne valeur pendant l'accélération et ne livre la nouvelle qu'à **l'entrée en croisière**,
@@ -294,7 +302,7 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
 | Composant | Rôle |
 | --- | --- |
 | `Button`, `IconButton` | bouton à libellé (tons défaut, primaire, danger, lien) et bouton-icône |
-| `ImageButton` | bouton à image : `chip` (pastille), `set` (sertie), `label` (logo et nom), `label-set` (logo serti et nom) |
+| `ImageButton` | bouton à image : `chip` (pastille, que l'image remplit, le tube par-dessus), `label` (logo et nom) |
 | `SetImage` | image sertie hors bouton (un portrait) : le chaton seul, cerclé de son tube, initiales à défaut d'image |
 | `Input`, `Select`, `Checkbox` | champs, liseré néon au repos, plein feu engagés (ou cochée) |
 | `SearchField` | champ de recherche, loupe qui s'allume, bouton Effacer |
@@ -309,7 +317,7 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
 | `DisclosureButton` | bouton section dépliante : la section est un bouton large dont l'en-tête s'actionne ; un appui l'allume tout entier et déplie le contenu dedans ; `open` le fait piloter par l'app (une seule section ouverte, un repli après enregistrement) |
 | `ChartFilters` | la lumière d'un graphique, en filtres SVG : le halo d'un trait (`#ds-chart-groove`), le halo plus discret d'une marque pleine (`#ds-chart-groove-fill`), chacun à la teinte de sa marque, et le liseré néon du graphique entier (`#ds-chart-set`, `--neon-color`). `#ds-chart-shadow` est **déprécié** — alias du halo d'un trait |
 | `Screen`, `Header`, `Body`, `Footer` | l'écran d'une app : en-tête et pied fixes, corps qui défile — **et qui ne coupe que s'il défile** : quand il tient dans sa place, le corps laisse déborder les halos de ses boutons, l'en-tête et le pied rendent leur fond |
-| `Slides` | les écrans côte à côte : changer de destination fait glisser le ruban à gauche ou à droite, tous restés montés, les autres `inert` ; chaque écran porte son `Body`, qui défile seul et garde sa position |
+| `Slides` | les écrans côte à côte : changer de destination **remplace le contenu du cadre d'un coup, sous un clignotement** — rien ne glisse ; tous restés montés, les autres `inert` ; chaque écran porte son `Body`, qui défile seul et garde sa position |
 | `Spinner`, `Notice`, `Zone` | chargement, message, panneau à liseré ambre et halo |
 | `Icon` | les icônes des **deux** polices : `ICONS` (Symbols Nerd Font) et `GLYPHS` (157 glyphes Star Wars), choisies d'après le seul nom |
 | `Frame`, `Readout` | la **visée** : le châssis d'écran que parcourt un balayage, et la lecture d'instrument dont les chiffres (`digits`) passent au rouge |

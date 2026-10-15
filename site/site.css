@@ -142,7 +142,7 @@ code {
   overflow: hidden;
 }
 
-/* La démo de glissement : un cadre de la hauteur d'un petit écran, et la barre de menu dessous. */
+/* La démo de changement d'écran : un cadre de la hauteur d'un petit écran, et la barre de menu dessous. */
 .slides-demo {
   display: flex;
   flex-direction: column;

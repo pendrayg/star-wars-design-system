@@ -113,6 +113,12 @@
   --placeholder-bg: color-mix(in srgb, var(--color-bg) 70%, #000);
   /* Signal d'état actif : blanc rétroéclairé, et son halo, qui rayonne de la couleur de l'élément. */
   --btn-active-color: #ffffff;
+  /* LA DEMI-ENCRE DU REPOS — la part de --btn-active-color dans le fond, pour tout ce qui attend :
+     texte d'un bouton inactif, intitulé d'une section repliée, d'un champ, d'une destination non
+     courante. Un JETON et non un 50 % recopié dans cinq feuilles : le thème clair doit le remonter
+     d'un bloc, parce que la couleur d'allumage y est l'ENCRE et non le blanc — à moitié diluée dans
+     un fond presque blanc, elle rend un gris à 3:1, sous le seuil AA. */
+  --btn-idle-mix: 50%;
   --btn-active-glow: 0 0 8px color-mix(in srgb, currentColor 50%, transparent);
   --btn-active-glow-strong: 0 0 11px color-mix(in srgb, currentColor 75%, transparent);
   /* LE TEXTE D'UNE COMMANDE AU REPOS — une COULEUR, et non une transparence. Les polices du
@@ -234,6 +240,9 @@
     --placeholder-bg: color-mix(in srgb, var(--color-bg) 88%, #000);
     /* L'encre remplace le blanc rétroéclairé : c'est le plus foncé qui « s'allume » sur fond clair. */
     --btn-active-color: var(--color-text);
+    /* ...et la demi-encre du repos remonte d'autant : diluer cette encre à moitié dans un fond
+       presque blanc rendait un gris à 3:1, illisible pour un libellé de 14 px. À 70 %, 6,4:1. */
+    --btn-idle-mix: 70%;
     /* ...et les halos s'éteignent : un glow sombre sur fond clair ne rayonne pas, il salit. */
     --btn-active-glow: 0 0 0 transparent;
     --btn-active-glow-strong: 0 0 0 transparent;
@@ -283,6 +292,8 @@
   --placeholder-bg: color-mix(in srgb, var(--color-bg) 88%, #000);
   /* L'encre remplace le blanc rétroéclairé : c'est le plus foncé qui « s'allume » sur fond clair. */
   --btn-active-color: var(--color-text);
+  /* ...et la demi-encre du repos remonte d'autant (cf. le bloc `prefers` ci-dessus). */
+  --btn-idle-mix: 70%;
   /* ...et les halos s'éteignent : un glow sombre sur fond clair ne rayonne pas, il salit. */
   --btn-active-glow: 0 0 0 transparent;
   --btn-active-glow-strong: 0 0 0 transparent;

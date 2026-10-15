@@ -3,7 +3,7 @@ import { cx } from './cx'
 import { initials } from './initials'
 import { Shade } from './Shade'
 
-export type ImageButtonVariant = 'chip' | 'set' | 'label' | 'label-set'
+export type ImageButtonVariant = 'chip' | 'label'
 
 /** L'état d'un bouton dans une grille dépliante (cf. FoldingGrid) : repli, amorçage (pop), attente. */
 export interface FoldItemState {
@@ -14,11 +14,11 @@ export interface FoldItemState {
 
 export interface ImageButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
   /**
-   * La forme (cf. image-button.css) : `chip`, la pastille ; `set`, sertie dans un chaton ; `label`,
-   * l'image en icône suivie du nom ; `label-set`, le logo serti suivi du nom.
+   * La forme (cf. image-button.css) : `chip`, la pastille, que l'image remplit ; `label`, l'image
+   * en icône suivie du nom.
    */
   variant?: ImageButtonVariant
-  /** Le nom : nom accessible et infobulle, écrit à côté de l'image en `label` et `label-set`. */
+  /** Le nom : nom accessible et infobulle, écrit à côté de l'image en `label`. */
   name: string
   /** L'image ; à défaut, ou si elle ne charge pas, les initiales du nom. */
   src?: string | null
@@ -29,10 +29,10 @@ export interface ImageButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonEl
 }
 
 /**
- * Bouton à image : le bouton reste une surface du DS, l'image en est le contenu, posée au-dessus de
- * son néon — le voile du plein feu se dessine autour d'elle, jamais par-dessus.
+ * Bouton à image : la pastille est REMPLIE par son image, le tube du bouton passant par-dessus ;
+ * en `label`, l'image reste une icône posée au-dessus du néon, suivie du nom.
  */
-export function ImageButton({ variant = 'set', name, src, pressed, fold, className, style, type = 'button', ...rest }: ImageButtonProps) {
+export function ImageButton({ variant = 'chip', name, src, pressed, fold, className, style, type = 'button', ...rest }: ImageButtonProps) {
   const [failed, setFailed] = useState(false)
   const image: ReactNode =
     src && !failed ? (
@@ -42,7 +42,7 @@ export function ImageButton({ variant = 'set', name, src, pressed, fold, classNa
         {initials(name)}
       </span>
     )
-  const labelled = variant === 'label' || variant === 'label-set'
+  const labelled = variant === 'label'
   const foldStyle = fold?.motion === 'pop' ? ({ '--pop-delay': `${fold.popDelay}s` } as CSSProperties) : undefined
   return (
     <button
@@ -53,7 +53,6 @@ export function ImageButton({ variant = 'set', name, src, pressed, fold, classNa
       inert={fold?.folded || undefined}
       className={cx(
         'ds-button',
-        variant === 'label-set' && 'ds-image-label',
         `ds-image-${variant}`,
         pressed && 'ds-active',
         fold?.folded && 'is-folded',
@@ -65,7 +64,7 @@ export function ImageButton({ variant = 'set', name, src, pressed, fold, classNa
       {...rest}
     >
       <Shade />
-      {variant === 'set' || variant === 'label-set' ? <span className="ds-well">{image}</span> : image}
+      {image}
       {labelled && <span className="ds-image-name">{name}</span>}
     </button>
   )

@@ -76,15 +76,16 @@ export function Footer({ className, ...rest }: Props<HTMLElement>) {
   return <footer className={cx('ds-footer', className)} {...rest} />
 }
 
-/** Durée du glissement d'un écran à l'autre : le temps que la pastille du menu s'éteigne sur
+/** Durée du clignotement d'un changement d'écran : le temps que la pastille du menu s'éteigne sur
  *  l'ancienne destination et commence à se rallumer sur la nouvelle (`MENU_OUT_MS`, puis ses
- *  premiers ratés) — l'écran arrive pendant que le néon reprend. */
-export const SLIDE_MS = 380
+ *  premiers ratés) — le cadre vacille pendant que le néon reprend. */
+export const BLINK_MS = 380
 
 /**
- * Les écrans d'une app, CÔTE À CÔTE : changer de destination fait GLISSER le ruban, vers la
- * gauche ou vers la droite selon l'ordre des écrans — l'ordre de la barre de menu. Le mouvement
- * dit donc où l'on va, pas seulement qu'on a changé.
+ * Les écrans d'une app, CÔTE À CÔTE : changer de destination remplace le contenu du cadre, et
+ * RIEN NE GLISSE. Un glissement montrait l'écran arriver par le côté — un mouvement de surface, qui
+ * n'a rien d'un instrument. Le changement est une COUPURE, et le CLIGNOTEMENT la couvre : le temps
+ * de deux ratés, ce qui est dans le cadre n'est plus le même.
  *
  * Tous les écrans restent MONTÉS : une carte garde son contexte, une liste sa position de
  * défilement, et le passage de l'un à l'autre ne coûte rien. Seul l'écran courant est atteignable
@@ -104,10 +105,31 @@ export const SLIDE_MS = 380
  *
  * `at` est l'INDEX de l'écran courant : c'est au consommateur de le tenir (un store de vue, une
  * route), et il doit suivre l'ordre des enfants.
+ *
+ * LE CADRE CLIGNOTE, comme un tube qui reprend, et SEUL CE QU'IL CONTIENT est vu vaciller. C'est
+ * une TRICHE : ce n'est pas le contenu qui s'éteint mais un voile à la couleur du fond, à la
+ * taille du cadre, qui le recouvre par éclats (cf. `layout.css`). Le `key` remonte le voile à
+ * chaque changement d'écran, seule façon de rejouer une animation CSS. Pas au premier rendu : une
+ * app ne s'ouvre pas sur un raté.
+ *
+ * `useLayoutEffect` et non `useEffect` : le ruban saute SANS transition, et le voile doit être
+ * peint dans la même image que le saut. Un effet ordinaire s'exécute après la peinture — on verrait
+ * le nouvel écran une image avant que le voile ne le couvre, soit exactement la coupure à cacher.
  */
 export function Slides({ at, className, children, ...rest }: Props<HTMLDivElement> & { at: number }) {
   const screens = Children.toArray(children)
   const shown = Math.max(0, Math.min(screens.length - 1, at))
+  const [blinks, setBlinks] = useState(0)
+  const first = useRef(true)
+
+  useLayoutEffect(() => {
+    if (first.current) {
+      first.current = false
+      return
+    }
+    setBlinks((count) => count + 1)
+  }, [shown])
+
   return (
     <div className={cx('ds-slides', className)} {...rest}>
       <div className="ds-slides-track" style={{ '--slides-at': shown } as CSSProperties}>
@@ -117,6 +139,7 @@ export function Slides({ at, className, children, ...rest }: Props<HTMLDivElemen
           </div>
         ))}
       </div>
+      {blinks > 0 && <span key={blinks} className="ds-screen-blink" aria-hidden="true" />}
     </div>
   )
 }

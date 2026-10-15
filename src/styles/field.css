@@ -116,7 +116,7 @@
   top: 50%;
   transform: translateY(-50%);
   font-size: var(--control-icon);
-  color: color-mix(in srgb, var(--btn-active-color) 50%, var(--color-bg));
+  color: color-mix(in srgb, var(--btn-active-color) var(--btn-idle-mix), var(--color-bg));
   pointer-events: none;
 }
 

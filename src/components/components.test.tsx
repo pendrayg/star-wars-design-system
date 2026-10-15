@@ -589,12 +589,13 @@ describe('Button', () => {
 })
 
 describe('ImageButton', () => {
-  it('sertie : image dans un chaton, bascule enfoncée quand elle est prise', () => {
+  it("pastille : l'image remplit le bouton, sans chaton, bascule enfoncée quand elle est prise", () => {
     render(<ImageButton name="Lagune" src="lagune.png" pressed />)
     const button = screen.getByRole('button', { name: 'Lagune' })
-    expect(button).toHaveClass('ds-image-set', 'ds-active')
+    expect(button).toHaveClass('ds-image-chip', 'ds-active')
     expect(button).toHaveAttribute('aria-pressed', 'true')
-    expect(button.querySelector('.ds-well > img.ds-image')).toBeInTheDocument()
+    expect(button.querySelector(':scope > img.ds-image')).toBeInTheDocument()
+    expect(button.querySelector('.ds-well')).not.toBeInTheDocument()
   })
 
   it("montre les initiales quand l'image manque ou ne charge pas", () => {
@@ -608,14 +609,6 @@ describe('ImageButton', () => {
   it('logo et nom : le nom est écrit, et nomme le bouton', () => {
     render(<ImageButton variant="label" name="Clarté" pressed={false} />)
     expect(screen.getByRole('button', { name: /Clarté/ })).toHaveClass('ds-image-label')
-  })
-
-  it('logo serti et nom : le logo dans un chaton, le nom écrit', () => {
-    render(<ImageButton variant="label-set" name="Lagune" src="lagune.png" pressed />)
-    const button = screen.getByRole('button', { name: /Lagune/ })
-    expect(button).toHaveClass('ds-image-label', 'ds-image-label-set')
-    expect(button.querySelector('.ds-well > img.ds-image')).toBeInTheDocument()
-    expect(button).toHaveTextContent('Lagune')
   })
 
   it("prend l'état de la grille dépliante", () => {
@@ -986,7 +979,7 @@ describe('Slides', () => {
     </Slides>
   )
 
-  it('pose les écrans côte à côte et glisse le ruban sur l’écran courant', () => {
+  it('pose les écrans côte à côte et cale le ruban sur l’écran courant', () => {
     const { container } = render(trois)
     const track = container.querySelector<HTMLElement>('.ds-slides-track')!
     expect(track.style.getPropertyValue('--slides-at')).toBe('1')
@@ -1009,6 +1002,23 @@ describe('Slides', () => {
       </Slides>,
     )
     expect(container.querySelector<HTMLElement>('.ds-slides-track')!.style.getPropertyValue('--slides-at')).toBe('1')
+  })
+
+  it('fait clignoter la page en changeant d’écran, jamais à l’ouverture', () => {
+    const { container, rerender } = render(trois)
+    expect(container.querySelector('.ds-screen-blink')).not.toBeInTheDocument()
+    rerender(
+      <Slides at={2}>
+        <div>un</div>
+        <div>deux</div>
+        <div>trois</div>
+      </Slides>,
+    )
+    // remonté à chaque changement : c'est ce qui rejoue l'animation
+    const premier = container.querySelector('.ds-screen-blink')
+    expect(premier).toBeInTheDocument()
+    rerender(trois)
+    expect(container.querySelector('.ds-screen-blink')).not.toBe(premier)
   })
 })
 

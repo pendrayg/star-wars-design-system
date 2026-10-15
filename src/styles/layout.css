@@ -8,7 +8,7 @@
                   en fondu (8 px) au lieu d'être coupé net ;
      .ds-footer — le pied (la barre de menu) : au-dessus de la zone sûre du bas d'iPhone ;
      .ds-button-bar — une rangée de commandes répartie sur toute la largeur qu'on lui donne ;
-     .ds-slides — les écrans côte à côte, dont on glisse de l'un à l'autre.
+     .ds-slides — les écrans côte à côte, dont on passe de l'un à l'autre d'une coupure.
 
    Entre l'en-tête et le corps, entre le corps et le pied, le même écart : --shadow-room, la place
    d'un halo. Sur les côtés, le corps garde la même marge, où débordent les halos de ce qu'il
@@ -106,12 +106,13 @@
 }
 
 /* LES ÉCRANS CÔTE À CÔTE. Un ruban aussi large que le nombre d'écrans, translaté d'un écran par
-   index : changer de destination le fait glisser à GAUCHE ou à DROITE selon l'ordre du menu, et le
-   mouvement dit où l'on va. Les écrans restent tous montés (une carte garde son contexte), le
-   débord est coupé par le cadre.
-   La durée est celle de la pastille du menu qui s'étire vers la nouvelle destination
-   (`SLIDE_MS`) : un seul geste, un seul rythme. La courbe décélère franchement — un glissement
-   d'écran ne rebondit pas, il arrive et s'arrête. */
+   index. Les écrans restent tous montés (une carte garde son contexte), le débord est coupé par
+   le cadre.
+   RIEN NE GLISSE : le ruban SAUTE, d'un écran à l'autre, sans transition. Un glissement était un
+   mouvement de surface — il disait d'où l'on venait, mais il montrait l'écran arriver, et une
+   image qui entre par le côté n'a rien d'un instrument. Le changement est une COUPURE, et c'est le
+   CLIGNOTEMENT qui la couvre (plus bas) : le temps de deux ratés, le contenu du cadre n'est plus
+   le même. On ne voit pas l'écran bouger, on voit le cadre vaciller. */
 .ds-slides {
   position: relative;
   flex: 1 1 auto;
@@ -134,7 +135,6 @@
   display: flex;
   height: 100%;
   transform: translateX(calc(var(--slides-at, 0) * -100%));
-  transition: transform var(--slides-dur, 380ms) cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* Un écran est une COLONNE, comme l'écran entier (.ds-screen) : le corps qu'il porte s'y étire et
@@ -149,9 +149,60 @@
   height: 100%;
 }
 
-/* Mouvement réduit : on saute d'un écran à l'autre, sans glissement. */
+/* LE CLIGNOTEMENT D'UN CHANGEMENT D'ÉCRAN — la seule chose qu'on voie du changement, et c'est une
+   TRICHE, assumée. Faire vraiment vaciller un contenu (l'opacité de son arbre) demanderait de le
+   recomposer à chaque raté, et trahirait au passage : les halos s'éteindraient avec lui, un voile
+   translucide laisserait voir ce qu'il y a derrière. On pose donc UN VOILE À LA COULEUR DU FOND,
+   et c'est LUI qui clignote. À chaque éclat il recouvre tout ce qui est dessous ; l'œil lit un
+   contenu qui vacille, pas un calque qui apparaît. Une seule boîte à composer.
+   IL COUVRE LE CONTENEUR, et rien de plus : `absolute` dans .ds-slides, jamais `fixed`. Un design
+   system ne possède pas la fenêtre — il ne sait pas ce qu'une app a mis autour du ruban, et un
+   voile pris sur le viewport irait recouvrir ce qui ne le regarde pas. Seul ce qui est DANS le
+   cadre est vu clignoter, ce qui suffit : c'est là que le regard est, et c'est là que le contenu
+   change.
+   Le voile est rendu dans .ds-slides et NON dans le ruban, dont le `transform` le translaterait
+   avec les écrans au lieu de les recouvrir ; son z-index le met au-dessus d'eux.
+   Les instants sont ceux de l'amorçage d'un tube (ds-pop), EN NÉGATIF : le voile est plein là où le
+   tube est éteint. Même `steps(1, end)` — chaque coupure est franche, jamais un fondu. Le premier
+   éclat est à 0 % : le voile est déjà plein quand le ruban saute, et personne ne voit la coupure. */
+.ds-screen-blink {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  background: var(--color-bg);
+  pointer-events: none;
+  animation: ds-screen-blink var(--blink-dur, 380ms) steps(1, end) both;
+}
+
+@keyframes ds-screen-blink {
+  0% {
+    opacity: 1;
+  }
+  8% {
+    opacity: 0;
+  }
+  13% {
+    opacity: 1;
+  }
+  24% {
+    opacity: 0;
+  }
+  28% {
+    opacity: 0.65;
+  }
+  36% {
+    opacity: 1;
+  }
+  46%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Mouvement réduit : la coupure reste (elle ne bouge pas), le clignotement part. */
 @media (prefers-reduced-motion: reduce) {
-  .ds-slides-track {
-    transition: none;
+  .ds-screen-blink {
+    animation: none;
+    opacity: 0;
   }
 }

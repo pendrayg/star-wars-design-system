@@ -59,7 +59,7 @@ const SECTIONS = [
   { id: 'selecteur', title: 'Sélecteur multiple plat' },
   { id: 'ecran', title: 'Écran' },
   { id: 'rangee', title: 'Rangée de commandes' },
-  { id: 'glissement', title: 'Écrans qui glissent' },
+  { id: 'glissement', title: 'Écrans qui clignotent' },
   { id: 'grille', title: 'Grille dépliante' },
   { id: 'depliantes', title: 'Sections dépliantes' },
   { id: 'selection', title: 'Sélection' },
@@ -197,7 +197,7 @@ function ButtonBarDemo() {
   )
 }
 
-/** Trois écrans dans un cadre, et la barre de menu qui les choisit : le ruban glisse. */
+/** Trois écrans dans un cadre, et la barre de menu qui les choisit : le cadre clignote. */
 function SlidesDemo() {
   const items: MenuItem<string>[] = [
     { id: 'un', icon: 'weather_sunny', label: 'Aperçu' },
@@ -769,16 +769,12 @@ export function App() {
       <Demo
         id="images"
         title="Boutons à image"
-        intro="Le bouton reste une surface du DS, l'image en est le contenu, posée au-dessus de son néon : le voile du plein feu se dessine autour d'elle. Éteinte tant que la bascule n'est pas allumée."
+        intro="La pastille est remplie par son image, le tube du bouton lui passant par-dessus — c'est lui qui la sertit. En logo et nom, l'image redevient l'icône d'une commande ordinaire. Éteinte tant que la bascule n'est pas allumée."
       >
-        <h3>Sertie</h3>
-        <ImageRow variant="set" />
         <h3>Pastille</h3>
         <ImageRow variant="chip" />
         <h3>Logo et nom</h3>
         <ImageRow variant="label" />
-        <h3>Logo serti et nom</h3>
-        <ImageRow variant="label-set" />
       </Demo>
 
       <Demo
@@ -881,8 +877,8 @@ export function App() {
 
       <Demo
         id="glissement"
-        title="Écrans qui glissent"
-        intro="Les écrans d'une app sont côte à côte : changer de destination fait glisser le ruban à gauche ou à droite selon l'ordre du menu — le mouvement dit où l'on va, pas seulement qu'on a changé. Tous restent montés (une carte garde son contexte) ; seul celui qu'on regarde est atteignable au doigt et au lecteur d'écran."
+        title="Écrans qui clignotent"
+        intro="Changer de destination ne fait rien glisser : le contenu du cadre est remplacé d'un coup, et un clignotement couvre la coupure — seul ce qui est dans le cadre est vu vaciller. Les écrans restent tous montés (une carte garde son contexte) ; seul celui qu'on regarde est atteignable au doigt et au lecteur d'écran."
       >
         <SlidesDemo />
       </Demo>

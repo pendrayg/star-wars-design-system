@@ -88,7 +88,7 @@
   /* Un choix fait --control-height juste au-dessus : sa pilule est celle d'une commande. */
   border-radius: var(--control-radius);
   background: transparent;
-  color: color-mix(in srgb, var(--btn-active-color) 50%, var(--color-bg));
+  color: color-mix(in srgb, var(--btn-active-color) var(--btn-idle-mix), var(--color-bg));
   font: inherit;
   /* Après le raccourci, qui vient de remettre la famille à celle du corps : une destination est
      une COMMANDE, elle prend la police des titres (cf. base.css). */

@@ -47,7 +47,7 @@
 /* Demi-encre OPAQUE : mélangée au fond, non transparente — la police chevauche ses lettres, et
    une encre translucide en montrerait chaque recouvrement (cf. tokens.css). */
 .ds-button:not(.ds-active) {
-  color: color-mix(in srgb, var(--btn-active-color) 50%, var(--color-bg));
+  color: color-mix(in srgb, var(--btn-active-color) var(--btn-idle-mix), var(--color-bg));
 }
 
 /* L'APPUI N'ALLUME QUE CE QUI N'A PAS D'ÉTAT. Une commande momentanée n'a que lui pour dire

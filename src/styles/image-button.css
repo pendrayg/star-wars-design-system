@@ -1,20 +1,15 @@
-/* Boutons à image.
-   Une image (un logo) ne remplace jamais la surface d'un bouton : posée à plein cadre, elle en
-   prenait la place, et le néon se lisait plus ou moins selon l'image. Le bouton reste une surface
-   du DS et l'image en est le contenu, sous trois formes :
-     .ds-image-chip  — pastille : l'image au centre, avec une marge de matière (image : 57 % du
-                       côté de la tuile) ;
-     .ds-image-set   — sertie : l'image incrustée dans un chaton (.ds-well, chaton et image aux
-                       deux tiers du côté) ; elle le remplit bord à bord, cerclée de son propre
-                       tube, qui s'allume avec celui du bouton ;
-     .ds-image-label — logo et nom : l'image en icône d'une commande ordinaire, suivie du nom ;
-     .ds-image-label-set — logo serti et nom : le même, le logo incrusté dans un chaton.
-   L'image est posée AU-DESSUS du néon du bouton : le voile qui monte en dedans au plein feu se
-   dessine autour d'elle, jamais par-dessus. Un bouton à bascule éteint son image (gris, 60 %) tant
-   qu'il n'est pas allumé. */
+/* Boutons à image, deux formes :
+     .ds-image-chip  — pastille : l'image REMPLIT le bouton, bord à bord, et le tube du bouton lui
+                       passe par-dessus — c'est lui qui la sertit. Un logo n'a plus à tenir dans
+                       une vignette au centre d'une surface vide ;
+     .ds-image-label — logo et nom : l'image en icône d'une commande ordinaire, suivie du nom.
+   Pas de variante SERTIE : le chaton (.ds-well) n'habille plus un bouton, il ne sert qu'aux images
+   montrées hors commande (SetImage, plus bas).
+   En `label`, l'image est posée AU-DESSUS du néon du bouton : le voile qui monte en dedans au plein
+   feu se dessine autour d'elle, jamais par-dessus. Un bouton à bascule éteint son image (gris,
+   60 %) tant qu'il n'est pas allumé. */
 
-.ds-image-chip,
-.ds-image-set {
+.ds-image-chip {
   display: grid;
   place-items: center;
   width: var(--control-height-lg);
@@ -64,13 +59,22 @@
     opacity 0.2s ease-in-out;
 }
 
+/* L'image REMPLIT la pastille : elle en reprend le rayon par héritage, donc elle est ronde comme
+   elle, à toutes les échelles et sans second calcul. `object-fit: cover` (posé sur .ds-image)
+   recadre un logo qui n'est pas carré plutôt que de le déformer. */
 .ds-image-chip .ds-image {
-  width: calc(var(--control-height-lg) * 0.567);
-  height: calc(var(--control-height-lg) * 0.567);
-  /* L'image de la pastille est carrée (même largeur et même hauteur, juste au-dessus) : elle est
-     donc ronde, dans la tuile ronde qui la porte. Les deux cercles restent concentriques à toutes
-     les échelles, ce qu'aucun rayon proportionnel ne garantissait. */
-  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+
+/* Le TUBE PASSE AU-DESSUS de l'image, et c'est ce qui rend la pastille possible : le liseré est
+   peint en dedans (`inset`, cf. neon.css) par le calque de néon, qu'une image à plein cadre
+   recouvrirait — .ds-image est en z-index 1, et le calque, sans z-index, vient avant lui dans le
+   document. Ces deux rangs remettent le calque devant ; ailleurs (en `label`), l'image reste
+   au-dessus du néon, comme tout contenu de bouton. */
+.ds-image-chip > .ds-shade {
+  z-index: 2;
 }
 
 /* Le logo d'un bouton « logo et nom » : un carré de --control-inner de côté, donc rond lui aussi. */
@@ -80,36 +84,10 @@
   border-radius: 50%;
 }
 
-/* Logo serti et nom : le logo remplit un chaton de la hauteur d'une commande logée
-   (--control-inner), à une marge de cadre du bord, sous son tube. */
-.ds-image-label-set {
-  padding-left: var(--control-pad);
-}
-
-.ds-image-label-set .ds-well {
-  flex: 0 0 auto;
-  width: var(--control-inner);
-  height: var(--control-inner);
-  /* Un chaton reste rond quelle que soit sa taille : ici celle d'une commande logée. */
-  border-radius: 50%;
-}
-
-.ds-image-label-set .ds-well .ds-image {
-  width: 100%;
-  height: 100%;
-  border-radius: inherit;
-}
-
-.ds-image-set .ds-image {
-  width: 100%;
-  height: 100%;
-  border-radius: inherit;
-}
-
-/* Le chaton : un logement dans la matière du bouton, que l'image remplit. Son tube est peint
-   AU-DESSUS de l'image : c'est lui qui la sertit. Il suit le --lit et le --pop du bouton, dont il
-   hérite — il s'allume, brille et s'amorce avec lui (cf. neon.css). Sa grille a la taille du chaton :
-   une image plus haute que large (un portrait) y est recadrée au lieu de le déborder. */
+/* Le chaton : un logement que l'image remplit, cerclé de son propre tube, peint AU-DESSUS d'elle —
+   c'est lui qui la sertit. Il ne loge plus de bouton : seules les images montrées hors commande
+   l'utilisent (.ds-set-image, juste après). Sa grille a la taille du chaton : une image plus haute
+   que large (un portrait) y est recadrée au lieu de le déborder. */
 .ds-well {
   display: grid;
   grid-template: 100% / 100%;
