@@ -120,9 +120,10 @@
     transform 0.35s ease;
 }
 
+/* La destination courante est ACTIVE : bleue, comme la pastille plein feu sous elle. */
 .ds-menu-item.ds-active {
   flex-grow: calc(1 + var(--menu-grow));
-  color: var(--btn-active-color);
+  color: var(--neon-lit-color);
   animation: ds-glow-in 0.05s ease-in 0.15s both;
 }
 

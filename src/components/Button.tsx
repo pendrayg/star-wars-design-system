@@ -47,7 +47,7 @@ export function Button({ tone = 'default', size = 'md', icon, active, flat = fal
     >
       <Shade />
       {icon && <Icon name={icon} />}
-      {children}
+      {children !== undefined && children !== null && <span className="ds-label">{children}</span>}
     </button>
   )
 }

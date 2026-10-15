@@ -43,6 +43,9 @@
      Deux nombres ANIMÉS la pilotent, enregistrés plus bas : --lit (0 au repos, 1 plein feu) et
      --pop (1 allumé, 0 éteint — l'amorçage d'une commande qui apparaît). */
   --neon-color: var(--grad-solar-to);
+  /* La couleur du PLEIN FEU : le bleu des hologrammes. Une commande active — bouton allumé,
+     bascule enclenchée, champ engagé, destination courante — est bleue ; au repos, jaune. */
+  --neon-lit-color: var(--color-primary);
   --neon-width: 2.5px;
   --neon-blur: 12px;
   /* MARGES. Il n'y a plus d'ombre à loger, mais un HALO, qui porte à peu près aussi loin : plein
@@ -107,26 +110,21 @@
   --btn-active-glow-strong: 0 0 11px color-mix(in srgb, currentColor 75%, transparent);
   --check-glow: drop-shadow(0 0 4px color-mix(in srgb, var(--color-primary) 70%, transparent));
 
-  /* LE PASSAGE DU REPOS AU PLEIN FEU, et retour : le tube CLIGNOTE, comme un néon dont la
-     tension hésite, et chaque raté PASSE PAR LE SOMBRE — sans quoi un saut entre deux éclats
-     voisins ne se voyait pas. --lit sort donc de son intervalle le temps de la transition :
-       1  plein feu,  0  repos,  −1  BAISSE DE TENSION (le tube pâlit, le texte et l'icône du
-       bouton s'assombrissent avec lui, cf. neon.css et button.css).
-     Les mêmes instants que l'amorçage (ds-pop : deux ratés, une retombée, puis il tient).
+  /* LE PASSAGE DU REPOS AU PLEIN FEU, et retour : le tube CLIGNOTE, et il CHANGE DE COULEUR en
+     clignotant. Le plein feu est BLEU (--neon-lit-color, le glacier des hologrammes), le repos
+     JAUNE (--neon-color) : chaque éclat est bleu, chaque raté retombe au jaune, et le texte du
+     bouton suit (cf. neon.css, button.css). Pas de baisse sous le repos : elle donnait un air de
+     bouton désactivé.
+     La courbe est BINAIRE — elle ne prend que 0 et 1 —, si bien que la couleur est toujours
+     franche, jaune ou bleue, jamais un mélange des deux. Trois éclats, de plus en plus longs,
+     puis le palier : les mêmes instants que l'amorçage (ds-pop).
      Le clignotement est une COURBE de transition, et non une animation : linear() accepte des
-     paliers (deux points à la même abscisse font une coupure franche) et des valeurs hors de
-     [0, 1] — c'est ainsi qu'on descend sous le repos. Interrompue (un toucher bref relâché en
-     route), une transition repart d'où elle en est, ce qu'une animation ne sait pas faire.
-     DEUX courbes, parce qu'une sortie de [0, 1] s'écrit dans le repère de la transition : vers le
-     plein feu (0 → 1), −1 est la sortie −1 ; vers le repos (1 → 0), −1 est la sortie 2.
-     Toutes deux : sombre, éclat, sombre, éclat, demi-sombre, puis l'état d'arrivée — et le
-     sombre d'abord, pour que le clic se voie dès l'image suivante.
-     0,6 s : le clignotement tient dans les 46 premiers centièmes, moins de 0,3 s ; le reste est
-     le palier final. */
-  --lit-flicker-up: linear(-1, -1 10%, 1 10%, 1 18%, -1 18%, -1 30%, 1 30%, 1 36%, -0.5 36%, -0.5 46%, 1 46%, 1);
-  --lit-flicker-down: linear(2, 2 10%, 0 10%, 0 18%, 2 18%, 2 30%, 0 30%, 0 36%, 1.5 36%, 1.5 46%, 1 46%, 1);
-  --lit-in: 0.6s var(--lit-flicker-up);
-  --lit-out: 0.6s var(--lit-flicker-down);
+     paliers (deux points à la même abscisse font une coupure franche), et une transition se joue
+     dans les deux sens sans rien de plus. Interrompue, elle repart d'où elle en est.
+     0,6 s : les ratés tiennent dans les 40 premiers centièmes, le reste est le palier final. */
+  --lit-flicker: linear(0, 0 8%, 1 8%, 1 13%, 0 13%, 0 24%, 1 24%, 1 30%, 0 30%, 0 40%, 1 40%, 1);
+  --lit-in: 0.6s var(--lit-flicker);
+  --lit-out: 0.6s var(--lit-flicker);
 
   /* Palettes de dégradé (couleurs de stop). */
   --grad-glacier-from: #001020;
