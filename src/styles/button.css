@@ -41,8 +41,10 @@
   background: var(--color-bg);
 }
 
+/* Demi-encre OPAQUE : mélangée au fond, non transparente — la police chevauche ses lettres, et
+   une encre translucide en montrerait chaque recouvrement (cf. tokens.css). */
 .ds-button:not(.ds-active) {
-  color: color-mix(in srgb, var(--btn-active-color) 50%, transparent);
+  color: color-mix(in srgb, var(--btn-active-color) 50%, var(--color-bg));
 }
 
 /* L'APPUI N'ALLUME QUE CE QUI N'A PAS D'ÉTAT. Une commande momentanée n'a que lui pour dire
@@ -83,9 +85,15 @@
   --neon-on: calc(clamp(0, var(--pop), 1) * clamp(0, var(--lit), 1));
 }
 
+/* Indisponible : une encre plus éteinte encore, et un tube à mi-tension — par la COULEUR, pas par
+   l'opacité du bouton, qui ferait ressortir les chevauchements de la police. */
 .ds-button:disabled {
-  opacity: 0.6;
+  color: color-mix(in srgb, var(--btn-active-color) 30%, var(--color-bg));
   cursor: default;
+}
+
+.ds-button:disabled > .ds-shade {
+  --neon-on: 0.45;
 }
 
 .ds-button:focus-visible {

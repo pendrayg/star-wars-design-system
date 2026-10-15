@@ -34,7 +34,7 @@
 }
 
 .ds-input::placeholder {
-  color: color-mix(in srgb, var(--color-muted) 70%, transparent);
+  color: color-mix(in srgb, var(--color-muted) 70%, var(--color-bg));
 }
 
 /* Champ MULTILIGNE. Il porte `ds-input` en plus de `ds-textarea` — même procédé que `.ds-select
@@ -116,7 +116,7 @@
   top: 50%;
   transform: translateY(-50%);
   font-size: var(--control-icon);
-  color: color-mix(in srgb, var(--btn-active-color) 50%, transparent);
+  color: color-mix(in srgb, var(--btn-active-color) 50%, var(--color-bg));
   pointer-events: none;
 }
 

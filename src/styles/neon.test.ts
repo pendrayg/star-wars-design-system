@@ -39,3 +39,18 @@ describe('actif = bleu', () => {
     expect(regle(graphique, '.ds-chart-part')).toMatch(/fill:\s*var\(--chart-fill\)/)
   })
 })
+
+describe('le texte est opaque', () => {
+  /**
+   * Les polices du générique sont à CHEVAUCHEMENT : un texte translucide en montre chaque
+   * recouvrement, plus foncé. Une demi-encre se mélange donc au fond, jamais au transparent.
+   */
+  it.each(['button.css', 'menu.css', 'field.css', 'search.css', 'disclosure.css'])('%s : aucune couleur de texte translucide', (fichier) => {
+    const couleurs = lire(fichier).match(/(?:^|[;{\s])(?:caret-)?color:[^;]*;/g) ?? []
+    for (const couleur of couleurs) expect(couleur).not.toMatch(/transparent/)
+  })
+
+  it('un bouton indisponible s’éteint par la couleur, pas par l’opacité', () => {
+    expect(regle(lire('button.css'), '.ds-button:disabled')).not.toMatch(/opacity/)
+  })
+})

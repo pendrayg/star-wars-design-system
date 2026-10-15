@@ -61,7 +61,7 @@
 }
 
 .ds-search-input::placeholder {
-  color: color-mix(in srgb, var(--color-muted) 70%, transparent);
+  color: color-mix(in srgb, var(--color-muted) 70%, var(--color-bg));
 }
 
 /* Le « × » natif ferait doublon avec le bouton Effacer. */

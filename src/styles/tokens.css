@@ -115,6 +115,12 @@
   --btn-active-color: #ffffff;
   --btn-active-glow: 0 0 8px color-mix(in srgb, currentColor 50%, transparent);
   --btn-active-glow-strong: 0 0 11px color-mix(in srgb, currentColor 75%, transparent);
+  /* LE TEXTE D'UNE COMMANDE AU REPOS — une COULEUR, et non une transparence. Les polices du
+     générique sont à CHEVAUCHEMENT : leurs lettres empiètent l'une sur l'autre, et un texte
+     translucide y laisse voir chaque recouvrement, plus foncé que le reste. La demi-encre se
+     MÉLANGE donc au fond (--color-bg) au lieu de le laisser passer : même teinte, opaque. Le
+     mélange se calcule là où il sert (button.css, menu.css…), sur le --btn-active-color de
+     l'élément, qui change d'un ton à l'autre. */
   --check-glow: drop-shadow(0 0 4px color-mix(in srgb, var(--color-primary) 70%, transparent));
 
   /* LE PASSAGE DU REPOS AU PLEIN FEU, et retour : le tube CLIGNOTE, et il CHANGE DE COULEUR en
