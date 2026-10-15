@@ -137,7 +137,7 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
   galet ; et ce contraste suffit à dire, d'un coup d'œil, ce qui s'actionne et ce qui se lit. Une
   **lecture** (`.ds-readout`), qui tient sur une ligne, est en pilule comme une commande.
 - **Une projection est translucide.** Ce qui est projeté (`.ds-holo` : une icône, une image) est à
-  **80 %** d'opacité (`--holo-alpha`) : on voit le fond à travers. Le décrochage du signal se
+  **60 %** d'opacité (`--holo-alpha`) : on voit le fond à travers. Le décrochage du signal se
   calcule sur cette opacité ; le faisceau de l'émetteur n'en hérite pas.
 - **Deux polices, une graisse.** Le corps prend la **SF Distant Galaxy** (`--font-body`), les
   titres et les commandes son **Alternate** (`--font-title`) : des mots courts et capitaux ont la

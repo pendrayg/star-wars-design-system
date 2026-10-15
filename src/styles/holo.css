@@ -8,11 +8,11 @@
    sujet manque continue de projeter dans le vide. */
 
 .ds-holo {
-  /* UNE PROJECTION EST TRANSLUCIDE : on voit le fond à travers. 80 % — assez pour que le sujet se
+  /* UNE PROJECTION EST TRANSLUCIDE : on voit le fond à travers. 60 % — assez pour que le sujet se
      lise net, assez peu pour qu'il ne passe pas pour un objet peint. Le décrochage du signal
      (ds-holo-flicker) se calcule SUR cette opacité, il ne la remplace pas ; le faisceau de
      l'émetteur, lui, n'en hérite pas (--holo-alpha n'est posé que sur le sujet). */
-  --holo-alpha: 0.8;
+  --holo-alpha: 0.6;
   opacity: var(--holo-alpha);
   color: var(--color-primary);
   text-shadow: var(--glow-holo);
