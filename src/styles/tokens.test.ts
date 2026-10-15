@@ -99,3 +99,13 @@ describe("l'échelle du support", () => {
     for (const s of [COMPACT, COMFORTABLE]) expect(s.check + 2 * ((44 - s.check) / 2)).toBe(44)
   })
 })
+
+describe('les palettes de dégradé', () => {
+  it('ont toutes leurs deux stops, citrouille comprise', () => {
+    for (const name of ['glacier', 'dusk', 'fern', 'blaze', 'solar', 'pumpkin']) {
+      expect(CSS, `--grad-${name}-from`).toMatch(new RegExp(`--grad-${name}-from: #[0-9a-f]{6};`))
+      expect(CSS, `--grad-${name}-to`).toMatch(new RegExp(`--grad-${name}-to: #[0-9a-f]{6};`))
+    }
+    expect(CSS).toContain('--grad-pumpkin-to: #ff7518;')
+  })
+})

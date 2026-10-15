@@ -159,6 +159,10 @@
   --grad-blaze-to: #ff2d2d;
   --grad-solar-from: #1a1200;
   --grad-solar-to: #ffc500;
+  /* Orange citrouille : entre l'ambre et le rouge, un dépassement qui n'est pas encore une alerte
+     (le budget dépassé, dans Budget). Assez loin de l'ambre pour ne pas s'y confondre. */
+  --grad-pumpkin-from: #1a0a00;
+  --grad-pumpkin-to: #ff7518;
 
   /* LES DEUX POLICES, et la troisième qui n'en est pas une (cf. fonts.css).
      Le corps prend la SF Distant Galaxy, les titres et les commandes son Alternate : le lettrage
@@ -270,6 +274,8 @@
     --grad-blaze-to: #ff2d2d;
     --grad-solar-from: #fbedd0;
     --grad-solar-to: #ffa42e;
+    --grad-pumpkin-from: #fde3d0;
+    --grad-pumpkin-to: #ff7518;
     /* Les rayures sont un artefact d'écran cathodique, pensé pour un fond sombre : à 14 % de noir
        sur du blanc cassé, l'écran entier se retrouve rayé. On garde le grain, en bleu nuit et
        presque trois fois plus discret. */
@@ -309,6 +315,8 @@
   --grad-blaze-to: #ff2d2d;
   --grad-solar-from: #fbedd0;
   --grad-solar-to: #ffa42e;
+  --grad-pumpkin-from: #fde3d0;
+  --grad-pumpkin-to: #ff7518;
   /* Les rayures sont un artefact d'écran cathodique, pensé pour un fond sombre : à 14 % de noir
      sur du blanc cassé, l'écran entier se retrouve rayé. On garde le grain, en bleu nuit et
      presque trois fois plus discret. */
