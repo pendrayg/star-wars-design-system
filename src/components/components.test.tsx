@@ -20,7 +20,7 @@ import { GLYPHS } from './glyphs'
 import { Icon } from './Icon'
 import { ICONS } from './icons'
 import { Body, ButtonBar, Footer, Header, Screen, Slides } from './Layout'
-import { MENU_RELEASE_DELAY_MS, MenuBar } from './MenuBar'
+import { MENU_OUT_MS, MenuBar } from './MenuBar'
 import { RichTextField, type RichTextAction } from './RichTextField'
 import { SearchField } from './SearchField'
 import { SetImage } from './SetImage'
@@ -881,7 +881,7 @@ describe('MenuBar', () => {
     expect(select).toHaveBeenCalledWith('home')
   })
 
-  it("garde l'ancienne destination allumée le temps que la pastille la quitte", () => {
+  it("garde l'ancienne destination allumée le temps que la pastille s'y éteigne", () => {
     vi.useFakeTimers()
     const items = [
       { id: 'home', icon: 'home', label: 'Accueil' },
@@ -893,7 +893,7 @@ describe('MenuBar', () => {
     expect(old).toHaveClass('ds-active', 'ds-trail')
     expect(old).not.toHaveAttribute('aria-current')
     expect(screen.getByRole('button', { name: 'Accueil' })).toHaveAttribute('aria-current', 'page')
-    act(() => vi.advanceTimersByTime(MENU_RELEASE_DELAY_MS))
+    act(() => vi.advanceTimersByTime(MENU_OUT_MS))
     expect(old).not.toHaveClass('ds-active')
     vi.useRealTimers()
   })

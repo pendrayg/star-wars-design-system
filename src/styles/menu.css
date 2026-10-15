@@ -1,9 +1,9 @@
 /* Barre de menu : un cadre en pilule CERNÉ DE NÉON, sur toute la largeur. Chaque destination y est
    une icône sans tube ; celle où l'on est S'ÉTIRE pour montrer son libellé, et une pastille PLEIN
-   FEU (son propre tube, à --lit 1) est posée sous elle. Au changement, la
-   pastille s'étire jusqu'à la nouvelle destination puis se rétracte depuis l'ancienne : le
-   composant (MenuBar) en pose les bords, mesurés sur les destinations ; l'ancienne reste allumée
-   (.ds-trail) le temps que la pastille la quitte.
+   FEU — et jaune, par exception (cf. .ds-menu-indicator) — est posée sous elle. Au changement,
+   la pastille s'éteint sur l'ancienne destination en clignotant, puis se rallume sur la nouvelle
+   en clignotant : le composant (PillBar) en pose les bords, mesurés sur les destinations ;
+   l'ancienne reste allumée (.ds-trail) le temps que la pastille s'y éteigne.
    L'INVARIANT, écrit une fois pour toutes — UN CADRE FAIT CE QU'IL LOGE, PLUS SES DEUX MARGES.
    Reste à savoir ce qu'il loge, et c'est l'USAGE qui le dit, jamais le cadre :
      — ce qu'on PRESSE pour agir est une COMMANDE et fait --control-height, comme un bouton. Une
@@ -16,8 +16,8 @@
    Deux cadres ici, la même mécanique (PillBar), la même hauteur :
      .ds-flat-selector — le sélecteur multiple plat (FlatSelector) : un choix parmi quelques-uns.
                          Un choix à libellé seul (.ds-plain) le montre toujours. Multiligne
-                         (.ds-multiline), les choix se replient : la pastille s'étire alors aussi
-                         d'une ligne à l'autre ;
+                         (.ds-multiline), les choix se replient : la pastille se rallume sur la
+                         ligne du nouveau choix ;
      .ds-menu-bar      — la barre de menu (MenuBar) : les destinations de l'app, la cible la plus
                          sollicitée qui soit.
    Ces deux cadres sont donc plus hauts qu'une commande, et ils le gagnent : posés à côté d'un
@@ -53,8 +53,24 @@
      non --control-inner : son rayon est donc celui d'une COMMANDE, pas celui d'un logé. */
   border-radius: var(--control-radius);
   --lit: 1;
+  /* L'EXCEPTION À « ACTIF = BLEU » : la pastille d'un sélecteur est plein feu, mais JAUNE. Elle
+     double le choix courant dans un cadre déjà cerné d'ambre ; en bleu, elle tranchait sur toute
+     la barre, en jaune elle s'y fond et la barre se lit d'un seul tenant. Le choix courant se
+     distingue par l'intensité de son tube et par son texte en pleine encre. */
+  --neon-lit-color: var(--neon-color);
   background: var(--color-bg);
   pointer-events: none;
+}
+
+/* LE CHANGEMENT DE CHOIX, au néon (cf. PillBar) : la pastille s'éteint sur l'ancien choix, en
+   clignotant comme un tube qui lâche, puis se rallume sur le nouveau, en clignotant comme un tube
+   qui s'amorce. `steps(1, end)` : chaque coupure est franche. */
+.ds-menu-indicator.is-out {
+  animation: ds-neon-out 0.3s steps(1, end) both;
+}
+
+.ds-menu-indicator.is-in {
+  animation: ds-neon-in 0.6s steps(1, end) both;
 }
 
 .ds-menu-item {

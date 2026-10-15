@@ -143,3 +143,25 @@
     opacity: 1;
   }
 }
+
+/* L'EXTINCTION — un tube qui lâche : il vacille, se rallume, retombe à mi-tension, et s'éteint.
+   C'est la sortie de la pastille d'un sélecteur (menu.css), avant qu'elle ne se rallume ailleurs
+   (ds-neon-in). */
+@keyframes ds-neon-out {
+  0% {
+    opacity: 1;
+  }
+  15% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 0.35;
+  }
+  60%,
+  100% {
+    opacity: 0;
+  }
+}

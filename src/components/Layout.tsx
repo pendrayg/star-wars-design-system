@@ -76,8 +76,9 @@ export function Footer({ className, ...rest }: Props<HTMLElement>) {
   return <footer className={cx('ds-footer', className)} {...rest} />
 }
 
-/** Durée du glissement d'un écran à l'autre : celle de la pastille du menu qui s'étire vers la
- *  nouvelle destination (`MENU_STRETCH_MS`) — les deux racontent le même geste, au même rythme. */
+/** Durée du glissement d'un écran à l'autre : le temps que la pastille du menu s'éteigne sur
+ *  l'ancienne destination et commence à se rallumer sur la nouvelle (`MENU_OUT_MS`, puis ses
+ *  premiers ratés) — l'écran arrive pendant que le néon reprend. */
 export const SLIDE_MS = 380
 
 /**

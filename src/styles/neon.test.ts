@@ -54,3 +54,16 @@ describe('le texte est opaque', () => {
     expect(regle(lire('button.css'), '.ds-button:disabled')).not.toMatch(/opacity/)
   })
 })
+
+describe('la pastille d’un sélecteur', () => {
+  it('est l’exception à « actif = bleu » : plein feu, mais jaune', () => {
+    expect(regle(lire('menu.css'), '.ds-menu-indicator')).toMatch(/--neon-lit-color:\s*var\(--neon-color\)/)
+  })
+
+  it('change de choix en s’éteignant puis en se rallumant au néon, en coupures franches', () => {
+    const menu = lire('menu.css')
+    expect(regle(menu, '.ds-menu-indicator.is-out')).toMatch(/ds-neon-out[^;]*steps\(1, end\)/)
+    expect(regle(menu, '.ds-menu-indicator.is-in')).toMatch(/ds-neon-in[^;]*steps\(1, end\)/)
+    expect(lire('neon.css')).toMatch(/@keyframes ds-neon-out/)
+  })
+})

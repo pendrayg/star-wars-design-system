@@ -848,14 +848,14 @@ export function App() {
         <Fields />
       </Demo>
 
-      <Demo id="menu" title="Barre de menu" intro="Un cadre cerné de néon ; une pastille plein feu sous la destination courante, qui montre son libellé. D'une destination à l'autre, la pastille s'étire puis se rétracte. Chaque destination est une commande, à la hauteur de l'échelle du support.">
+      <Demo id="menu" title="Barre de menu" intro="Un cadre cerné de néon ; une pastille plein feu sous la destination courante, qui montre son libellé. D'une destination à l'autre, la pastille s'éteint en clignotant puis se rallume sur la nouvelle, jaune — l'exception à « actif = bleu ». Chaque destination est une commande, à la hauteur de l'échelle du support.">
         <Menu />
       </Demo>
 
       <Demo
         id="selecteur"
         title="Sélecteur multiple plat"
-        intro="Un choix parmi quelques-uns, côte à côte dans un cadre cerné de néon : la pastille plein feu s'étire jusqu'au nouveau choix puis se rétracte de l'ancien, comme la barre de menu, dans la hauteur d'une commande. Multiligne, les choix se replient sur autant de lignes qu'il en faut, et la pastille s'étire d'une ligne à l'autre : tous restent visibles, un toucher suffit, là où une liste déroulante en cache une douzaine."
+        intro="Un choix parmi quelques-uns, côte à côte dans un cadre cerné de néon : la pastille plein feu, jaune, s'éteint sur l'ancien choix en clignotant puis se rallume sur le nouveau, comme la barre de menu, dans la hauteur d'une commande. Multiligne, les choix se replient sur autant de lignes qu'il en faut, et la pastille se rallume sur la ligne du nouveau choix : tous restent visibles, un toucher suffit, là où une liste déroulante en cache une douzaine."
       >
         <h3>Sur une ligne</h3>
         <RangeDemo />

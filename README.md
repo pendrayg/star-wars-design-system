@@ -114,9 +114,10 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
   multiple plat du DS, et avec rien d'autre** : pas de « segmented toggle » maison, pas de rangée de
   boutons dont on allume le courant. La règle de partage est simple : **`MenuBar` dit où l'on est
   dans l'app, `FlatSelector` dit ce qu'on regarde là où l'on est.** Les deux partagent la même
-  mécanique (`PillBar`) — cadre cerné de néon, pastille plein feu qui s'étire jusqu'au nouveau
-  choix puis se rétracte de l'ancien —, si bien qu'un sous-menu refait à la main ne sera jamais que
-  cette mécanique en moins bien : pastille qui glisse au lieu de s'étirer, hauteurs hors échelle,
+  mécanique (`PillBar`) — cadre cerné de néon, pastille plein feu **jaune** (l'exception à
+  « actif = bleu ») qui s'éteint sur l'ancien choix en clignotant puis se rallume sur le nouveau
+  —, si bien qu'un sous-menu refait à la main ne sera jamais que cette mécanique en moins bien :
+  pastille qui glisse au lieu de se rallumer, hauteurs hors échelle,
   néon hors recette, et une seconde grammaire à maintenir à côté de la première.
 - **Des pilules, et ce qui est carré est rond.** `--control-radius` n'est plus un nombre par
   échelle (9 et 14) mais une **règle** : **la moitié de la hauteur**, déclarée une fois dans les
@@ -297,7 +298,7 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
 | `SetImage` | image sertie hors bouton (un portrait) : le chaton seul, cerclé de son tube, initiales à défaut d'image |
 | `Input`, `Select`, `Checkbox` | champs, liseré néon au repos, plein feu engagés (ou cochée) |
 | `SearchField` | champ de recherche, loupe qui s'allume, bouton Effacer |
-| `MenuBar` | barre de menu cernée de néon, pastille plein feu qui s'étire sous la destination courante — *où l'on est dans l'app* |
+| `MenuBar` | barre de menu cernée de néon, pastille plein feu jaune qui s'éteint et se rallume, au néon, sous la destination courante — *où l'on est dans l'app* |
 | `FlatSelector` | **le sous-menu du DS** : un choix parmi quelques-uns, même cadre et même pastille — *ce qu'on regarde là où l'on est*. Toute bascule entre contenus passe par lui ; `multiline`, ses choix se replient sur plusieurs lignes et remplacent une liste déroulante |
 | `ButtonBar` | rangée de commandes répartie sur toute la largeur (l'écart suit le conteneur, pas une constante), qui se replie quand la place manque |
 | `FoldingGrid` | grille repliée à une ligne, dépliée ligne par ligne, le néon des boutons s'amorçant |

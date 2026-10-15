@@ -17,8 +17,8 @@ export interface FlatSelectorProps<Id extends string> {
 
 /**
  * Sélecteur multiple plat : un choix parmi quelques-uns, côte à côte dans un cadre cerné de néon,
- * la pastille plein feu sous le choix courant — qui s'étire jusqu'au nouveau puis se rétracte de
- * l'ancien, comme la barre de menu (cf. PillBar). Un choix se PRESSE : c'est une commande, pas un
+ * la pastille plein feu, jaune, sous le choix courant — qui s'éteint sur l'ancien en clignotant
+ * puis se rallume sur le nouveau, comme la barre de menu (cf. PillBar). Un choix se PRESSE : c'est une commande, pas un
  * contenu logé, et il fait donc --control-height comme un bouton (33 px à la souris, 50 au doigt) ;
  * un cadre faisant ce qu'il loge plus ses deux marges, le sélecteur fait 43 / 66 — même compte que
  * la barre de menu. Seule la recherche loge un CONTENU (son champ, à --control-inner) et retombe
@@ -31,7 +31,7 @@ export interface FlatSelectorProps<Id extends string> {
  * La barre de menu dit où l'on est dans l'app ; le sélecteur plat, ce qu'on regarde là où l'on est.
  *
  * `multiline` : les choix se replient sur plusieurs lignes, chacune occupant toute la largeur, la
- * dernière à gauche comme un texte justifié. La pastille s'étire d'une ligne à l'autre. Tous les
+ * dernière à gauche comme un texte justifié. La pastille se rallume sur la ligne du nouveau choix. Tous les
  * choix restent visibles d'un coup d'œil : là où une liste déroulante en cache une douzaine, le
  * sélecteur plat les montre, et un seul toucher suffit.
  */
