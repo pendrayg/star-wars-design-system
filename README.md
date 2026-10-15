@@ -45,7 +45,7 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
   repos, 1 plein feu), qui passe de l'un à l'autre **en clignotant**, dans les deux sens : chaque
   éclat bleu, chaque raté jaune, sur une courbe de transition à paliers qui ne prend que 0 et 1
   (`--lit-flicker`, un `linear()`), en 0,6 s. Un **bouton d'action** s'allume ainsi au clic,
-  reste bleu **une seconde** (`PRESS_HOLD_MS`) pour dire que le clic est pris, puis revient au
+  reste bleu **une demi-seconde** (`PRESS_HOLD_MS`) pour dire que le clic est pris, puis revient au
   jaune ; une **bascule** reste bleue tant qu'elle est active. Sans `linear()`, la lumière monte
   en 80 ms et pâlit en 250.
 - **Ce qui apparaît s'amorce.** Une commande qui paraît (grille, section dépliante) ne monte pas
@@ -173,7 +173,7 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
   et posé sous `@media (pointer: coarse)`. À la souris, les commandes font 33 px et la case 18, sans
   débord : un curseur vise juste. Le débord se déduisant de la case, il suit même un
   `data-density="compact"` forcé sur un écran tactile : case de 18, débord de −13, cible de 44.
-- **Un clic se voit** : un bouton d'action reste allumé, bleu, **une seconde** (`PRESS_HOLD_MS`),
+- **Un clic se voit** : un bouton d'action reste allumé, bleu, **une demi-seconde** (`PRESS_HOLD_MS`),
   puis clignote vers son repos jaune (`usePress`, classe `ds-pressed`).
 - **Le néon d'un bouton est un élément** (`<span class="ds-shade">`, rendu par les composants ;
   `Shade` pour un bouton écrit à la main), pas un pseudo-élément : il hérite des nombres animés du
