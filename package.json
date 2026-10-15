@@ -1,6 +1,6 @@
 {
   "name": "@pendrayg/star-wars-design-system",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Design system Star Wars : jetons, CSS et composants React — pilules, glyphes swg, scanlines, holo et saut en hyperespace.",
   "type": "module",
   "license": "PolyForm-Noncommercial-1.0.0",
