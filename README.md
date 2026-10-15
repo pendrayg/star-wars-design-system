@@ -30,16 +30,13 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
   `--neu-density`** (1 au doigt, **2/3** à la souris) —, soit 24 / 36 px au doigt et
   **16 / 24 px à la souris** (`--shadow-room` / `-lg`). Les apps la posent en marge et en `gap` :
   un halo rogné, ou recouvert par la commande voisine, se lirait comme un tube cassé.
-- **Plein feu, sans rebond.** Rien ne s'enfonce : on appuie, ça brille plus fort et ça passe
-  **au bleu** — le halo se densifie (55 → 100 %, sans s'élargir), un voile de lumière passe en
-  dedans, et le tube comme le texte virent du jaune (`--neon-color`) au bleu des hologrammes
-  (`--neon-lit-color`). Le danger reste rouge. Un nombre enregistré le pilote, `--lit` (0 au
-  repos, 1 plein feu), qui passe de l'un à l'autre **en clignotant**, dans les deux sens : chaque
-  éclat bleu, chaque raté jaune, sur une courbe de transition à paliers qui ne prend que 0 et 1
-  (`--lit-flicker`, un `linear()`), en 0,6 s. Un **bouton d'action** s'allume ainsi au clic,
-  reste bleu **une seconde** (`PRESS_HOLD_MS`) pour dire que le clic est pris, puis revient au
-  jaune ; une **bascule** reste bleue tant qu'elle est active. Sans `linear()`, la lumière monte
-  en 80 ms et pâlit en 250.
+- **Plein feu, sans rebond.** Rien ne s'enfonce : on appuie, ça brille plus fort — le halo
+  se densifie (55 → 100 %, sans s'élargir), un voile de lumière passe en dedans. Un nombre enregistré le pilote,
+  `--lit` (0 au repos, 1 plein feu), qui passe de l'un à l'autre **en clignotant**, dans les
+  deux sens, entre le moins et le plus éclairé : les instants de l'amorçage, portés par une
+  courbe de transition à paliers (`--lit-flicker-up` / `-down`, des `linear()`), chaque raté passant par une baisse de
+  tension qui assombrit tube, texte et icône, en 0,6 s. Sans `linear()`, la
+  lumière monte en 80 ms et pâlit en 250.
 - **Ce qui apparaît s'amorce.** Une commande qui paraît (grille, section dépliante) ne monte pas
   du fond : son néon **s'amorce**, comme un tube qu'on allume — deux ratés, une retombée, puis il
   tient —, en coupures franches (`steps`). Au repli, la même chose à l'envers : il vacille et
@@ -165,10 +162,8 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
   et posé sous `@media (pointer: coarse)`. À la souris, les commandes font 33 px et la case 18, sans
   débord : un curseur vise juste. Le débord se déduisant de la case, il suit même un
   `data-density="compact"` forcé sur un écran tactile : case de 18, débord de −13, cible de 44.
-- **Un clic se voit** : un bouton d'action reste allumé, bleu, **une seconde** (`PRESS_HOLD_MS`),
-  puis clignote vers son repos jaune (`usePress`, classe `ds-pressed`). Le texte et l'icône
-  passent au bleu avec le tube : `TextButton` loge son libellé dans un `<span class="ds-label">`,
-  qui hérite de `--lit` image par image.
+- **Un toucher bref se voit** : le bouton reste plein feu **230 ms** (`PRESS_HOLD_MS`), le temps
+  que la lumière monte, puis pâlit (`usePress`, classe `ds-pressed`).
 - **Le néon d'un bouton est un élément** (`<span class="ds-shade">`, rendu par les composants ;
   `Shade` pour un bouton écrit à la main), pas un pseudo-élément : il hérite des nombres animés du
   bouton (`--lit`, `--pop`), ce que Safari ne fait pas pour `::after`.

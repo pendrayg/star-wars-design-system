@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react'
 
-/** Le plein feu d'un clic : une SECONDE. Un bouton d'action s'allume comme une bascule — il
- *  clignote jusqu'au bleu —, reste allumé le temps qu'on voie que le clic a été pris en compte,
- *  puis clignote vers son repos. */
-export const PRESS_HOLD_MS = 1000
+/** Le plein feu d'un toucher bref : un peu plus que le clignotement de --lit (--lit-flicker-up, les
+ *  46 premiers centièmes de 0,6 s, soit 276 ms), pour que le tube ait fini de s'allumer avant de
+ *  clignoter vers son repos. */
+export const PRESS_HOLD_MS = 300
 
 interface PressHandlers {
   onPointerDown?: (event: PointerEvent<HTMLButtonElement>) => void
@@ -17,7 +17,7 @@ interface PressHandlers {
 /**
  * Le plein feu d'un toucher bref. `:active` ne dure que le temps du doigt sur l'écran — une
  * fraction de seconde sur iPhone —, et la lumière retombait avant d'avoir paru. Le bouton reste
- * donc plein feu (`pressed`, classe `ds-pressed`) PRESS_HOLD_MS (une seconde), puis clignote vers son repos (--lit-out). Clavier compris (Entrée, Espace). Les gestionnaires de
+ * donc plein feu (`pressed`, classe `ds-pressed`) PRESS_HOLD_MS, puis clignote vers son repos (--lit-out). Clavier compris (Entrée, Espace). Les gestionnaires de
  * l'app sont appelés aussi.
  */
 export function usePress(own: PressHandlers): { pressed: boolean; handlers: Required<PressHandlers> } {

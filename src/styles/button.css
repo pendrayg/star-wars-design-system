@@ -6,7 +6,7 @@
 
    RIEN NE S'ENFONCE. Un appui ne creuse plus le bouton : il le fait briller plus fort. --lit, un
    nombre, dit où en est le bouton : 0 au repos, 1 plein feu. Il passe de l'un à l'autre en
-   CLIGNOTANT, dans un sens comme dans l'autre, du jaune au bleu (cf. --lit-flicker).
+   CLIGNOTANT, dans un sens comme dans l'autre (--lit-in, --lit-out : cf. --lit-flicker-up et -down, qui passent par le sombre).
 
    Un toucher bref ne laisse pas le temps de voir la lumière monter (:active ne dure qu'un
    instant) : les composants posent `ds-pressed` un court moment (cf. usePress), puis le bouton
@@ -46,8 +46,8 @@
 }
 
 /* L'APPUI N'ALLUME QUE CE QUI N'A PAS D'ÉTAT. Une commande momentanée n'a que lui pour dire
-   qu'elle a été touchée : elle s'active comme une bascule — clignote jusqu'au plein feu bleu —,
-   reste allumée UNE SECONDE (`ds-pressed`, cf. PRESS_HOLD_MS), puis clignote vers son repos. Une BASCULE, elle, a son état, et c'est lui qui s'allume ou s'éteint
+   qu'elle a été touchée : elle clignote jusqu'au plein feu, tient le temps de `ds-pressed`, puis
+   clignote vers son repos. Une BASCULE, elle, a son état, et c'est lui qui s'allume ou s'éteint
    au clic : l'appui ne la tient plus au plein feu, sans quoi éteindre une bascule ne se voyait
    qu'une fois le doigt levé et le maintien écoulé — un bon tiers de seconde après le clic. */
 .ds-button.ds-active,
@@ -68,13 +68,13 @@
   pointer-events: none;
 }
 
-/* LE TEXTE PASSE AU BLEU AVEC LE TUBE, raté pour raté. La couleur est posée sur les ENFANTS du
-   bouton (libellé, icône), qui héritent de --lit image par image : sur iPhone, Safari ne répercute
-   pas un nombre animé sur les autres propriétés de l'élément même qui l'anime. `currentColor`
-   est ici la couleur du bouton — demi-encre au repos, pleine encre actif —, que le bleu remplace
-   au plein feu. */
-.ds-button > :not(.ds-shade) {
-  color: color-mix(in srgb, var(--neon-lit-color) calc(100% * clamp(0, var(--lit), 1)), currentColor);
+/* LA BAISSE DE TENSION GAGNE LE TEXTE. Le calque de néon est peint AU-DESSUS du contenu (un
+   élément positionné passe devant le texte qui le précède dans le flux) : le temps d'un raté, il
+   se voile de la couleur du fond, et le libellé comme l'icône s'assombrissent avec le tube. Pas
+   de filtre ni d'opacité sur le bouton lui-même : --lit y est animé, et Safari ne répercute pas
+   un nombre animé sur les autres propriétés de l'élément qui l'anime — un enfant, si. */
+.ds-button > .ds-shade {
+  background: color-mix(in srgb, var(--color-bg) calc(75% * clamp(0, -1 * var(--lit), 1)), transparent);
 }
 
 /* Éteint au repos (posé dans une surface déjà cernée de néon) : le tube ne s'allume qu'à l'appui
@@ -160,11 +160,9 @@
   --neon-color: var(--color-primary);
 }
 
-/* Le danger reste rouge au plein feu : une alerte qui virerait au bleu se démentirait. */
 .ds-danger {
   --btn-active-color: var(--color-danger);
   --neon-color: var(--color-danger);
-  --neon-lit-color: var(--color-danger);
 }
 
 .ds-link {

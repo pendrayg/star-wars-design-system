@@ -6,8 +6,7 @@
         commandes, que tout le DS aligne au pixel ;
      2. le HALO au-dehors : flou fixe (--neon-blur, celui du châssis), encre de 55 à 100 % selon
         --lit — le plein feu densifie le halo, il ne l'élargit pas ;
-     Au plein feu, le tube passe aussi du JAUNE au BLEU (--neon-tint) : l'état actif se lit à la
-     couleur autant qu'à l'intensité.
+     Le tube et le halo BAISSENT quand --lit passe sous 0 : c'est le creux d'un clignotement.
      3. le VOILE en dedans : nul au repos, il monte avec --lit, jusqu'à 35 % sur 16 px. C'est
         celui du châssis (« un voile ambre à 8 % en dedans »), bien plus dense : c'est lui qui
         fait voir le plein feu, et chaque saut du clignotement entre repos et plein feu.
@@ -30,14 +29,15 @@
 .ds-selectable,
 .ds-well::after {
   --neon-on: clamp(0, var(--pop), 1);
+  /* --lit hors de [0, 1] le temps d'un clignotement (cf. --lit-flicker-up, tokens.css) : sa part
+     positive est le plein feu, sa part négative la baisse de tension, qui ramène le tube à 30 %
+     et éteint son halo. */
   --neon-full: clamp(0, var(--lit), 1);
-  /* La teinte du tube suit --lit : jaune au repos, bleue au plein feu. --lit ne prend que 0 et 1
-     pendant un clignotement (cf. --lit-flicker) : la couleur saute avec lui, sans mélange. */
-  --neon-tint: color-mix(in srgb, var(--neon-lit-color) calc(100% * var(--neon-full)), var(--neon-color));
+  --neon-dim: clamp(0, -1 * var(--lit), 1);
   box-shadow:
-    inset 0 0 0 var(--neon-width) color-mix(in srgb, var(--neon-tint) calc(100% * var(--neon-on)), transparent),
-    0 0 var(--neon-blur) color-mix(in srgb, var(--neon-tint) calc((55% + 45% * var(--neon-full)) * var(--neon-on)), transparent),
-    inset 0 0 calc(16px * var(--neon-full)) color-mix(in srgb, var(--neon-tint) calc(35% * var(--neon-full) * var(--neon-on)), transparent);
+    inset 0 0 0 var(--neon-width) color-mix(in srgb, var(--neon-color) calc((100% - 70% * var(--neon-dim)) * var(--neon-on)), transparent),
+    0 0 var(--neon-blur) color-mix(in srgb, var(--neon-color) calc((55% + 45% * var(--neon-full) - 55% * var(--neon-dim)) * var(--neon-on)), transparent),
+    inset 0 0 calc(16px * var(--neon-full)) color-mix(in srgb, var(--neon-color) calc(35% * var(--neon-full) * var(--neon-on)), transparent);
 }
 
 /* Sans color-mix() (Safari avant 16.2) : le tube seul, à la couleur du thème — un néon sans halo
