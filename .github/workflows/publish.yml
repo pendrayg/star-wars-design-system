@@ -32,8 +32,9 @@ jobs:
           registry-url: https://registry.npmjs.org
           scope: '@pendrayg'
       # npm 10 bute sur la résolution des dépendances pair à l'installation : npm 11 (npm ci, lui, passe).
-      # Le publieur de confiance demande en outre npm >= 11.5.1 et Node >= 22.14.
-      - run: npm install -g npm@11
+      # Le publieur de confiance demande en outre npm >= 11.5.1 et Node >= 22.14 ; la publication
+      # par étape (npm stage), npm >= 11.15.0.
+      - run: npm install -g npm@^11.15.0
       - id: version
         run: |
           name=$(node -p "require('./package.json').name")
@@ -51,8 +52,11 @@ jobs:
         run: npm test
       - if: steps.version.outputs.published == 'false'
         run: npm run build
+      # PUBLICATION PAR ÉTAPE : le workflow ne publie pas, il DÉPOSE la version (npm stage publish).
+      # Elle n'est installable qu'une fois approuvée par un mainteneur, avec sa 2FA — sur npmjs.com
+      # ou par `npm stage approve`. Un workflow compromis ne peut donc rien mettre en ligne seul.
       - if: steps.version.outputs.published == 'false'
-        run: npm publish
+        run: npm stage publish
       - name: Poser le tag
         env:
           TAG: v${{ steps.version.outputs.version }}

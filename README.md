@@ -434,7 +434,12 @@ npm version minor    # ou patch, major : met à jour package.json et crée le ta
 git push --follow-tags
 ```
 
-Le workflow « Publier » construit et publie le tag sur npmjs **sans aucun jeton** : npmjs reconnaît
+Le workflow « Publier » construit le tag et le **dépose** sur npmjs (`npm stage publish`) **sans
+aucun jeton** : la version n'est installable qu'une fois **approuvée** par un mainteneur, avec sa
+double authentification — sur npmjs.com, ou par `npm stage list` puis
+`npm stage approve @pendrayg/star-wars-design-system@<version>`. Un workflow compromis ne peut
+donc rien mettre en ligne seul. Côté npmjs, le publieur de confiance peut être restreint au seul
+dépôt par étape, pour qu'un `npm publish` direct depuis le workflow soit refusé. npmjs reconnaît
 ce dépôt et ce fichier de workflow comme publieur de confiance (*trusted publisher*, OIDC), et
 l'identité d'exécution d'Actions tient lieu de preuve. Un corollaire gratuit : la **provenance** du
 paquet est attestée à chaque publication. Il se lance aussi à la main
