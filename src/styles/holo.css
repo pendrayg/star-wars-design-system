@@ -8,6 +8,12 @@
    sujet manque continue de projeter dans le vide. */
 
 .ds-holo {
+  /* UNE PROJECTION EST TRANSLUCIDE : on voit le fond à travers. 80 % — assez pour que le sujet se
+     lise net, assez peu pour qu'il ne passe pas pour un objet peint. Le décrochage du signal
+     (ds-holo-flicker) se calcule SUR cette opacité, il ne la remplace pas ; le faisceau de
+     l'émetteur, lui, n'en hérite pas (--holo-alpha n'est posé que sur le sujet). */
+  --holo-alpha: 0.8;
+  opacity: var(--holo-alpha);
   color: var(--color-primary);
   text-shadow: var(--glow-holo);
   /* La recette est un JETON (--holo-anim, tokens.css) et non un nom d'animation recopié : une app,
@@ -32,47 +38,47 @@
 @keyframes ds-holo-flicker {
   0%,
   11.2% {
-    opacity: 1;
+    opacity: calc(var(--holo-alpha, 1) * 1);
   }
   11.5% {
-    opacity: 0.25;
+    opacity: calc(var(--holo-alpha, 1) * 0.25);
   }
   11.9% {
-    opacity: 1;
+    opacity: calc(var(--holo-alpha, 1) * 1);
   }
   12.2% {
-    opacity: 0.6;
+    opacity: calc(var(--holo-alpha, 1) * 0.6);
   }
   12.6%,
   37.8% {
-    opacity: 1;
+    opacity: calc(var(--holo-alpha, 1) * 1);
   }
   38.1% {
-    opacity: 0.15;
+    opacity: calc(var(--holo-alpha, 1) * 0.15);
   }
   38.5%,
   63.4% {
-    opacity: 1;
+    opacity: calc(var(--holo-alpha, 1) * 1);
   }
   63.7% {
-    opacity: 0.45;
+    opacity: calc(var(--holo-alpha, 1) * 0.45);
   }
   64% {
-    opacity: 1;
+    opacity: calc(var(--holo-alpha, 1) * 1);
   }
   64.3% {
-    opacity: 0.2;
+    opacity: calc(var(--holo-alpha, 1) * 0.2);
   }
   64.7%,
   89.5% {
-    opacity: 1;
+    opacity: calc(var(--holo-alpha, 1) * 1);
   }
   89.8% {
-    opacity: 0.5;
+    opacity: calc(var(--holo-alpha, 1) * 0.5);
   }
   90.2%,
   100% {
-    opacity: 1;
+    opacity: calc(var(--holo-alpha, 1) * 1);
   }
 }
 

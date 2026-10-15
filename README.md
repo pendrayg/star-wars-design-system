@@ -132,9 +132,13 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
   la case à cocher, les tuiles à image, leur image, le chaton serti. Les rayons proportionnels
   écrits à la main (0,18 d'une tuile, 0,2 d'un chaton, 0,318 d'une case) ont disparu avec eux.
 
-  Les **zones** font exception, et c'est voulu : **3 px**, presque carré. Une zone qui imiterait la
-  pilule disputerait sa forme aux commandes ; un panneau de cockpit n'est pas une touche, et ce
-  contraste suffit à dire, d'un coup d'œil, ce qui s'actionne et ce qui se lit.
+  Les **zones** font exception, et c'est voulu : elles prennent le rayon du **châssis de visée**,
+  **26 px**, celui d'une dalle d'écran. La pilule, sur un panneau de plusieurs lignes, en ferait un
+  galet ; et ce contraste suffit à dire, d'un coup d'œil, ce qui s'actionne et ce qui se lit. Une
+  **lecture** (`.ds-readout`), qui tient sur une ligne, est en pilule comme une commande.
+- **Une projection est translucide.** Ce qui est projeté (`.ds-holo` : une icône, une image) est à
+  **80 %** d'opacité (`--holo-alpha`) : on voit le fond à travers. Le décrochage du signal se
+  calcule sur cette opacité ; le faisceau de l'émetteur n'en hérite pas.
 - **Deux polices, une graisse.** Le corps prend la **SF Distant Galaxy** (`--font-body`), les
   titres et les commandes son **Alternate** (`--font-title`) : des mots courts et capitaux ont la
   place de la variante large, un paragraphe entier s'y lirait comme une affiche. Aucune des deux

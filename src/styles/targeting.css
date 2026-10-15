@@ -4,14 +4,14 @@
    Trois pièces, et elles se distinguent par leur ÉCHELLE :
      .ds-frame   — le CHÂSSIS d'un écran : il entoure un graphique, une carte, un tableau de bord.
                    Le tube néon du DS, grand rayon, et un balayage qui le parcourt une fois ;
-     .ds-readout — la LECTURE : un petit panneau d'instrument, au même tube, presque carré, qui porte
+     .ds-readout — la LECTURE : un petit panneau d'instrument, au même tube, en pilule, qui porte
                    une valeur mesurée, au même tube ;
      .ds-digits  — les CHIFFRES de cette lecture, en rouge, parce qu'un nombre qui compte ne se
                    lit pas à la même encre que son intitulé.
 
    Le châssis N'EST PAS une zone (.ds-zone) et ne la remplace pas : une zone est un panneau de
-   contenu, le châssis est le bord de l'écran lui-même. Les deux se superposent sans se gêner —
-   même tube, mais 26 px de rayon contre 3. */
+   contenu, le châssis est le bord de l'écran lui-même. Ils partagent le tube et le rayon — 26 px,
+   celui d'une dalle d'écran. */
 
 .ds-frame {
   position: relative;
@@ -20,8 +20,8 @@
      trait de 3 s'épaississait en bandeau. C'est LA mesure du néon, que tout le DS reprend
      (--neon-width, --neon-blur). */
   border: var(--neon-width) solid var(--grad-solar-to);
-  /* 26 px, et le châssis est la SEULE pièce du DS à ce rayon : il n'est ni une commande (pilule,
-     hauteur / 2) ni une zone (3 px). Son arrondi est celui d'une dalle d'écran. */
+  /* 26 px : l'arrondi d'une dalle d'écran, que la zone (.ds-zone) reprend. Ni l'un ni l'autre
+     n'est une commande, et la pilule (hauteur / 2) en ferait des galets. */
   border-radius: 26px;
   background: var(--color-bg);
   /* Le halo fort au-dehors, et un voile ambre à 8 % en dedans, sur 40 px : c'est lui qui donne au
@@ -73,14 +73,16 @@
 }
 
 /* LA LECTURE : le panneau d'instrument, à l'échelle d'une étiquette. Même recette que la zone
-   (fond 92 %, liseré ambre, 3 px, halo) à une différence près — elle prend la police des TITRES,
-   celle des commandes : une valeur mesurée s'affiche, elle ne se raconte pas. */
+   (fond 92 %, liseré ambre, halo), à deux différences près. Elle prend la police des TITRES,
+   celle des commandes : une valeur mesurée s'affiche, elle ne se raconte pas. Et elle est en
+   PILULE : une lecture tient sur une ligne, et ce qui tient sur une ligne est rond, comme une
+   commande — 999 px, plutôt que la moitié d'une hauteur qu'elle ne fixe pas (son texte la fait). */
 .ds-readout {
   display: inline-block;
-  padding: 6px 10px;
+  padding: 6px 14px;
   background: color-mix(in srgb, var(--color-bg) 92%, #000);
   border: var(--neon-width) solid var(--grad-solar-to);
-  border-radius: 3px;
+  border-radius: 999px;
   color: var(--grad-solar-to);
   font-family: var(--font-title);
   box-shadow: var(--glow-amber);

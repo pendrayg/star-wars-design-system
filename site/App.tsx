@@ -735,7 +735,7 @@ export function App() {
       <Demo
         id="visee"
         title="Visée et holo"
-        intro="Le vocabulaire des écrans de ciblage. Le châssis (Frame) est le bord de l'écran lui-même : trait ambre de 2,5 px, rayon de 26 px, halo, et un balayage rouge qui le parcourt une seule fois. La lecture (Readout) est un panneau d'instrument, presque carré, dont les chiffres passent au rouge : l'encre dit le rôle. L'émetteur (HoloEmitter) projette ce qu'on lui donne — socle matériel, faisceau évasé qui s'arrête au sommet du sujet —, et le faisceau décroche avec lui, jamais le socle."
+        intro="Le vocabulaire des écrans de ciblage. Le châssis (Frame) est le bord de l'écran lui-même : trait ambre de 2,5 px, rayon de 26 px, halo, et un balayage rouge qui le parcourt une seule fois. La lecture (Readout) est un panneau d'instrument, en pilule, dont les chiffres passent au rouge : l'encre dit le rôle. L'émetteur (HoloEmitter) projette ce qu'on lui donne, translucide — socle matériel, faisceau évasé qui s'arrête au sommet du sujet —, et le faisceau décroche avec lui, jamais le socle."
       >
         <Visee />
       </Demo>

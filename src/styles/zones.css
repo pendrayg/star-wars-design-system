@@ -4,16 +4,17 @@
 
    ICI, LA BORDURE EST AMBRE ET ELLE RAYONNE. Une zone n'est plus un panneau neutre mais un PANNEAU
    D'INSTRUMENT : liseré solaire, halo, encre solaire aussi — le texte d'une zone se lit comme un
-   affichage, pas comme du corps de texte. Et le RAYON TOMBE À 3 PX : les commandes sont en pilules,
-   une zone qui les imiterait leur disputerait la forme ; un panneau de cockpit est presque carré,
-   et ce contraste est ce qui distingue, d'un coup d'œil, ce qui s'actionne de ce qui se lit.
+   affichage, pas comme du corps de texte. Et LE RAYON EST CELUI DU CHÂSSIS DE VISÉE, 26 px : une zone est
+   une dalle d'écran, comme lui. Elle ne prend pas la pilule des commandes — la moitié de sa
+   hauteur, sur un panneau de plusieurs lignes, en ferait un galet — et ce contraste reste ce qui
+   distingue, d'un coup d'œil, ce qui s'actionne de ce qui se lit.
    Le fond s'assombrit de 8 % pour décoller le panneau du fond de page (valeur de team-dashboard,
    `targeting.css:103-115`). */
 
 .ds-zone {
   background: color-mix(in srgb, var(--color-bg) 92%, #000);
   border: var(--neon-width) solid var(--grad-solar-to);
-  border-radius: 3px;
+  border-radius: 26px;
   padding: var(--shadow-room);
   color: var(--grad-solar-to);
   box-shadow: var(--glow-amber);
