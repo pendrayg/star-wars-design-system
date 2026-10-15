@@ -36,7 +36,7 @@
 }
 
 .ds-search:focus-within .ds-search-icon {
-  color: var(--neon-lit-color);
+  color: var(--btn-active-color);
   text-shadow: var(--btn-active-glow);
 }
 
@@ -57,7 +57,7 @@
   background: transparent;
   color: var(--color-text);
   font-size: 16px;
-  caret-color: var(--neon-lit-color);
+  caret-color: var(--btn-active-color);
 }
 
 .ds-search-input::placeholder {

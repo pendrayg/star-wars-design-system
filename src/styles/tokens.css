@@ -125,8 +125,8 @@
 
   /* LE PASSAGE DU REPOS AU PLEIN FEU, et retour : le tube CLIGNOTE, et il CHANGE DE COULEUR en
      clignotant. Le plein feu est BLEU (--neon-lit-color, le glacier des hologrammes), le repos
-     JAUNE (--neon-color) : chaque éclat est bleu, chaque raté retombe au jaune, et le texte du
-     bouton suit (cf. neon.css, button.css). Pas de baisse sous le repos : elle donnait un air de
+     JAUNE (--neon-color) : chaque éclat est bleu, chaque raté retombe au jaune (cf. neon.css).
+     Le TEXTE, lui, garde la couleur de typographie par défaut : seul le tube change de couleur. Pas de baisse sous le repos : elle donnait un air de
      bouton désactivé.
      La courbe est BINAIRE — elle ne prend que 0 et 1 —, si bien que la couleur est toujours
      franche, jaune ou bleue, jamais un mélange des deux. Trois éclats, de plus en plus longs,

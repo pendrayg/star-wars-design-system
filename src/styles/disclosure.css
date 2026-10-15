@@ -107,9 +107,8 @@
   transition: color 0.2s ease;
 }
 
-/* Dépliée, la section est ACTIVE : son en-tête passe au bleu avec son tube. */
 .ds-disclosure-button.ds-active > .ds-disclosure-trigger {
-  color: var(--neon-lit-color);
+  color: var(--btn-active-color);
 }
 
 .ds-disclosure-trigger:focus-visible {

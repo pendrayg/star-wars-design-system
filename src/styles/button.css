@@ -70,15 +70,6 @@
   pointer-events: none;
 }
 
-/* LE TEXTE PASSE AU BLEU AVEC LE TUBE, raté pour raté. La couleur est posée sur les ENFANTS du
-   bouton (libellé, icône), qui héritent de --lit image par image : sur iPhone, Safari ne répercute
-   pas un nombre animé sur les autres propriétés de l'élément même qui l'anime. `currentColor`
-   est ici la couleur du bouton — demi-encre au repos, pleine encre actif —, que le bleu remplace
-   au plein feu. */
-.ds-button > :not(.ds-shade) {
-  color: color-mix(in srgb, var(--neon-lit-color) calc(100% * clamp(0, var(--lit), 1)), currentColor);
-}
-
 /* Éteint au repos (posé dans une surface déjà cernée de néon) : le tube ne s'allume qu'à l'appui
    ou à l'état actif — il suit --lit au lieu de rester allumé. */
 .ds-button.ds-flat > .ds-shade {

@@ -743,7 +743,7 @@ export function App() {
       <Demo
         id="boutons"
         title="Boutons"
-        intro="Un liseré jaune au repos, bleu et plein feu une fois actifs : rien ne s'enfonce, le bouton clignote du jaune au bleu, texte compris. Un bouton d'action reste bleu une seconde après le clic, puis revient au jaune en clignotant ; une bascule reste bleue tant qu'elle est active. Le bouton qui supprime, armé, reste au rouge."
+        intro="Un liseré jaune au repos, bleu et plein feu une fois actifs : rien ne s'enfonce, le tube clignote du jaune au bleu, le texte gardant sa couleur. Un bouton d'action reste bleu une seconde après le clic, puis revient au jaune en clignotant ; une bascule reste bleue tant qu'elle est active. Le bouton qui supprime, armé, reste au rouge."
       >
         <div className="row">
           <Button icon="tray_arrow_down">Sauvegarder</Button>

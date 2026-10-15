@@ -18,7 +18,8 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
   liste, message) n'a qu'une bordure fine.
 - **Actif = bleu.** C'est le premier principe du DS : le **bleu** des hologrammes
   (`--neon-lit-color`) est réservé à ce qui est **actif** — bouton allumé, bascule enclenchée,
-  champ engagé, case cochée, élément choisi, section dépliée, destination courante. Tout le reste
+  champ engagé, case cochée, élément choisi, section dépliée, destination courante. C'est le
+  **tube** qui passe au bleu ; le texte garde la couleur de typographie par défaut. Tout le reste
   est **ambre** au repos (`--neon-color`). Un bouton principal ou un lien n'est donc plus bleu au
   repos : il se distingue par un libellé en pleine encre ambre. Le danger reste rouge, actif ou
   non. Les données aussi sont ambre par défaut (`--chart-ink`) : une courbe ou un camembert
@@ -39,8 +40,8 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
   un halo rogné, ou recouvert par la commande voisine, se lirait comme un tube cassé.
 - **Plein feu, sans rebond.** Rien ne s'enfonce : on appuie, ça brille plus fort et ça passe
   **au bleu** — le halo se densifie (55 → 100 %, sans s'élargir), un voile de lumière passe en
-  dedans, et le tube comme le texte virent du jaune (`--neon-color`) au bleu des hologrammes
-  (`--neon-lit-color`). Le danger reste rouge. Un nombre enregistré le pilote, `--lit` (0 au
+  dedans, et le tube vire du jaune (`--neon-color`) au bleu des hologrammes
+  (`--neon-lit-color`) ; le texte garde la couleur de typographie par défaut, en pleine encre. Le danger reste rouge. Un nombre enregistré le pilote, `--lit` (0 au
   repos, 1 plein feu), qui passe de l'un à l'autre **en clignotant**, dans les deux sens : chaque
   éclat bleu, chaque raté jaune, sur une courbe de transition à paliers qui ne prend que 0 et 1
   (`--lit-flicker`, un `linear()`), en 0,6 s. Un **bouton d'action** s'allume ainsi au clic,
@@ -173,9 +174,7 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
   débord : un curseur vise juste. Le débord se déduisant de la case, il suit même un
   `data-density="compact"` forcé sur un écran tactile : case de 18, débord de −13, cible de 44.
 - **Un clic se voit** : un bouton d'action reste allumé, bleu, **une seconde** (`PRESS_HOLD_MS`),
-  puis clignote vers son repos jaune (`usePress`, classe `ds-pressed`). Le texte et l'icône
-  passent au bleu avec le tube : `TextButton` loge son libellé dans un `<span class="ds-label">`,
-  qui hérite de `--lit` image par image.
+  puis clignote vers son repos jaune (`usePress`, classe `ds-pressed`).
 - **Le néon d'un bouton est un élément** (`<span class="ds-shade">`, rendu par les composants ;
   `Shade` pour un bouton écrit à la main), pas un pseudo-élément : il hérite des nombres animés du
   bouton (`--lit`, `--pop`), ce que Safari ne fait pas pour `::after`.

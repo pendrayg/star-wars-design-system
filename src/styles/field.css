@@ -105,7 +105,7 @@
 .ds-select select:active {
   --lit: 1;
   transition: --lit var(--lit-in);
-  color: var(--neon-lit-color);
+  color: var(--btn-active-color);
 }
 
 .ds-select-chevron {
@@ -120,9 +120,8 @@
   pointer-events: none;
 }
 
-/* Engagé, le sélecteur est ACTIF : valeur et chevron en bleu, comme son tube. */
 .ds-select:focus-within .ds-select-chevron {
-  color: var(--neon-lit-color);
+  color: var(--btn-active-color);
 }
 
 /* Case à cocher : liseré au repos ; cochée, elle est ACTIVE, donc plein feu, coche rétroéclairée. */
