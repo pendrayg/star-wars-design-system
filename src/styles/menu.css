@@ -97,8 +97,10 @@
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   overflow: hidden;
+  /* Le texte bascule d'un coup, au premier éclat de la pastille qui se rallume (--lit-first) :
+     un fondu de couleur précédait le néon. */
   transition:
-    color 0.3s ease,
+    color 0s linear var(--lit-first),
     flex-grow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 

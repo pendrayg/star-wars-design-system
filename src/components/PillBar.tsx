@@ -144,7 +144,11 @@ export function PillBar<Id extends string>({ items, active, onSelect, className,
       <span ref={pill} className="ds-menu-indicator" aria-hidden="true" />
       {items.map((item, index) => {
         const current = index === at
-        const lit = current || index === trail
+        // LE TEXTE SUIT LA PASTILLE, pas le clic : tant que la pastille s'éteint sur l'ancien choix,
+        // c'est lui qui reste allumé, et le nouveau ne s'allume — texte en pleine encre, libellé
+        // qui paraît — qu'au moment où elle s'y rallume. Le choix courant, lui, change aussitôt
+        // pour les lecteurs d'écran (aria-current, aria-checked : cf. itemProps).
+        const lit = trail === null ? current : index === trail
         return (
           <button
             key={item.id}

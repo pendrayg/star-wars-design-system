@@ -27,8 +27,11 @@
   font-weight: 400;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  /* LE TEXTE CHANGE AU PREMIER ÉCLAT, pas au clic : la courbe du néon (--lit-flicker) tient sa
+     valeur de départ pendant ses 8 premiers centièmes, et un texte qui changeait aussitôt
+     précédait le tube. Il bascule d'un coup, au moment où le tube saute (--lit-first). */
   transition:
-    color 0.2s ease,
+    color 0s linear var(--lit-first),
     --lit var(--lit-out);
 }
 
@@ -57,9 +60,9 @@
 .ds-button:not([aria-pressed]):active {
   --lit: 1;
   color: var(--btn-active-color);
-  animation: ds-glow-in 0.05s ease-in both;
+  animation: ds-glow-in 0.05s ease-in var(--lit-first) both;
   transition:
-    color 0.05s ease,
+    color 0s linear var(--lit-first),
     --lit var(--lit-in);
 }
 
