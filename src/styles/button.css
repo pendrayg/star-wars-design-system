@@ -154,27 +154,22 @@
 }
 
 /* --- Tons ---
-   Un bouton TEINTÉ garde sa pleine teinte au repos : la demi-encre suppose une couleur d'allumage
-   proche du fond, ce qui n'est pas le cas d'un accent saturé.
-   LE BLEU EST RÉSERVÉ À L'ÉTAT ACTIF — c'est un principe du DS, pas une teinte de ton. Un bouton
-   principal n'est donc plus bleu au repos (on l'aurait pris pour un bouton allumé) : il garde le
-   tube ambre de tous, et se distingue par son LIBELLÉ en pleine encre ambre, là où un bouton
-   ordinaire est à demi-encre. Actif, il passe au bleu comme les autres. Un bouton dangereux est
-   rouge, au repos comme actif (cf. plus bas). */
-.ds-primary {
-  --btn-active-color: var(--neon-color);
-}
-
+   LE TON EST DANS LE TUBE, JAMAIS DANS LE TEXTE. Le libellé d'un bouton est toujours à l'encre de
+   la typographie (--btn-active-color : blanc en sombre, encre en clair) — à demi-encre au repos,
+   pleine encre actif. Un texte coloré se lisait comme un lien ou une alerte posés sur le bouton.
+   Un bouton TEINTÉ se distingue par son tube et par un libellé en PLEINE ENCRE dès le repos, là
+   où un bouton ordinaire est à demi-encre.
+   LE BLEU EST RÉSERVÉ À L'ÉTAT ACTIF — un principe du DS, pas une teinte de ton : un bouton
+   principal garde le tube ambre de tous au repos, et passe au bleu actif comme les autres. Un
+   bouton dangereux a le tube rouge, au repos comme actif (cf. plus bas). */
 /* Le danger reste rouge au plein feu : une alerte qui virerait au bleu se démentirait. */
 .ds-danger {
-  --btn-active-color: var(--color-danger);
   --neon-color: var(--color-danger);
   --neon-lit-color: var(--color-danger);
 }
 
-/* Un lien d'action non plus n'est pas bleu au repos : ambre, en pleine encre, comme le principal. */
+/* Un lien d'action : un bouton serré, au libellé plus petit, en pleine encre comme le principal. */
 .ds-link {
-  --btn-active-color: var(--neon-color);
   padding: 0 calc(1.5 * var(--control-pad));
   font-size: 13px;
 }

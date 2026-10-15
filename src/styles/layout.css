@@ -162,16 +162,46 @@
    change.
    Le voile est rendu dans .ds-slides et NON dans le ruban, dont le `transform` le translaterait
    avec les écrans au lieu de les recouvrir ; son z-index le met au-dessus d'eux.
-   Les instants sont ceux de l'amorçage d'un tube (ds-pop), EN NÉGATIF : le voile est plein là où le
-   tube est éteint. Même `steps(1, end)` — chaque coupure est franche, jamais un fondu. Le premier
-   éclat est à 0 % : le voile est déjà plein quand le ruban saute, et personne ne voit la coupure. */
+   DEUX PHASES, CALÉES SUR LA PASTILLE DU MENU (cf. Slides, PillBar), et ce sont ses instants EN
+   NÉGATIF — le voile est plein là où la pastille est éteinte :
+     .is-out — l'ancien écran s'éteint avec la pastille (ds-neon-out, 0,3 s) ; il finit PLEIN,
+               et c'est alors que le ruban saute : personne ne voit la coupure ;
+     .is-in  — le nouvel écran se rallume avec elle (ds-neon-in, 0,6 s).
+   Même `steps(1, end)` — chaque coupure est franche, jamais un fondu. */
 .ds-screen-blink {
   position: absolute;
   z-index: 2;
   inset: 0;
   background: var(--color-bg);
   pointer-events: none;
-  animation: ds-screen-blink var(--blink-dur, 380ms) steps(1, end) both;
+}
+
+.ds-screen-blink.is-out {
+  animation: ds-screen-out 0.3s steps(1, end) both;
+}
+
+.ds-screen-blink.is-in {
+  animation: ds-screen-blink 0.6s steps(1, end) both;
+}
+
+/* Le négatif de ds-neon-out (neon.css). */
+@keyframes ds-screen-out {
+  0% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 0;
+  }
+  45% {
+    opacity: 0.65;
+  }
+  60%,
+  100% {
+    opacity: 1;
+  }
 }
 
 @keyframes ds-screen-blink {
@@ -201,7 +231,9 @@
 
 /* Mouvement réduit : la coupure reste (elle ne bouge pas), le clignotement part. */
 @media (prefers-reduced-motion: reduce) {
-  .ds-screen-blink {
+  .ds-screen-blink,
+  .ds-screen-blink.is-out,
+  .ds-screen-blink.is-in {
     animation: none;
     opacity: 0;
   }

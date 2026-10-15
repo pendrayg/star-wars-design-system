@@ -1,11 +1,10 @@
-/* Le bouton qui supprime (DeleteButton). Au repos, la poubelle à l'encre des commandes, comme tout
-   bouton-icône ; ARMÉ par un premier appui, elle passe au rouge du danger, et le reste jusqu'au
-   second appui ou au désarmement. Son tube rougit avec elle : armé, c'est tout le bouton qui
-   passe à l'alerte. */
+/* Le bouton qui supprime (DeleteButton). Au repos, un bouton-icône comme les autres ; ARMÉ par un
+   premier appui, son TUBE passe au rouge du danger, et le reste jusqu'au second appui ou au
+   désarmement. La poubelle et le libellé gardent l'encre de la typographie, en pleine encre :
+   le ton est dans le tube, jamais dans le texte (cf. button.css). */
 
 .ds-delete.ds-armed {
-  --btn-active-color: var(--color-danger);
   --neon-color: var(--color-danger);
   --neon-lit-color: var(--color-danger);
-  color: var(--color-danger);
+  color: var(--btn-active-color);
 }

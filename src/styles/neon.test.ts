@@ -20,11 +20,13 @@ describe('actif = bleu', () => {
     expect(neon).toMatch(/--neon-tint:\s*color-mix\(in srgb, var\(--neon-lit-color\) calc\(100% \* var\(--neon-full\)\), var\(--neon-color\)\)/)
   })
 
-  it('un bouton principal ou un lien n’est pas bleu au repos', () => {
+  it('le ton est dans le tube, jamais dans le texte : aucun ton ne change la couleur du libellé', () => {
     const bouton = lire('button.css')
-    for (const ton of ['.ds-primary', '.ds-link']) {
-      expect(regle(bouton, ton)).not.toMatch(/--color-primary|--neon-lit-color/)
+    for (const ton of ['.ds-danger', '.ds-link']) {
+      expect(regle(bouton, ton)).not.toMatch(/--btn-active-color|--color-primary/)
     }
+    expect(bouton).not.toMatch(/\.ds-primary\s*\{/)
+    expect(regle(lire('delete.css'), '.ds-delete.ds-armed')).not.toMatch(/--btn-active-color:|(?:^|[\s;{])color:\s*var\(--color-danger\)/)
   })
 
   it('le danger reste rouge, même actif', () => {

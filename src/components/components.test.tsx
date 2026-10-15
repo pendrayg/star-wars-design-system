@@ -1004,8 +1004,10 @@ describe('Slides', () => {
     expect(container.querySelector<HTMLElement>('.ds-slides-track')!.style.getPropertyValue('--slides-at')).toBe('1')
   })
 
-  it('fait clignoter la page en changeant d’écran, jamais à l’ouverture', () => {
+  it('éteint l’écran avec la pastille du menu, saute, puis le rallume avec elle — jamais à l’ouverture', () => {
+    vi.useFakeTimers()
     const { container, rerender } = render(trois)
+    const track = () => container.querySelector<HTMLElement>('.ds-slides-track')!.style.getPropertyValue('--slides-at')
     expect(container.querySelector('.ds-screen-blink')).not.toBeInTheDocument()
     rerender(
       <Slides at={2}>
@@ -1014,11 +1016,18 @@ describe('Slides', () => {
         <div>trois</div>
       </Slides>,
     )
-    // remonté à chaque changement : c'est ce qui rejoue l'animation
-    const premier = container.querySelector('.ds-screen-blink')
-    expect(premier).toBeInTheDocument()
-    rerender(trois)
-    expect(container.querySelector('.ds-screen-blink')).not.toBe(premier)
+    // Au clic : l'ancien écran s'éteint, il est encore affiché.
+    const extinction = container.querySelector('.ds-screen-blink')
+    expect(extinction).toHaveClass('is-out')
+    expect(track()).toBe('1')
+    // Le temps que la pastille s'éteigne : le ruban saute, et le nouvel écran se rallume —
+    // un voile remonté, c'est ce qui rejoue l'animation.
+    act(() => void vi.advanceTimersByTime(MENU_OUT_MS))
+    expect(track()).toBe('2')
+    const rallumage = container.querySelector('.ds-screen-blink')
+    expect(rallumage).toHaveClass('is-in')
+    expect(rallumage).not.toBe(extinction)
+    vi.useRealTimers()
   })
 })
 

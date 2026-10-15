@@ -1,6 +1,7 @@
 import {
   Children,
   useCallback,
+  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -10,6 +11,7 @@ import {
   type RefObject,
 } from 'react'
 import { cx } from './cx'
+import { MENU_IN_MS, MENU_OUT_MS } from './PillBar'
 
 type Props<E extends HTMLElement> = HTMLAttributes<E> & { ref?: Ref<E> }
 
@@ -76,19 +78,24 @@ export function Footer({ className, ...rest }: Props<HTMLElement>) {
   return <footer className={cx('ds-footer', className)} {...rest} />
 }
 
-/** Durée du clignotement d'un changement d'écran : le temps que la pastille du menu s'éteigne sur
- *  l'ancienne destination et commence à se rallumer sur la nouvelle (`MENU_OUT_MS`, puis ses
- *  premiers ratés) — le cadre vacille pendant que le néon reprend. */
-export const BLINK_MS = 380
+/** Durée totale du changement d'écran : celle de la pastille du menu qui s'éteint sur l'ancienne
+ *  destination (`MENU_OUT_MS`) puis se rallume sur la nouvelle (`MENU_IN_MS`). L'écran et le menu
+ *  racontent le même geste, image pour image. */
+export const BLINK_MS = MENU_OUT_MS + MENU_IN_MS
 
 /**
  * Les écrans d'une app, CÔTE À CÔTE : changer de destination remplace le contenu du cadre, et
  * RIEN NE GLISSE. Un glissement montrait l'écran arriver par le côté — un mouvement de surface, qui
- * n'a rien d'un instrument. Le changement est une COUPURE, et le CLIGNOTEMENT la couvre : le temps
- * de deux ratés, ce qui est dans le cadre n'est plus le même.
+ * n'a rien d'un instrument. Le changement est une COUPURE, et le CLIGNOTEMENT la couvre.
+ *
+ * LE CLIGNOTEMENT EST CALÉ SUR CELUI DU MENU. Au clic, la pastille du menu s'éteint sur l'ancienne
+ * destination en clignotant (`MENU_OUT_MS`), puis se rallume sur la nouvelle (`MENU_IN_MS`).
+ * L'écran fait EXACTEMENT la même chose, aux mêmes instants : l'ancien écran s'éteint avec la
+ * pastille, le ruban saute au moment où les deux sont éteints, et le nouvel écran se rallume avec
+ * elle. Le ruban ne saute donc pas au clic mais `MENU_OUT_MS` plus tard.
  *
  * Tous les écrans restent MONTÉS : une carte garde son contexte, une liste sa position de
- * défilement, et le passage de l'un à l'autre ne coûte rien. Seul l'écran courant est atteignable
+ * défilement, et le passage de l'un à l'autre ne coûte rien. Seul l'écran affiché est atteignable
  * — les autres sont `inert` : ni doigt, ni focus, ni lecteur d'écran, sans quoi leurs commandes
  * apparaîtraient en double dans l'ordre de tabulation.
  *
@@ -104,31 +111,41 @@ export const BLINK_MS = 380
  *   </Screen>
  *
  * `at` est l'INDEX de l'écran courant : c'est au consommateur de le tenir (un store de vue, une
- * route), et il doit suivre l'ordre des enfants.
+ * route), et il doit suivre l'ordre des enfants. Le passer en même temps que le `active` du menu
+ * suffit à caler les deux.
  *
- * LE CADRE CLIGNOTE, comme un tube qui reprend, et SEUL CE QU'IL CONTIENT est vu vaciller. C'est
- * une TRICHE : ce n'est pas le contenu qui s'éteint mais un voile à la couleur du fond, à la
- * taille du cadre, qui le recouvre par éclats (cf. `layout.css`). Le `key` remonte le voile à
- * chaque changement d'écran, seule façon de rejouer une animation CSS. Pas au premier rendu : une
- * app ne s'ouvre pas sur un raté.
- *
- * `useLayoutEffect` et non `useEffect` : le ruban saute SANS transition, et le voile doit être
- * peint dans la même image que le saut. Un effet ordinaire s'exécute après la peinture — on verrait
- * le nouvel écran une image avant que le voile ne le couvre, soit exactement la coupure à cacher.
+ * C'est une TRICHE : ce n'est pas le contenu qui s'éteint mais un voile à la couleur du fond, à la
+ * taille du cadre, qui le recouvre par éclats (cf. `layout.css`) — en négatif de la pastille : le
+ * voile est plein là où elle est éteinte. Le `key` remonte le voile à chaque phase, seule façon de
+ * rejouer une animation CSS. Pas au premier rendu : une app ne s'ouvre pas sur un raté. Sous
+ * `prefers-reduced-motion`, le ruban saute aussitôt, sans voile.
  */
 export function Slides({ at, className, children, ...rest }: Props<HTMLDivElement> & { at: number }) {
   const screens = Children.toArray(children)
-  const shown = Math.max(0, Math.min(screens.length - 1, at))
-  const [blinks, setBlinks] = useState(0)
-  const first = useRef(true)
+  const target = Math.max(0, Math.min(screens.length - 1, at))
+  // L'écran AFFICHÉ, en retard de `MENU_OUT_MS` sur l'écran demandé : le temps que l'ancien s'éteigne.
+  const [shown, setShown] = useState(target)
+  const [veil, setVeil] = useState<{ key: number; phase: 'out' | 'in' } | null>(null)
+  // Le dernier écran DEMANDÉ : c'est son changement, vu pendant le rendu, qui lance l'extinction —
+  // dans le même rendu que le clic, donc dans la même image que la pastille du menu. Rien au
+  // premier rendu : une app ne s'ouvre pas sur un raté.
+  const [requested, setRequested] = useState(target)
+  if (requested !== target) {
+    setRequested(target)
+    const still = typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (still) setShown(target)
+    else if (target !== shown) setVeil((v) => ({ key: (v?.key ?? 0) + 1, phase: 'out' }))
+  }
 
-  useLayoutEffect(() => {
-    if (first.current) {
-      first.current = false
-      return
-    }
-    setBlinks((count) => count + 1)
-  }, [shown])
+  // L'ancien écran éteint, le ruban saute et le nouveau se rallume.
+  useEffect(() => {
+    if (target === shown) return
+    const timer = window.setTimeout(() => {
+      setShown(target)
+      setVeil((v) => ({ key: (v?.key ?? 0) + 1, phase: 'in' }))
+    }, MENU_OUT_MS)
+    return () => window.clearTimeout(timer)
+  }, [target, shown])
 
   return (
     <div className={cx('ds-slides', className)} {...rest}>
@@ -139,7 +156,7 @@ export function Slides({ at, className, children, ...rest }: Props<HTMLDivElemen
           </div>
         ))}
       </div>
-      {blinks > 0 && <span key={blinks} className="ds-screen-blink" aria-hidden="true" />}
+      {veil && <span key={veil.key} className={cx('ds-screen-blink', `is-${veil.phase}`)} aria-hidden="true" />}
     </div>
   )
 }

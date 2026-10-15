@@ -21,8 +21,9 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
   champ engagé, case cochée, élément choisi, section dépliée, destination courante. C'est le
   **tube** qui passe au bleu ; le texte garde la couleur de typographie par défaut. Tout le reste
   est **ambre** au repos (`--neon-color`). Un bouton principal ou un lien n'est donc plus bleu au
-  repos : il se distingue par un libellé en pleine encre ambre. Le danger reste rouge, actif ou
-  non. Les données aussi sont ambre par défaut (`--chart-ink`) : une courbe ou un camembert
+  repos : il se distingue par un libellé en pleine encre. **Le ton est dans le tube, jamais dans le
+  texte** : un libellé est toujours à l'encre de la typographie. Le danger a le tube rouge, actif
+  ou non. Les données aussi sont ambre par défaut (`--chart-ink`) : une courbe ou un camembert
   bleus se liraient comme sélectionnés.
 - **Un tube néon, le même partout.** Boutons, champs, case à cocher, recherche, cadre de la barre
   de menu et sa pastille, chaton d'un bouton serti : tous sont cernés du **même tube** — un trait
@@ -253,12 +254,12 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
 - **Supprimer se fait en deux appuis, sans boîte de dialogue** (`DeleteButton`). Au repos, la
   poubelle est à l'encre des commandes, comme tout bouton-icône : en rouge, chaque ligne d'une
   liste serait une alerte. Le premier appui allume le bouton, comme tout appui, et
-  l'**arme** : la poubelle passe au rouge du danger, et son tube avec elle. Le second supprime. La confirmation est là
+  l'**arme** : son tube passe au rouge du danger, la poubelle restant à l'encre de la typographie. Le second supprime. La confirmation est là
   où était le doigt, rien d'autre ne bouge. Armé, il désarme de lui-même au bout de
   `DELETE_ARM_MS` (3 s) ou dès qu'on touche ailleurs, et son nom accessible devient
   « Confirmer : … ». Avec `withLabel`, c'est un bouton à libellé — la poubelle puis le nom —,
-  pour une suppression qui doit se lire avant d'être touchée (« Tout effacer ») ; le nom rougit
-  avec la poubelle, et ne change pas, pour que le bouton garde sa largeur.
+  pour une suppression qui doit se lire avant d'être touchée (« Tout effacer ») ; le nom passe en
+  pleine encre, et ne change pas, pour que le bouton garde sa largeur.
 - **Une pastille EST son image.** Elle la remplit bord à bord, et le tube du bouton lui passe
   par-dessus : c'est lui qui la sertit, le chaton n'a plus à le faire. En **logo et nom**, l'image
   redevient l'icône d'une commande ordinaire, posée au-dessus du néon — le voile du plein feu se

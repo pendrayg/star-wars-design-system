@@ -743,7 +743,7 @@ export function App() {
       <Demo
         id="boutons"
         title="Boutons"
-        intro="Un liseré jaune au repos, bleu et plein feu une fois actifs : rien ne s'enfonce, le tube clignote du jaune au bleu, le texte gardant sa couleur. Un bouton d'action reste bleu une demi-seconde après le clic, puis revient au jaune en clignotant ; une bascule reste bleue tant qu'elle est active. Le bouton qui supprime, armé, reste au rouge."
+        intro="Un liseré jaune au repos, bleu et plein feu une fois actifs : rien ne s'enfonce, le tube clignote du jaune au bleu, le texte gardant sa couleur. Un bouton d'action reste bleu une demi-seconde après le clic, puis revient au jaune en clignotant ; une bascule reste bleue tant qu'elle est active. Le ton d'un bouton est dans son tube, jamais dans son texte : le bouton qui supprime, armé, a le tube rouge."
       >
         <div className="row">
           <Button icon="tray_arrow_down">Sauvegarder</Button>
@@ -835,7 +835,7 @@ export function App() {
       <Demo
         id="suppression"
         title="Suppression"
-        intro="Supprimer se fait en deux appuis, sans boîte de dialogue. Au repos, la poubelle est à l'encre des commandes — une liste n'est pas une alerte. Le premier appui allume le bouton et l'arme : la poubelle passe au rouge, et son tube avec elle. Le second supprime. Armé, il désarme de lui-même au bout de trois secondes, ou dès qu'on touche ailleurs. Avec son libellé (« Tout effacer »), c'est un bouton à libellé, le nom rougissant avec la poubelle."
+        intro="Supprimer se fait en deux appuis, sans boîte de dialogue. Au repos, la poubelle est à l'encre des commandes — une liste n'est pas une alerte. Le premier appui allume le bouton et l'arme : son tube passe au rouge, la poubelle gardant l'encre de la typographie. Le second supprime. Armé, il désarme de lui-même au bout de trois secondes, ou dès qu'on touche ailleurs. Avec son libellé (« Tout effacer »), c'est un bouton à libellé."
       >
         <DeleteDemo />
       </Demo>
@@ -878,7 +878,7 @@ export function App() {
       <Demo
         id="glissement"
         title="Écrans qui clignotent"
-        intro="Changer de destination ne fait rien glisser : le contenu du cadre est remplacé d'un coup, et un clignotement couvre la coupure — seul ce qui est dans le cadre est vu vaciller. Les écrans restent tous montés (une carte garde son contexte) ; seul celui qu'on regarde est atteignable au doigt et au lecteur d'écran."
+        intro="Changer de destination ne fait rien glisser : l'écran s'éteint en clignotant avec la pastille du menu, puis le nouveau se rallume avec elle, aux mêmes instants — seul ce qui est dans le cadre est vu vaciller. Les écrans restent tous montés (une carte garde son contexte) ; seul celui qu'on regarde est atteignable au doigt et au lecteur d'écran."
       >
         <SlidesDemo />
       </Demo>
