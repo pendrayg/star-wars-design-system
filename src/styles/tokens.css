@@ -177,7 +177,7 @@
      plus qu'un alias, gardé pour les apps qui le citent.
      Valeurs portées telles quelles de team-dashboard (HoloProjection.module.css, targeting.css) :
      elles y ont été réglées à l'écran, les rejouer de tête ne rendrait pas le même rayonnement. */
-  --glow-holo: 0 0 8px color-mix(in srgb, var(--grad-glacier-to) 70%, transparent);
+  --glow-holo: 0 0 8px color-mix(in srgb, var(--color-primary) 70%, transparent);
   --glow-amber: 0 0 var(--neon-blur) color-mix(in srgb, var(--grad-solar-to) 55%, transparent);
   --glow-amber-strong: var(--glow-amber);
 

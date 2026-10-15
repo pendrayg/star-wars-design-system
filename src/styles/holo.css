@@ -1,7 +1,7 @@
 /* HOLOGRAMMES — ce qui est PROJETÉ, par opposition à ce qui est peint.
 
    Deux classes, et elles sont indépendantes :
-     .ds-holo         — le SUJET projeté : teinte glacier, halo, et le signal qui décroche ;
+     .ds-holo         — le SUJET projeté : bleu du DS (--color-primary), halo, et le signal qui décroche ;
      .ds-holo-emitter — l'ÉMETTEUR : le socle et son faisceau, dessinés autour de ce qu'il projette.
 
    On peut poser l'une sans l'autre — un texte holographique n'a pas de socle, un émetteur dont le
@@ -108,13 +108,15 @@
 }
 
 /* LE SOCLE : un trapèze base large en bas, qui MORD de 0,1 em l'encre du sujet (laquelle descend à
-   0,563 em du centre) — sans ce chevauchement, le sujet lévite au lieu de se poser dessus. */
+   0,563 em du centre) — sans ce chevauchement, le sujet lévite au lieu de se poser dessus.
+   GRIS, à l'encre du texte secondaire (--color-muted) : c'est une pièce MATÉRIELLE, pas de la
+   lumière — seul ce qui est projeté prend le bleu. */
 .ds-holo-emitter::after {
   top: calc(50% + 0.46em);
   width: 0.55em;
   height: 0.09em;
   clip-path: polygon(18% 0, 82% 0, 100% 100%, 0 100%);
-  background: linear-gradient(180deg, var(--grad-glacier-to), color-mix(in srgb, var(--grad-glacier-to) 45%, transparent));
+  background: linear-gradient(180deg, var(--color-muted), color-mix(in srgb, var(--color-muted) 45%, transparent));
 }
 
 /* LE FAISCEAU : un triangle qui part exactement de la largeur du HAUT du trapèze (0,352 em = 27 %
@@ -124,13 +126,15 @@
    Aucun z-index : `::before` précède `::after` et le contenu dans l'ordre de peinture, donc le
    faisceau passe dessous — et un z-index négatif le ferait passer sous le fond de la page.
    Le faisceau décroche avec le sujet (même recette, même délai hérité) ; LE SOCLE NON : c'est une
-   pièce matérielle, seule la lumière projetée souffre de la perturbation. */
+   pièce matérielle, seule la lumière projetée souffre de la perturbation.
+   Le faisceau est au BLEU DU DS (--color-primary), celui du sujet qu'il dessine — et non au
+   glacier de la palette, qui s'en écarte en thème clair. */
 .ds-holo-emitter::before {
   top: calc(50% - 0.563em);
   width: 1.3em;
   height: 1.023em;
   clip-path: polygon(0 0, 100% 0, 63.5% 100%, 36.5% 100%);
-  background: linear-gradient(to top, color-mix(in srgb, var(--grad-glacier-to) 18%, transparent), transparent);
+  background: linear-gradient(to top, color-mix(in srgb, var(--color-primary) 18%, transparent), transparent);
   animation: var(--holo-anim);
   animation-delay: var(--holo-delay, 0s);
 }
