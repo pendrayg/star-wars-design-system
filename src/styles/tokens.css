@@ -238,8 +238,29 @@
     --btn-active-glow: 0 0 0 transparent;
     --btn-active-glow-strong: 0 0 0 transparent;
     --check-glow: none;
-    /* Jaune d'alerte : #ffc500 disparaît sur fond clair. */
-    --grad-solar-to: #a86b00;
+    /* LES PALETTES, en REGISTRE VIF. Les `to` du sombre sont des pastels calibrés sur fond noir
+       (#a8e6ff, #ffc500) et les `from` des quasi-noirs : les premiers s'effacent sur le blanc
+       cassé, les seconds y font des trous. On garde la sémantique — `from` proche du fond, `to` =
+       l'accent — en poussant les teintes à SATURATION PLEINE (+20 de luminance) plutôt qu'en les
+       assombrissant : un ambre rabattu pour le contraste vire au marron, et un panneau
+       d'instrument marron est un panneau éteint. Valeurs de team-dashboard, réglées à l'écran dans
+       les deux thèmes ; les rejouer de tête ne rendrait pas le même registre.
+       Le rouge est le seul à ne pas suivre le glissement complet : +20 points le feraient virer au
+       corail, il ne dirait plus l'alerte.
+       CE QUI PORTE LE TEXTE CRITIQUE N'EST PAS ICI : ces accents tiennent le trait, le halo et la
+       surface (1,5 à 3,6:1 sur le fond clair). Pour l'encre lisible, le thème pose ses propres
+       `--color-primary` et `--color-danger` plus haut — c'est précisément pour cela qu'ils sont
+       DÉCOUPLÉS de `--grad-glacier-to` / `--grad-blaze-to`, dont ils héritent en sombre. */
+    --grad-glacier-from: #d7ecf5;
+    --grad-glacier-to: #30abff;
+    --grad-dusk-from: #fadfe9;
+    --grad-dusk-to: #ff45a0;
+    --grad-fern-from: #daf0e2;
+    --grad-fern-to: #00f06b;
+    --grad-blaze-from: #fadddd;
+    --grad-blaze-to: #ff2d2d;
+    --grad-solar-from: #fbedd0;
+    --grad-solar-to: #ffa42e;
     /* Les rayures sont un artefact d'écran cathodique, pensé pour un fond sombre : à 14 % de noir
        sur du blanc cassé, l'écran entier se retrouve rayé. On garde le grain, en bleu nuit et
        presque trois fois plus discret. */
@@ -266,8 +287,17 @@
   --btn-active-glow: 0 0 0 transparent;
   --btn-active-glow-strong: 0 0 0 transparent;
   --check-glow: none;
-  /* Jaune d'alerte : #ffc500 disparaît sur fond clair. */
-  --grad-solar-to: #a86b00;
+  /* Les palettes en registre vif — mêmes valeurs et mêmes raisons que le bloc `prefers` ci-dessus. */
+  --grad-glacier-from: #d7ecf5;
+  --grad-glacier-to: #30abff;
+  --grad-dusk-from: #fadfe9;
+  --grad-dusk-to: #ff45a0;
+  --grad-fern-from: #daf0e2;
+  --grad-fern-to: #00f06b;
+  --grad-blaze-from: #fadddd;
+  --grad-blaze-to: #ff2d2d;
+  --grad-solar-from: #fbedd0;
+  --grad-solar-to: #ffa42e;
   /* Les rayures sont un artefact d'écran cathodique, pensé pour un fond sombre : à 14 % de noir
      sur du blanc cassé, l'écran entier se retrouve rayé. On garde le grain, en bleu nuit et
      presque trois fois plus discret. */
