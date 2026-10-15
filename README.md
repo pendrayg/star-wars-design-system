@@ -16,6 +16,13 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
   suit l'appareil (sombre par défaut) ; `data-theme="dark"` ou `"light"` sur `<html>` le force.
 - **La lumière ne dit que l'interaction.** Ce qui se presse porte un tube ; une **zone** (panneau,
   liste, message) n'a qu'une bordure fine.
+- **Actif = bleu.** C'est le premier principe du DS : le **bleu** des hologrammes
+  (`--neon-lit-color`) est réservé à ce qui est **actif** — bouton allumé, bascule enclenchée,
+  champ engagé, case cochée, élément choisi, section dépliée, destination courante. Tout le reste
+  est **ambre** au repos (`--neon-color`). Un bouton principal ou un lien n'est donc plus bleu au
+  repos : il se distingue par un libellé en pleine encre ambre. Le danger reste rouge, actif ou
+  non. Les données aussi sont ambre par défaut (`--chart-ink`) : une courbe ou un camembert
+  bleus se liraient comme sélectionnés.
 - **Un tube néon, le même partout.** Boutons, champs, case à cocher, recherche, cadre de la barre
   de menu et sa pastille, chaton d'un bouton serti : tous sont cernés du **même tube** — un trait
   ambre (`--grad-solar-to`) de **2,5 px** posé en dedans, pour ne rien pousser, et son halo de
@@ -30,13 +37,16 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
   `--neu-density`** (1 au doigt, **2/3** à la souris) —, soit 24 / 36 px au doigt et
   **16 / 24 px à la souris** (`--shadow-room` / `-lg`). Les apps la posent en marge et en `gap` :
   un halo rogné, ou recouvert par la commande voisine, se lirait comme un tube cassé.
-- **Plein feu, sans rebond.** Rien ne s'enfonce : on appuie, ça brille plus fort — le halo
-  se densifie (55 → 100 %, sans s'élargir), un voile de lumière passe en dedans. Un nombre enregistré le pilote,
-  `--lit` (0 au repos, 1 plein feu), qui passe de l'un à l'autre **en clignotant**, dans les
-  deux sens, entre le moins et le plus éclairé : les instants de l'amorçage, portés par une
-  courbe de transition à paliers (`--lit-flicker-up` / `-down`, des `linear()`), chaque raté passant par une baisse de
-  tension qui assombrit tube, texte et icône, en 0,6 s. Sans `linear()`, la
-  lumière monte en 80 ms et pâlit en 250.
+- **Plein feu, sans rebond.** Rien ne s'enfonce : on appuie, ça brille plus fort et ça passe
+  **au bleu** — le halo se densifie (55 → 100 %, sans s'élargir), un voile de lumière passe en
+  dedans, et le tube comme le texte virent du jaune (`--neon-color`) au bleu des hologrammes
+  (`--neon-lit-color`). Le danger reste rouge. Un nombre enregistré le pilote, `--lit` (0 au
+  repos, 1 plein feu), qui passe de l'un à l'autre **en clignotant**, dans les deux sens : chaque
+  éclat bleu, chaque raté jaune, sur une courbe de transition à paliers qui ne prend que 0 et 1
+  (`--lit-flicker`, un `linear()`), en 0,6 s. Un **bouton d'action** s'allume ainsi au clic,
+  reste bleu **une seconde** (`PRESS_HOLD_MS`) pour dire que le clic est pris, puis revient au
+  jaune ; une **bascule** reste bleue tant qu'elle est active. Sans `linear()`, la lumière monte
+  en 80 ms et pâlit en 250.
 - **Ce qui apparaît s'amorce.** Une commande qui paraît (grille, section dépliante) ne monte pas
   du fond : son néon **s'amorce**, comme un tube qu'on allume — deux ratés, une retombée, puis il
   tient —, en coupures franches (`steps`). Au repli, la même chose à l'envers : il vacille et
@@ -162,8 +172,10 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
   et posé sous `@media (pointer: coarse)`. À la souris, les commandes font 33 px et la case 18, sans
   débord : un curseur vise juste. Le débord se déduisant de la case, il suit même un
   `data-density="compact"` forcé sur un écran tactile : case de 18, débord de −13, cible de 44.
-- **Un toucher bref se voit** : le bouton reste plein feu **230 ms** (`PRESS_HOLD_MS`), le temps
-  que la lumière monte, puis pâlit (`usePress`, classe `ds-pressed`).
+- **Un clic se voit** : un bouton d'action reste allumé, bleu, **une seconde** (`PRESS_HOLD_MS`),
+  puis clignote vers son repos jaune (`usePress`, classe `ds-pressed`). Le texte et l'icône
+  passent au bleu avec le tube : `TextButton` loge son libellé dans un `<span class="ds-label">`,
+  qui hérite de `--lit` image par image.
 - **Le néon d'un bouton est un élément** (`<span class="ds-shade">`, rendu par les composants ;
   `Shade` pour un bouton écrit à la main), pas un pseudo-élément : il hérite des nombres animés du
   bouton (`--lit`, `--pop`), ce que Safari ne fait pas pour `::after`.
@@ -185,6 +197,12 @@ en PolyForm Noncommercial : qui s'en sert pour un projet non commercial n'a qu'�
     et son halo. Il habille le graphique entier, jamais une marque ;
   - `#ds-chart-shadow` — **déprécié** : il rend désormais le halo d'un trait, pour qu'une app qui
     le cite encore reste dans le ton, et sera retiré.
+- **Les encres par défaut d'un graphique sont ambre.** `.ds-chart-line` pour une courbe : un
+  trait de 2 px à `--chart-ink` (l'ambre du néon). `.ds-chart-part` pour une marque pleine (part
+  de camembert, barre, aire) : remplie de `--chart-fill`, l'ambre à 22 % de transparence, et cernée
+  du trait plein du néon (`--neon-width`) — deux parts voisines se séparent par leur liseré. Des
+  classes, pas des attributs, pour que le thème change l'encre ; une app qui distingue des séries
+  pose ses propres teintes, **jamais le bleu**, qui dirait « sélectionné ».
 
   Les identifiants sont ceux d'avant : une app qui les cite n'a rien à changer.
 - **Un filtre se cite en attribut, jamais par une règle CSS.** WebKit résout le fragment d'un

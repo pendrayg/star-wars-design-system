@@ -238,24 +238,9 @@ code {
   font-size: 13px;
 }
 
-.charts-demo-trait {
-  fill: none;
-  /* L'accent du thème : le cyan pâle du sombre ne se lit pas sur le fond clair. */
-  stroke: var(--color-primary);
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
 .charts-demo-axe {
   stroke: var(--color-border);
   stroke-width: 1;
-}
-
-/* Pas de séparateur entre les parts : le sertissage loge un anneau, et l'ombre ne travaille que
-   sur ses deux bords. La frontière, c'est le changement de teinte. */
-.charts-demo-part {
-  stroke: none;
 }
 
 /* Sélection : trois blocs, un bouton à bascule chacun. */

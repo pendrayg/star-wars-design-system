@@ -6,5 +6,6 @@
 .ds-delete.ds-armed {
   --btn-active-color: var(--color-danger);
   --neon-color: var(--color-danger);
+  --neon-lit-color: var(--color-danger);
   color: var(--color-danger);
 }

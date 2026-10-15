@@ -1,5 +1,5 @@
-/* Graphiques : la couleur du liseré de `ChartFilters`, et rien d'autre — le DS ne dessine pas de
-   graphique, il en règle la lumière. Les halos des marques prennent la teinte de la marque même
+/* Graphiques : la couleur du liseré de `ChartFilters`, et les encres par défaut des marques — le
+   DS ne dessine pas de graphique, il en règle la lumière et l'encre. Les halos des marques prennent la teinte de la marque même
    (le flou de SourceGraphic) ; seul le châssis a une couleur à recevoir, et elle vit ici et non
    dans les attributs du filtre : un attribut de présentation ne résout pas var(), et le thème doit
    pouvoir la changer. */
@@ -15,4 +15,24 @@
 #ds-chart-set feFlood {
   flood-color: var(--neon-color);
   flood-opacity: 1;
+}
+
+/* LES ENCRES PAR DÉFAUT. Une courbe : un trait ambre de 2 px, aux bouts et aux angles arrondis.
+   Une marque pleine — part de camembert, barre, aire — : l'ambre en transparence (--chart-fill),
+   cernée du trait plein du néon (--neon-width) ; deux parts voisines se séparent par leur liseré.
+   Des classes, et non des attributs : un attribut de présentation ne résout pas var(), et le thème
+   doit pouvoir changer l'encre. Une app qui pose `stroke` ou `fill` en style garde la main. */
+.ds-chart-line {
+  fill: none;
+  stroke: var(--chart-ink);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ds-chart-part {
+  fill: var(--chart-fill);
+  stroke: var(--chart-ink);
+  stroke-width: var(--neon-width);
+  stroke-linejoin: round;
 }

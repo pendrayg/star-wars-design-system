@@ -70,11 +70,11 @@ const SECTIONS = [
 const COURBE = [-1.2, 2.1, 3.8, 5.2, 8.4, 7.2, 12.6, 16.2, 20.4]
 
 /** Quatre parts, dans les teintes des palettes du DS. */
-const PARTS: [string, number, string][] = [
-  ['Actions', 46, 'var(--grad-glacier-to)'],
-  ['Immobilier', 24, 'var(--grad-solar-to)'],
-  ['Obligations', 18, 'var(--grad-fern-to)'],
-  ['Liquidités', 12, 'var(--grad-dusk-to)'],
+const PARTS: [string, number][] = [
+  ['Actions', 46],
+  ['Immobilier', 24],
+  ['Obligations', 18],
+  ['Liquidités', 12],
 ]
 
 /** Le bestiaire entier, avec son nom : c'est la liste qu'une app parcourt pour choisir. */
@@ -145,15 +145,15 @@ function Charts() {
         <figure className="charts-demo-courbe">
           <svg viewBox={`0 0 ${largeur} ${hauteur}`} role="img" aria-label="Une progression de neuf points">
             <line className="charts-demo-axe" x1="8" y1={hauteur - 14} x2={largeur - 8} y2={hauteur - 14} />
-            <path className="charts-demo-trait" d={courbe} filter="url(#ds-chart-groove)" />
+            <path className="ds-chart-line" d={courbe} filter="url(#ds-chart-groove)" />
           </svg>
-          <figcaption>Le halo d’un trait : la courbe rayonne de sa propre teinte.</figcaption>
+          <figcaption>Une courbe : le trait ambre par défaut (<code>.ds-chart-line</code>), et son halo.</figcaption>
         </figure>
 
         <figure className="charts-demo-parts">
           <svg viewBox="0 0 180 180" role="img" aria-label="Une répartition en quatre parts">
-            <g filter="url(#ds-chart-set)">
-              {PARTS.map(([nom, part, teinte], rang) => {
+            <g filter="url(#ds-chart-groove-fill)">
+              {PARTS.map(([nom, part], rang) => {
                 const delta = (part / 100) * Math.PI * 2
                 const depart = -Math.PI / 2 + (avantChaque[rang] / 100) * Math.PI * 2
                 const fin = depart + delta
@@ -163,8 +163,7 @@ function Charts() {
                 return (
                   <path
                     key={nom}
-                    className="charts-demo-part"
-                    fill={teinte}
+                    className="ds-chart-part"
                     d={`M ${bord(dehors, depart)} A ${dehors} ${dehors} 0 ${grand} 1 ${bord(dehors, fin)} L ${bord(dedans, fin)} A ${dedans} ${dedans} 0 ${grand} 0 ${bord(dedans, depart)} Z`}
                   >
                     <title>{`${nom} · ${part} %`}</title>
@@ -173,7 +172,7 @@ function Charts() {
               })}
             </g>
           </svg>
-          <figcaption>Le châssis : un liseré néon autour de la silhouette entière.</figcaption>
+          <figcaption>Un camembert : chaque part en ambre transparent, cernée du néon (<code>.ds-chart-part</code>).</figcaption>
         </figure>
     </div>
   )
@@ -744,7 +743,7 @@ export function App() {
       <Demo
         id="boutons"
         title="Boutons"
-        intro="Un liseré néon au repos, plein feu pressés ou actifs : rien ne s'enfonce, le halo se densifie et un voile de lumière passe en dedans. La lumière monte vite et pâlit plus lentement, sans rebond. Le primaire brille au glacier ; le bouton qui supprime, armé, au rouge."
+        intro="Un liseré jaune au repos, bleu et plein feu une fois actifs : rien ne s'enfonce, le bouton clignote du jaune au bleu, texte compris. Un bouton d'action reste bleu une seconde après le clic, puis revient au jaune en clignotant ; une bascule reste bleue tant qu'elle est active. Le bouton qui supprime, armé, reste au rouge."
       >
         <div className="row">
           <Button icon="tray_arrow_down">Sauvegarder</Button>
@@ -812,7 +811,7 @@ export function App() {
       <Demo
         id="graphiques"
         title="Graphiques"
-        intro="Un graphique n'est ni une commande ni une zone : quelques filtres lui suffisent. Plus de gravure : chaque marque est un tube néon et rayonne de sa propre teinte, comme un hologramme. Le halo d'un trait, pour une courbe — le trait flouté, posé deux fois sous lui, faute de quoi un trait mince n'en garderait qu'un voile. Celui d'une marque pleine, barre, symbole ou part, posé une fois et plus discret : elle retient tout son flou. Et le châssis, un liseré néon autour de la silhouette entière du graphique, à la teinte des commandes."
+        intro="Un graphique n'est ni une commande ni une zone : quelques filtres et deux encres lui suffisent. Par défaut, tout est AMBRE — le bleu dit « actif », il n'a rien à faire sur une donnée : une courbe est un trait ambre, une part de camembert un ambre transparent cerné du néon. Chaque marque rayonne de sa propre teinte. Le halo d'un trait, pour une courbe — le trait flouté, posé deux fois sous lui, faute de quoi un trait mince n'en garderait qu'un voile. Celui d'une marque pleine, barre, symbole ou part, posé une fois et plus discret : elle retient tout son flou. Et le châssis, un liseré néon autour de la silhouette entière du graphique, à la teinte des commandes."
       >
         <Charts />
       </Demo>
