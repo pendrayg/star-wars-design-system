@@ -320,6 +320,12 @@ code {
   padding: 18px 0;
 }
 
+/* Les chiffres projetés au fil d'une phrase : l'interligne fait la place du socle et du faisceau,
+   qui sortent de la line-box (0,55 em sous le centre, 0,67 em au-dessus) sans l'élargir. */
+.holo-inline {
+  line-height: 2.4;
+}
+
 /* La Starwars Kit n'écrit pas des lettres mais des coques : à 15 px, on ne verrait rien. */
 .hull-demo {
   font-family: var(--font-hull);

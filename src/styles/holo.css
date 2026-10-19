@@ -1,8 +1,11 @@
 /* HOLOGRAMMES — ce qui est PROJETÉ, par opposition à ce qui est peint.
 
-   Deux classes, et elles sont indépendantes :
+   Trois classes, et elles sont indépendantes :
      .ds-holo         — le SUJET projeté : bleu du DS (--color-primary), halo, et le signal qui décroche ;
-     .ds-holo-emitter — l'ÉMETTEUR : le socle et son faisceau, dessinés autour de ce qu'il projette.
+     .ds-holo-emitter — l'ÉMETTEUR : le socle et son faisceau, dessinés autour de ce qu'il projette ;
+     .ds-holo-text    — posée EN PLUS sur un sujet qui est du TEXTE et non un glyphe swg (un chiffre,
+                        deux lettres) : elle seule sait que l'encre d'un texte s'arrête à sa ligne de
+                        base et non à l'aplomb d'une coque (cf. plus bas).
 
    On peut poser l'une sans l'autre — un texte holographique n'a pas de socle, un émetteur dont le
    sujet manque continue de projeter dans le vide. */
@@ -137,6 +140,48 @@
   background: linear-gradient(to top, color-mix(in srgb, var(--color-primary) 18%, transparent), transparent);
   animation: var(--holo-anim);
   animation-delay: var(--holo-delay, 0s);
+}
+
+/* ---- UN SUJET TEXTUEL : .ds-holo-text ----
+   Tout ce qui précède est calé sur l'encre d'un GLYPHE swg, qui descend à 0,563 em sous le centre de
+   sa boîte. Un TEXTE ne descend que jusqu'à sa LIGNE DE BASE, et nulle part ailleurs : les chiffres
+   des deux SF Distant Galaxy sont posés à plat dessus (yMin = 0 pour les dix, relevé dans les .ttf).
+   Projeté sans rien, un chiffre LÉVITE donc 0,1 em au-dessus de son socle.
+
+   Métriques de la police, en unités d'em (1200 upem, relevées dans head/hhea des deux fontes) :
+     ascendante 1000/1200 = 0,8333 em   descendante 200/1200 = 0,1667 em   (somme : 1 em exactement)
+     hauteur des chiffres 800/1200 = 0,6667 em au-dessus de la ligne de base, identique pour 0 à 9.
+   Avec le `line-height: 1` de l'émetteur, la line-box vaut 1 em et le demi-interligne est NUL : la
+   ligne de base tombe donc à 0,8333 − 0,5 = 0,3333 em sous le centre de la boîte, confondu avec le
+   centre de l'émetteur sur lequel socle et faisceau sont ancrés.
+
+   La cible est celle du glyphe : la base du sujet se POSE SUR LE HAUT DU SOCLE, à 0,46 em sous le
+   centre (`::after`). D'où la descente à rattraper :
+     top = 0,46 − 0,3333 = 0,127 em
+   Un seul em, et non deux comme pour un glyphe : le sujet vaut 1 em de l'émetteur, c'est tout
+   l'intérêt du contrat « un seul font-size ». Le glyphe, lui, garde son chevauchement de 0,103 em
+   (il n'a pas de ligne de base à respecter) ; un chiffre mordu de 0,1 em serait tronqué du bas,
+   c'est-à-dire illisible — or on projette un chiffre précisément pour qu'il se LISE. */
+.ds-holo-emitter .ds-holo-text {
+  position: relative;
+  top: 0.127em;
+}
+
+/* LE FAISCEAU D'UN SUJET TEXTUEL. La règle du DS est que la lumière s'arrête sur ce qu'elle dessine
+   (cf. `::before`) : au-dessus d'un chiffre, dont le sommet est 0,3 em plus bas que le nez d'un
+   vaisseau, le cône calibré pour un glyphe surplomberait. On le raccourcit donc, sans toucher à son
+   ouverture : seule la hauteur change, la largeur reste 1,3 em pour que la base du cône couvre
+   toujours exactement le haut du trapèze (0,352 em = 27 % de 1,3 em) — c'est l'APERTURE de
+   l'émetteur, elle ne dépend pas de ce qu'on projette ; le cône s'en trouve plus évasé, ce qui est
+   le dessin juste d'une lumière qui porte moins loin.
+   Le chiffre, une fois posé, occupe exactement sa hauteur de capitale au-dessus du socle :
+     hauteur = 0,6667 em (de la ligne de base au sommet du chiffre, cf. ci-dessus)
+     top     = 50 % − (0,6667 − 0,46) = 50 % − 0,207 em
+   `:has()` plutôt qu'une seconde classe sur l'émetteur : l'API reste UN marqueur, posé là où est la
+   connaissance — sur le sujet, qui sait s'il est un texte ou une coque. */
+.ds-holo-emitter:has(.ds-holo-text)::before {
+  top: calc(50% - 0.207em);
+  height: 0.667em;
 }
 
 @media (prefers-reduced-motion: reduce) {

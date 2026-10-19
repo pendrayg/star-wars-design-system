@@ -5,6 +5,10 @@ import { cx } from './cx'
  * Émetteur holographique : un socle et son faisceau, qui projettent ce qu'on leur donne — en
  * général un `Icon` de glyphe Star Wars portant la classe `ds-holo`.
  *
+ * Il projette aussi bien un TEXTE COURT (un chiffre, deux lettres) : le sujet porte alors
+ * `ds-holo ds-holo-text`, et le marqueur supplémentaire pose sa ligne de base sur le socle et
+ * raccourcit le faisceau à sa hauteur (un texte n'a pas l'encre d'une coque, cf. holo.css).
+ *
  * Il porte un NOM ACCESSIBLE, contrairement à `Icon` : une projection n'est pas un ornement de
  * commande mais le sujet lui-même (le vaisseau d'une ligne, le personnage d'une priorité), et
  * l'enfant qu'il projette est, lui, décoratif.

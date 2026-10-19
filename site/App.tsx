@@ -112,6 +112,25 @@ function Visee() {
           </HoloEmitter>
         ))}
       </div>
+      {/* LE MÊME ÉMETTEUR, PROJETANT UN TEXTE. Au fil d'une phrase et à `font-size: 1em`, le chiffre
+          se lit à la taille du texte qui l'entoure — il n'a pas de taille à lui, c'est l'émetteur
+          qui se met à son échelle. `ds-holo-text` pose sa ligne de base sur le socle et raccourcit
+          le faisceau à sa hauteur. */}
+      <p className="holo-inline">
+        Ticket estimé à{' '}
+        <HoloEmitter label="3 points" style={{ fontSize: '1em' } as CSSProperties}>
+          <span className="ds-holo ds-holo-text" aria-hidden="true">
+            3
+          </span>
+        </HoloEmitter>{' '}
+        points, le suivant à{' '}
+        <HoloEmitter label="13 points" style={{ fontSize: '1em', '--holo-delay': '-6.5s' } as CSSProperties}>
+          <span className="ds-holo ds-holo-text" aria-hidden="true">
+            13
+          </span>
+        </HoloEmitter>{' '}
+        points.
+      </p>
     </div>
   )
 }
@@ -735,7 +754,7 @@ export function App() {
       <Demo
         id="visee"
         title="Visée et holo"
-        intro="Le vocabulaire des écrans de ciblage. Le châssis (Frame) est le bord de l'écran lui-même : trait ambre de 2,5 px, rayon de 26 px, halo, et un balayage rouge qui le parcourt une seule fois. La lecture (Readout) est un panneau d'instrument, en pilule, dont les chiffres passent au rouge : l'encre dit le rôle. L'émetteur (HoloEmitter) projette ce qu'on lui donne, translucide — socle matériel, faisceau évasé qui s'arrête au sommet du sujet —, et le faisceau décroche avec lui, jamais le socle."
+        intro="Le vocabulaire des écrans de ciblage. Le châssis (Frame) est le bord de l'écran lui-même : trait ambre de 2,5 px, rayon de 26 px, halo, et un balayage rouge qui le parcourt une seule fois. La lecture (Readout) est un panneau d'instrument, en pilule, dont les chiffres passent au rouge : l'encre dit le rôle. L'émetteur (HoloEmitter) projette ce qu'on lui donne, translucide — socle matériel, faisceau évasé qui s'arrête au sommet du sujet —, et le faisceau décroche avec lui, jamais le socle. Il projette un GLYPHE (le sujet porte ds-holo) comme un TEXTE court (ds-holo ds-holo-text) : le marqueur de texte pose la ligne de base du chiffre sur le socle et raccourcit le faisceau à sa hauteur de capitale. Une seule cote se règle dans les deux cas, le font-size de l'émetteur — à 1 em, le chiffre se lit à la taille du texte qui l'entoure."
       >
         <Visee />
       </Demo>

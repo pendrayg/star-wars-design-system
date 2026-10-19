@@ -1275,4 +1275,23 @@ describe('Frame, Readout et HoloEmitter', () => {
 
     expect(screen.getByRole('img', { name: 'Non estimé' })).toBeEmptyDOMElement()
   })
+
+  it("projette un TEXTE aussi bien qu'un glyphe, à la taille de police de son contexte", () => {
+    render(
+      <HoloEmitter label="3 points" style={{ fontSize: '1em' }}>
+        <span className="ds-holo ds-holo-text" aria-hidden="true">
+          3
+        </span>
+      </HoloEmitter>,
+    )
+
+    const emetteur = screen.getByRole('img', { name: '3 points' })
+    // Le chiffre n'a PAS de taille à lui : l'émetteur seul est coté, le sujet vaut 1 em et l'hérite.
+    expect(emetteur).toHaveStyle({ fontSize: '1em' })
+    // `ds-holo-text` est un marqueur EN PLUS de `ds-holo` : la teinte et le décrochage restent
+    // l'affaire de `ds-holo`, le marqueur ne porte que la pose (cf. holo.css).
+    const sujet = emetteur.firstElementChild
+    expect(sujet).toHaveClass('ds-holo', 'ds-holo-text')
+    expect(sujet).toHaveTextContent('3')
+  })
 })

@@ -29,3 +29,37 @@ describe("l'émetteur holographique", () => {
     expect(rule('.ds-holo-emitter::before {')).not.toMatch(/font-size:/)
   })
 })
+
+/**
+ * LA POSE D'UN SUJET TEXTUEL, elle aussi gardée depuis le FICHIER : ce sont des cotes DÉRIVÉES
+ * (métriques de la police, cf. le commentaire de `.ds-holo-text`) et non des valeurs ajustées à
+ * l'œil — une retouche qui casserait la dérivation doit casser un test. jsdom ne résout ni les `em`
+ * ni `:has()`, le rendu ne dirait rien.
+ */
+describe('un sujet textuel projeté (.ds-holo-text)', () => {
+  it('pose sa ligne de base sur le haut du socle : 0,46 − 0,3333 = 0,127 em', () => {
+    expect(rule('.ds-holo-emitter .ds-holo-text {')).toMatch(/top:\s*0\.127em;/)
+  })
+
+  it('raccourcit le faisceau à la hauteur du chiffre (0,667 em), sommet à 0,6667 − 0,46', () => {
+    const faisceau = rule('.ds-holo-emitter:has(.ds-holo-text)::before {')
+    expect(faisceau).toMatch(/top:\s*calc\(50% - 0\.207em\);/)
+    expect(faisceau).toMatch(/height:\s*0\.667em;/)
+  })
+
+  it("ne touche pas à l'ouverture du faisceau : l'aperture ne dépend pas du sujet", () => {
+    const faisceau = rule('.ds-holo-emitter:has(.ds-holo-text)::before {')
+    expect(faisceau).not.toMatch(/width:/)
+    expect(faisceau).not.toMatch(/clip-path:/)
+  })
+
+  it('laisse la projection du GLYPHE intacte : ses cotes restent celles de son encre', () => {
+    // Pas `rule()` ici : le sélecteur du socle apparaît d'abord dans la règle GROUPÉE avec le
+    // faisceau (content/position), c'est la règle qui le cote qu'on veut lire.
+    expect(CSS).toMatch(/\.ds-holo-emitter::after \{\s*top:\s*calc\(50% \+ 0\.46em\);/)
+    const faisceau = rule('.ds-holo-emitter::before {')
+    expect(faisceau).toMatch(/top:\s*calc\(50% - 0\.563em\);/)
+    expect(faisceau).toMatch(/height:\s*1\.023em;/)
+    expect(faisceau).toMatch(/width:\s*1\.3em;/)
+  })
+})
