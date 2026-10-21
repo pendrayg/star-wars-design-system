@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs'
+import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 
@@ -68,4 +68,55 @@ describe('la pastille d’un sélecteur', () => {
     expect(regle(menu, '.ds-menu-indicator.is-in')).toMatch(/ds-neon-in[^;]*steps\(1, end\)/)
     expect(lire('neon.css')).toMatch(/@keyframes ds-neon-out/)
   })
+})
+
+/**
+ * RIEN NE S’ALLUME PAR HÉRITAGE. --lit est héritée (tokens.css), et c’est voulu : elle descend
+ * d’une commande à son calque de néon. Mais elle descend AUSSI dans tout ce que cette commande
+ * CONTIENT — une section dépliée monte à 1 pour son propre calque et le passe à ses champs. Tout ce
+ * que la recette peint doit donc POSER son --lit, sinon il prend celui d’un ancêtre allumé et vire
+ * au bleu du plein feu sans rien avoir d’actif. C’est ce qui était arrivé au cadre d’un sélecteur
+ * plat déplié : cadre bleu, pastille jaune — l’inverse exact du dessin.
+ * Deux exceptions, et deux seulement : le calque, qui EST le tube de la commande qui le porte, et
+ * .ds-neon, la porte d’entrée qu’une app allume elle-même.
+ */
+describe('rien ne s’allume par héritage', () => {
+  const SUIVENT_LEUR_HOTE = ['.ds-neon', '.ds-shade']
+  const FEUILLES = readdirSync(import.meta.dirname)
+    .filter((fichier) => fichier.endsWith('.css'))
+    .map(lire)
+
+  /** Les règles d’une feuille, en couples [sélecteurs, corps]. */
+  const regles = (css: string): [string, string][] =>
+    [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((hit) => [hit[1].trim(), hit[2]])
+
+  /** Ce que le néon peint : la liste est LUE dans la recette, jamais recopiée ici. */
+  const peints = (() => {
+    const neon = lire('neon.css')
+    return neon
+      .slice(0, neon.indexOf('{'))
+      .split(',')
+      .map((selecteur) => selecteur.trim())
+      .filter(Boolean)
+  })()
+
+  it('la liste des peints est bien celle de neon.css', () => {
+    expect(peints).toContain('.ds-menu')
+    expect(peints).toContain('.ds-selectable')
+    expect(peints.length).toBeGreaterThan(5)
+  })
+
+  it.each(peints.filter((selecteur) => !SUIVENT_LEUR_HOTE.includes(selecteur)))(
+    '%s pose son propre --lit',
+    (selecteur) => {
+      /* Le tube d’un pseudo-élément se règle sur l’élément qui le porte, dont il hérite. */
+      const cible = selecteur.replace(/::[a-z-]+$/, '')
+      const pose = FEUILLES.some((css) =>
+        regles(css).some(
+          ([selecteurs, corps]) => selecteurs.split(',').some((s) => s.trim() === cible) && /--lit:/.test(corps),
+        ),
+      )
+      expect(pose, `${selecteur} n’a pas de --lit à lui : il prendra celui d’un ancêtre allumé`).toBe(true)
+    },
+  )
 })

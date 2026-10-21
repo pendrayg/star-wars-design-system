@@ -89,6 +89,10 @@
    l'utilisent (.ds-set-image, juste après). Sa grille a la taille du chaton : une image plus haute
    que large (un portrait) y est recadrée au lieu de le déborder. */
 .ds-well {
+  /* Le chaton ne s'allume pas davantage (même raison que .ds-menu) : il sertit une image montrée
+     HORS commande, il n'a aucun état actif. Son tube étant peint sur ::after, qui hérite de lui,
+     le zéro se pose ici et couvre les deux. */
+  --lit: 0;
   display: grid;
   grid-template: 100% / 100%;
   place-items: center;

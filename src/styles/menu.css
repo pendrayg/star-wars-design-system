@@ -25,6 +25,14 @@
    L'app place la barre de menu (marges, zone sûre du bas d'iPhone). */
 
 .ds-menu {
+  /* LE CADRE NE S'ALLUME JAMAIS : il cerne, il ne dit pas d'état — c'est la pastille qui le dit
+     (cf. .ds-menu-indicator). --lit est HÉRITÉE (tokens.css), et sans ce zéro le cadre prenait
+     celui de son ancêtre : posé dans une section dépliée (.ds-disclosure-button.ds-active, qui
+     monte à 1 pour son propre calque de néon), il virait au BLEU du plein feu alors que rien n'y
+     était actif — et la pastille restait jaune à l'intérieur, l'inverse exact du dessin. Toutes les
+     commandes du DS posent ce zéro (bouton, champ, case, recherche, bloc choisi) ; le cadre l'avait
+     oublié, étant le seul à n'avoir aucun état allumé à lui. */
+  --lit: 0;
   /* Ce que la destination courante prend de largeur en plus (0,8 = 1,8 fois une autre). */
   --menu-grow: 0.8;
   --menu-gap: var(--control-pad);
